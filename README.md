@@ -1,240 +1,131 @@
-# The Dead Good Club
+# World Zombie Day: London
 
-A vintage-magazine single-page site — a long scrolling 1960s-UFO-periodical strip with aged paper, halftone photos, redacted posters, and a mail-in coupon that is a real newsletter form. Built with Next.js 14, TypeScript, and Tailwind CSS.
+The site for [World Zombie Day: London](https://worldzombieday.co.uk) — a
+free charity zombie walk through central London on the second Saturday of
+October. Next one: **Saturday 10 October 2026**.
 
-All homepage copy is editable from the **dgc-pages** Notion database: rows whose Title starts with `home.` override individual text slots (see `NOTION_SETUP.md` §6). **This repo has diverged heavily from the blog template it started as — read `CLAUDE.md` for the actual architecture before making changes.** The template instructions below are kept for historical reference.
+Next.js 14 (app router) and Tailwind, deployed on Vercel. All the words on
+the site are editable in Notion without touching code.
 
-## 🚀 Quick Start - Duplicate This Template
+## How the copy works
 
-Want to create your own blog using this template? Follow these steps:
+Every string on the site has a key like `home.hero.title` or `faq.q3`.
 
-### 1. Duplicate the Notion Database Template
+1. `content/site-copy.json` holds the built-in text for every key. This is
+   the base layer, and it is complete — **the site renders correctly with no
+   Notion credentials at all.**
+2. `lib/site-copy.ts` fetches the Notion database in one query and overlays
+   any row whose title is a matching key and whose `Published` box is ticked.
+3. `components/notion-text.tsx` gives each page a `<T k="…" />` component
+   that renders the result. Newlines in the Notion text become line breaks.
 
-👉 **[Click here to duplicate the Notion database template](https://cloud24.notion.site/24307b611e30807fba0ce6e074d348ac)**
+So Notion only ever *replaces* text that already exists. A Notion outage,
+a missing token, or a deleted row falls back to the built-in copy rather
+than blanking the page.
 
-This will give you the exact database structure needed for this blog template.
+Pages revalidate every 60 seconds, so an edit in Notion appears within a
+minute. To publish immediately, `POST /api/revalidate` with
+`{ "secret": "<REVALIDATION_SECRET>" }`.
 
-### 2. Clone & Setup the Code
+### Editing copy in Notion
+
+The database is **wzd-pages**. Each row is one slot:
+
+| Property | Meaning |
+|---|---|
+| `Name` (title) | the key, e.g. `home.hero.title` |
+| `Text` (rich text) | the words shown on the site |
+| `Status` (or a `Published` checkbox) | whether the override is live — this database uses `Status` = Done |
+
+Rows whose title isn't a dotted key are ignored, so you can keep notes in
+the database without them appearing anywhere.
+
+## Photographs and credit
+
+**Every photograph on this site is published with its photographer's name,
+and that is enforced by the code, not by convention.**
+
+- `content/photos.json` is the registry: source file, credit, alt text.
+- `lib/photos.ts` throws at build time if a photo has no credit.
+- `components/photo.tsx` is the only component that emits an `<img>`, and it
+  always renders the credit in a `<figcaption>`.
+- `npm run check:credits` fails the build if any of that stops being true.
+
+Eighteen photographs by thirteen photographers are currently in the repo.
+See [`IMAGES.md`](IMAGES.md) for the full list, the credit wording, and the
+photographs still sitting on the old WordPress site.
+
+To add a photograph: drop the original in the repo root, add an entry to
+`content/photos.json` with its credit and alt text, and run `npm run images`.
+
+## Local development
 
 ```bash
-# Clone the repository
-git clone <your-repository-url>
-cd notion-blog
-
-# Install dependencies
 npm install
-
-# Copy environment variables
-cp .env.example .env
+npm run dev          # http://localhost:3000 — works with no .env
 ```
 
-### 3. Configure Your Environment
+Copy `.env.example` to `.env.local` and fill in `NOTION_TOKEN` to pull live
+copy from Notion.
 
-Add your Notion credentials to `.env`:
+### Scripts
 
-```env
-# Get these from your Notion integration
-NOTION_TOKEN=secret_your_integration_token_here
-NOTION_DATABASE_ID=your_database_id_here
+| Command | What it does |
+|---|---|
+| `npm run images` | Rebuilds web/press renditions from the originals, and the video from the GIF. Needs the originals in `assets/originals/`. |
+| `npm run check:credits` | Verifies every photo is credited and no raw `<img>` slips past. |
+| `npm run check:a11y` | Runs axe-core over every route in both themes, plus keyboard checks. Start the server first. |
+| `npm run seed:notion` | Creates/updates one Notion row per copy key, pre-filled and Published. Needs `NOTION_TOKEN`. Safe to re-run. |
+| `node scripts/extract-wp-content.mjs <wxr.xml>` | Re-derives the original WordPress text, for auditing the migration. |
 
-# Optional: For manual revalidation
-REVALIDATION_SECRET=your_secret_key_here
-```
+## Deployment
 
-### 4. Set Up Notion Integration
+Set these in Vercel:
 
-1. **Create Integration**: Go to [https://www.notion.so/my-integrations](https://www.notion.so/my-integrations)
-2. **Create New Integration**: Give it a name like "My Blog"
-3. **Copy Token**: This is your `NOTION_TOKEN`
-4. **Share Database**: Share your duplicated database with the integration
-5. **Get Database ID**: Copy from the database URL
+| Variable | Value |
+|---|---|
+| `NOTION_TOKEN` | the internal integration token |
+| `NOTION_DATABASE_ID` | `3c16f6ccb2c180e087a4da55703d5792` |
+| `NEXT_PUBLIC_SITE_URL` | `https://worldzombieday.co.uk` |
+| `REVALIDATION_SECRET` | any long random string (optional) |
 
-### 5. Start Development
+The old WordPress URLs (`/survival`, `/become-a-sponsor`, `/about-2`, the
+blog, …) are redirected in `next.config.mjs`, so a decade of press links
+keep working.
 
-```bash
-npm run dev
-```
+## Design
 
-Visit `http://localhost:3000` to see your blog!
+Black, bone white and blood red, everything in caps — a Saul Bass tribute,
+following the site's own 2016 design. Dark is the default; there's a light
+theme, and a first-time visitor whose system asks for light gets light.
 
-## 📋 Database Structure
+Display type is **Grandstander**, body is **Raleway**, both from Google
+Fonts and self-hosted by `next/font`.
 
-Your Notion database should have these properties:
+The 2016 site set its headlines in **Hitchcock**. We do not ship it:
 
-| Property           | Type          | Description                        |
-| ------------------ | ------------- | ---------------------------------- |
-| **Title**          | Title         | Blog post title                    |
-| **Slug**           | Rich Text     | URL slug (e.g., "my-awesome-post") |
-| **Excerpt**        | Rich Text     | Short description                  |
-| **Category**       | Select        | Post category                      |
-| **Tags**           | Multi-select  | Post tags                          |
-| **Author**         | Person        | Post author                        |
-| **Featured**       | Checkbox      | Show on homepage                   |
-| **Published**      | Checkbox      | Make post live                     |
-| **Published Date** | Date          | Publication date                   |
-| **Cover Image**    | Files & Media | Post cover image                   |
+> Hitchcock was created by Matt Terich, based on the work of Saul Bass.
+> Please do not redistribute these files in any way. They can be downloaded
+> for free at <http://typographica.org/001110.php>
 
-## ✨ Features
+Serving a font as a webfont is redistributing it, so Hitchcock is not in
+this repository, is not referenced by any font stack, and is not served to
+anyone. It informed the letterform choices and nothing else. `*.ttf` and
+`Hitchcock*` are gitignored to keep it that way.
 
-### 🎨 Neobrutalist Design
+## Accessibility
 
-- Bold, chunky typography with strong visual hierarchy
-- High contrast colors and sharp geometric shapes
-- Brutalist-inspired layouts with intentional imperfections
-- Transform effects and bold borders throughout
+Targeting WCAG 2.2 AA, and checked rather than assumed — `npm run check:a11y`
+reports zero axe violations across all nine routes in both themes.
 
-### 📝 Notion CMS Integration
-
-- Seamless content management through Notion
-- Automatic publishing from Notion to the website
-- Support for rich content including images, code blocks, and formatting
-- Real-time synchronization with Notion database
-
-### 🚀 Performance & SEO
-
-- Static site generation with Next.js 14
-- Optimized images with Next.js Image component
-- SEO-friendly meta tags and Open Graph support
-- Fast loading times with performance best practices
-
-### 🌙 Modern Features
-
-- Dark mode support with system preference detection
-- Responsive design for all device sizes
-- Advanced filtering and search functionality
-- Social sharing capabilities
-
-## 🛠️ Tech Stack
-
-- **Framework**: Next.js 14 with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS with custom neobrutalist theme
-- **UI Components**: shadcn/ui
-- **CMS**: Notion API
-- **Icons**: Lucide React
-- **Theme**: next-themes for dark mode
-
-## 📁 Project Structure
-
-```
-├── app/                    # Next.js app directory
-│   ├── api/               # API routes
-│   │   ├── revalidate/    # Manual cache revalidation
-│   │   └── test-notion/   # Notion connection testing
-│   ├── blog/              # Blog pages
-│   │   ├── [slug]/        # Dynamic blog post pages
-│   │   └── page.tsx       # Blog listing page
-│   ├── globals.css        # Global styles
-│   ├── layout.tsx         # Root layout
-│   └── page.tsx           # Home page
-├── components/            # React components
-│   ├── ui/               # shadcn/ui components
-│   ├── blog-*.tsx        # Blog-specific components
-│   ├── debug-notion.tsx  # Development debugging
-│   ├── header.tsx        # Site header
-│   └── footer.tsx        # Site footer
-├── lib/                  # Utility functions
-│   ├── notion.ts         # Notion API integration
-│   └── utils.ts          # General utilities
-├── NOTION_SETUP.md       # Detailed Notion setup guide
-└── README.md             # This file
-```
-
-## 🔧 Development
-
-### Debug Mode
-
-The template includes debugging tools:
-
-- Visit `/blog` to see the debug panel (red box)
-- Check browser console for API logs
-- Test Notion connection at `/api/test-notion`
-
-### Cache Management
-
-- Pages auto-revalidate every 60 seconds
-- Manual revalidation via `/api/revalidate`
-- For development: uncomment `export const dynamic = 'force-dynamic'`
-
-## 🚀 Deployment
-
-### Vercel (Recommended)
-
-1. Push your code to GitHub
-2. Connect repository to Vercel
-3. Add environment variables in Vercel dashboard
-4. Deploy automatically on push
-
-### Other Platforms
-
-Compatible with any Next.js hosting:
-
-- Netlify
-- Railway
-- DigitalOcean App Platform
-- AWS Amplify
-
-## 📝 TODO List
-
-### 🐛 Current Issues
-
-- [ ] Fix category/tag dropdowns not populating
-- [ ] Improve error handling for missing Notion data
-- [ ] Add loading states for better UX
-
-### 🎯 Core CMS Features
-
-- [ ] **About Page**: Create dynamic about page from Notion
-- [ ] **Contact Page**: Functional contact form with Notion integration
-- [ ] **Pages CMS**: Support for static pages (Privacy, Terms, etc.)
-- [ ] **Menu Management**: Dynamic navigation from Notion
-- [ ] **Site Settings**: Global site configuration via Notion
-
-### 📧 Contact & Forms
-
-- [ ] Contact form with email notifications
-- [ ] Newsletter signup with email service integration
-- [ ] Comment system integration
-- [ ] Form submissions stored in Notion
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
-## 📚 Documentation
-
-- [Notion Setup Guide](NOTION_SETUP.md) - Detailed Notion configuration
-- [API Documentation](docs/api.md) - API endpoints and usage
-- [Deployment Guide](docs/deployment.md) - Deployment instructions
-- [Customization Guide](docs/customization.md) - How to customize the design
-
-## 🆘 Support
-
-Need help? Here's how to get support:
-
-1. **Check the Issues**: Look for existing solutions
-2. **Documentation**: Read the setup guides
-3. **Debug Tools**: Use the built-in debug panel
-4. **Create Issue**: Open a GitHub issue with details
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **Notion API** for the excellent CMS capabilities
-- **Next.js Team** for the amazing framework
-- **shadcn/ui** for the beautiful component library
-- **Tailwind CSS** for the utility-first styling
-
----
-
-**Ready to build your blog?**
-👉 [Duplicate the Notion template](https://cloud24.notion.site/24307b611e30807fba0ce6e074d348ac) and start creating!
-
-Built with ❤️ using Next.js, Notion API, and brutal design principles.
+- Contrast is measured, not eyeballed: body text is at least 4.5:1 in both
+  themes, and the accent red is a different red in each because a red that
+  passes on black fails on paper.
+- Caps come from `text-transform`, never from typing capitals, so screen
+  readers read words rather than letters.
+- The FAQ is a native `<details>`, so it works with a keyboard and before
+  JavaScript loads.
+- Text never sits on top of a photograph.
+- **The Channel 56 video contains flashing images** — measured at six large
+  luminance swings in one second, above the WCAG 2.3.1 limit. It never
+  autoplays, is labelled before you start it, and has its own pause control.

@@ -1,0 +1,140 @@
+{
+  "bridge-horde": {
+    "widths": [
+      640,
+      1024,
+      1600
+    ],
+    "aspect": 1.3343
+  },
+  "the-horde": {
+    "widths": [
+      640,
+      1024,
+      1600
+    ],
+    "aspect": 1.5
+  },
+  "leicester-square-banner": {
+    "widths": [
+      640,
+      1024,
+      1600
+    ],
+    "aspect": 1.5004
+  },
+  "family-kerb": {
+    "widths": [
+      640,
+      1024,
+      1600
+    ],
+    "aspect": 1.5
+  },
+  "leake-street-crowd": {
+    "widths": [
+      640,
+      1024,
+      1600
+    ],
+    "aspect": 1.5004
+  },
+  "steward-crossing": {
+    "widths": [
+      640,
+      1024,
+      1600
+    ],
+    "aspect": 1.5
+  },
+  "zombie-dog": {
+    "widths": [
+      640,
+      1024
+    ],
+    "aspect": 1.4989
+  },
+  "kissing-booth": {
+    "widths": [
+      640,
+      1024,
+      1600
+    ],
+    "aspect": 1.5004
+  },
+  "selfie": {
+    "widths": [
+      640,
+      1024,
+      1600
+    ],
+    "aspect": 1.5103
+  },
+  "london-eye-pair": {
+    "widths": [
+      640,
+      1024,
+      1600
+    ],
+    "aspect": 1.5004
+  },
+  "half-face-portrait": {
+    "widths": [
+      640,
+      1024,
+      1600
+    ],
+    "aspect": 1.5004
+  },
+  "stop-sign-couple": {
+    "widths": [
+      640,
+      1024,
+      1600
+    ],
+    "aspect": 1.4976
+  },
+  "makeup-blood": {
+    "widths": [
+      640,
+      1024,
+      1600
+    ],
+    "aspect": 1.4983
+  },
+  "teddy-bear": {
+    "widths": [
+      640
+    ],
+    "aspect": 1.0997
+  },
+  "wolf-puppet": {
+    "widths": [
+      640
+    ],
+    "aspect": 0.6667
+  },
+  "piccadilly-rain": {
+    "widths": [
+      640,
+      1024
+    ],
+    "aspect": 1.4989
+  },
+  "zombies-crossing": {
+    "widths": [
+      640,
+      1024,
+      1600
+    ],
+    "aspect": 1.5004
+  },
+  "groaning-group": {
+    "widths": [
+      640,
+      1024,
+      1600
+    ],
+    "aspect": 1.5004
+  }
+}

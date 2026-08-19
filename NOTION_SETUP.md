@@ -1,382 +1,123 @@
-# Notion Blog Setup Guide
+# Notion setup
 
-This guide will help you set up your Notion database to work with your blog.
+The site reads its copy from one Notion database, **wzd-pages**. This guide
+covers connecting it and editing the words.
 
-## 1. Create a Notion Integration
+Nothing here is required for the site to work: every page has built-in copy
+in `content/site-copy.json` and renders correctly with no Notion connection.
+Notion only overrides what's already there.
 
-1. Go to [https://www.notion.so/my-integrations](https://www.notion.so/my-integrations)
-2. Click "New integration"
-3. Give it a name (e.g., "My Blog")
-4. Select the workspace where your blog database will be
-5. Click "Submit"
-6. Copy the "Internal Integration Token" - this is your `NOTION_TOKEN`
+## 1. Create the integration
 
-## 2. Your Blog Database Structure
+1. Go to <https://www.notion.so/my-integrations> and click **New
+   integration**.
+2. Name it something like `World Zombie Day site`, in the workspace that
+   holds the database.
+3. Copy the **Internal Integration Token** — that's `NOTION_TOKEN`.
 
-Perfect! Your database structure is already set up correctly:
+## 2. Share the database with it
 
-### Your Properties:
+1. Open the **wzd-pages** database in Notion.
+2. Top right → **Share** → **Invite** → pick your integration → **Edit**.
 
-- **Title** (Title) - The blog post title ✅
-- **Slug** (Rich Text) - URL slug for the post ✅
-- **Excerpt** (Rich Text) - Short description of the post ✅
-- **Category** (Select) - Blog post category ✅
-- **Tags** (Multi-select) - Blog post tags ✅
-- **Author** (Person) - Post author ✅
-- **Featured** (Checkbox) - Whether the post is featured ✅
-- **Published** (Checkbox) - Whether the post is published ✅
-- **Published Date** (Date) - When the post was published ✅
-- **Cover Image** (Files & Media) - Cover image for the post ✅
+Without this step the integration can see nothing, and the site quietly
+falls back to its built-in copy.
 
-### Example Database Entry:
+## 3. Set the environment variables
 
-```
-| Title | Slug | Published | Published Date | Category | Tags | Featured | Author |
-|-------|------|-----------|----------------|----------|------|----------|--------|
-| My First Post | my-first-post | ✓ | 2024-02-08 | Technology | React, Next.js | ✓ | @you |
-```
-
-## 3. Share Database with Integration
-
-1. Open your database in Notion
-2. Click the "Share" button in the top right
-3. Click "Invite" and search for your integration name
-4. Give it "Edit" permissions
-5. Copy the database URL - extract the database ID from it
-
-The database ID is the string between the last `/` and the `?` in the URL:
-
-```
-https://notion.so/your-workspace/DATABASE_ID?v=...
-                                 ^^^^^^^^^^^^
-                                This is your database ID
-```
-
-## 4. Update Environment Variables
-
-Update your `.env` file:
+Locally, in `.env.local`; on Vercel, in Project → Settings → Environment
+Variables:
 
 ```env
-NOTION_TOKEN=secret_your_integration_token_here
-NOTION_DATABASE_ID=your_database_id_here
+NOTION_TOKEN=ntn_…
+NOTION_DATABASE_ID=3c16f6ccb2c180e087a4da55703d5792
+NEXT_PUBLIC_SITE_URL=https://worldzombieday.co.uk
+REVALIDATION_SECRET=<any long random string>
 ```
 
-## 5. Test Your Setup
+## 4. Database structure
 
-Run your development server:
+Three properties, and that's all:
+
+| Property | Type | Holds |
+|---|---|---|
+| `Name` | Title | the key, e.g. `home.hero.title` |
+| `Text` | Rich text | the words shown on the site |
+| `Status` *or* `Published` | Status / Checkbox | whether the override is live |
+
+The site is flexible about the last one, because databases get set up
+differently. A row counts as live if:
+
+- there is a `Published` checkbox and it is ticked; **or**
+- there is a `Status` set to `Done` (also accepted: Published, Live,
+  Complete, Completed); **or**
+- the database has neither property, in which case every row is live.
+
+This database uses **`Status` = Done**. Any other column you add — `Image`,
+`slug`, `Title`, `Publication Date` — is ignored by the site, so the
+database is safe to use for your own notes and workflow.
+
+## 4a. Fill the database
+
+Once those two properties exist:
 
 ```bash
-npm run dev
+NOTION_TOKEN=ntn_… npm run seed:notion
 ```
 
-Your blog should now pull content from your Notion database!
-
-## How to Use Your Database
-
-### Publishing Posts
-
-1. **Published** checkbox: Check this to make the post visible on your blog
-2. **Published Date**: Set the publication date (used for sorting)
-
-### Content Fields
-
-1. **Title**: Your blog post title
-2. **Slug**: URL-friendly version (e.g., "my-first-post")
-3. **Excerpt**: Short description shown in post previews
-4. **Cover Image**: Upload an image file for the post cover
-
-### Organization
-
-1. **Category**: Select from your categories (Technology, Design, etc.)
-2. **Tags**: Add multiple tags for better organization
-3. **Author**: Assign the post author
-4. **Featured**: Check to highlight on homepage
-
-### Category Examples
-
-Create categories like:
-
-- Technology
-- Design
-- Business
-- Marketing
-- Leadership
-
-### Tag Examples
-
-Create tags like:
-
-- React
-- Next.js
-- JavaScript
-- UI/UX
-- Startup
-- Remote Work
-
-## Writing Posts
-
-1. Create a new page in your database
-2. Fill in all the properties:
-   - Set the **Title**
-   - Add a **Slug** (URL-friendly, like "my-awesome-post")
-   - Write an **Excerpt** (short description)
-   - Select a **Category**
-   - Add relevant **Tags**
-   - Set the **Author**
-   - Upload a **Cover Image** (optional)
-   - Set the **Published Date**
-   - Check **Featured** if you want it highlighted
-   - Check **Published** when ready to go live
-3. Write your content using Notion's rich text editor
-4. Your post will automatically appear on your blog!
-
-## Troubleshooting
-
-### Common Issues:
-
-1. **Posts not showing up**:
-   - Make sure **Published** checkbox is checked
-   - Verify **Published Date** is set
-2. **Integration not working**: Make sure you've shared the database with your integration
-3. **Environment variables**: Ensure your `.env` file has the correct tokens
-4. **Database ID**: Double-check the database ID format
-
-### Error Messages:
-
-- `NOTION_TOKEN is not set`: Add your integration token to `.env`
-- `NOTION_DATABASE_ID is not set`: Add your database ID to `.env`
-- `Error fetching posts`: Check your integration permissions and database sharing
-
-## Advanced Features
-
-### Custom Slugs
-
-Your **Slug** field allows you to control the exact URL for each post. Make sure slugs are:
-
-- URL-friendly (lowercase, hyphens instead of spaces)
-- Unique for each post
-- Descriptive of the content
-
-### SEO Optimization
-
-Your current setup is great for SEO:
-
-- **Title** for page titles
-- **Excerpt** for meta descriptions
-- **Cover Image** for social sharing
-- **Slug** for clean URLs
-
-### Content Scheduling
-
-Set future dates in the **Published Date** field to schedule posts. Just make sure to check the **Published** checkbox when you're ready for them to go live.
-
-### Author Management
-
-The **Author** field links to Notion users. You can:
-
-- Assign different authors to different posts
-- Use the author's Notion profile picture automatically
-- Extend the system later to include author bios and social links
-
-## Site Content Database (Editable Text Sections)
-
-Every editorial text section on the site (hero, newsletter pitch, about page,
-contact info, footer tagline, blog index intro) can be edited from Notion.
-
-1. Create a second database called **Site Content** with these properties:
-   - **Key** (Title) — the section identifier
-   - **Heading** (Rich text, optional) — overrides the section heading
-   - **Published** (Checkbox) — only checked rows are used
-2. Share it with the same integration as your posts database.
-3. Set `NOTION_CONTENT_DATABASE_ID` in your `.env` to this database's ID.
-4. Add one page per section. The **page body** becomes the section copy.
-
-Recognized keys:
-
-| Key | Where it appears |
-| --- | --- |
-| `hero` | Homepage cover headline + intro clipping |
-| `newsletter` | Subscription coupon heading + pitch |
-| `about` | About page body |
-| `contact-info` | Contact page intro + address block |
-| `footer` | Footer tagline |
-| `blog-intro` | Blog index intro line |
-
-If the database or a key is missing, the site quietly falls back to its
-built-in copy — nothing breaks.
-
-
-## 6. Homepage Text (dgc-pages rows)
-
-Every text slot on the homepage is editable from the main **dgc-pages**
-database — the same one already connected via `NOTION_DATABASE_ID`, so no
-extra setup is needed. Copy rows sit alongside the site's pages:
-
-- **Title** — the slot's key, e.g. `home.cover.title`
-- **Text** (Rich text) — the copy shown on the site (newlines become line
-  breaks)
-- **Published** (Checkbox) — tick to keep the override active
-
-Rows whose Title starts with `home.` are fetched in one query and are
-automatically excluded from the blog/pages listings. A slot with no row (or
-an unpublished one) renders the built-in copy from the code. Setting
-`NOTION_CONTENT_DATABASE_ID` moves the copy rows to a separate database if
-you ever want that. Letter-stack display words
-(OTHER, ENEMY) and the section rail words are design elements and stay in
-code.
-
-### Available keys
-
-**Cover (Titus Groan / Jet Pilot)**
-
-- `home.cover.series`
-- `home.cover.author`
-- `home.cover.title`
-- `home.cover.blurb`
-- `home.cover.cta`
-- `home.cover.jet1`
-- `home.cover.jet2`
-- `home.cover.jet3`
-- `home.cover.jet4`
-- `home.cover.jet5`
-- `home.cover.mag.lead`
-- `home.cover.mag.col1`
-- `home.cover.mag.col2`
-- `home.cover.mag.col3`
-
-**Birch trail**
-
-- `home.birch.trail`
-
-**Seeing Is Disbelieving**
-
-- `home.field.w1`
-- `home.field.w2`
-- `home.field.w3`
-- `home.field.w4`
-- `home.field.caption`
-- `home.field.body1`
-- `home.field.body2`
-- `home.field.body3`
-- `home.field.body4`
-- `home.field.body5`
-- `home.field.pageno`
-- `home.field.continued`
-
-**The Condon Report**
-
-- `home.condon.quote`
-- `home.condon.attrib`
-- `home.condon.byline`
-- `home.condon.col1`
-- `home.condon.col2`
-- `home.condon.col3`
-- `home.condon.deck`
-- `home.condon.band`
-- `home.condon.headline`
-- `home.condon.body2`
-- `home.condon.memo.title`
-- `home.condon.memo.body`
-- `home.condon.body3`
-
-**The Other Enemy / Over Vietnam**
-
-- `home.enemy.body1`
-- `home.enemy.body2`
-- `home.enemy.body3`
-- `home.enemy.body4`
-- `home.enemy.quote`
-- `home.enemy.photocredit`
-- `home.enemy.col1`
-- `home.enemy.col2`
-- `home.enemy.declass`
-- `home.enemy.byline1`
-- `home.enemy.title`
-- `home.enemy.cta`
-
-**Bird Brains**
-
-- `home.birds.credit1`
-- `home.birds.cap1`
-- `home.birds.cap2`
-- `home.birds.examine`
-- `home.birds.barcap`
-
-**Anatomical Anomalies**
-
-- `home.anatomical.readout1`
-- `home.anatomical.readout2`
-- `home.anatomical.headline`
-
-**The Redacted Report**
-
-- `home.poster.kicker`
-- `home.poster.line1`
-- `home.poster.line2`
-- `home.poster.line3`
-- `home.poster.button`
-- `home.poster.footer`
-- `home.poster.redact`
-
-**Signals From Space**
-
-- `home.signals.title1`
-- `home.signals.body1`
-- `home.signals.body2`
-- `home.signals.body3`
-- `home.signals.title2a`
-- `home.signals.byline`
-- `home.signals.body4a`
-- `home.signals.body5a`
-- `home.signals.beep`
-- `home.signals.title2b`
-- `home.signals.body4b`
-- `home.signals.body5b`
-
-**Environmental Quality**
-
-- `home.eq.title`
-- `home.eq.cta`
-- `home.eq.body`
-
-**Book Club coupon (footer)**
-
-- `home.coupon.header`
-- `home.coupon.address`
-- `home.coupon.intro`
-- `home.coupon.terms`
-- `home.coupon.free`
-- `home.coupon.guarantee`
-- `home.coupon.name.label`
-- `home.coupon.print`
-- `home.coupon.email.label`
-- `home.coupon.optin`
-- `home.coupon.code`
-
-**Psychic Pendulum (footer)**
-
-- `home.pendulum.title`
-- `home.pendulum.body`
-- `home.pendulum.bold`
-- `home.pendulum.tail`
-
-**Book covers (footer)**
-
-- `home.books.1.title`
-- `home.books.1.author`
-- `home.books.1.caption`
-- `home.books.2.title`
-- `home.books.2.author`
-- `home.books.2.caption`
-- `home.books.3.title`
-- `home.books.3.author`
-- `home.books.3.caption`
-
-**Orchids box (footer)**
-
-- `home.orchids.title`
-- `home.orchids.intro`
-- `home.orchids.name`
-- `home.orchids.line1`
-- `home.orchids.line2`
-
+That creates one row per key in `content/site-copy.json` — currently 192 —
+pre-filled with the copy that ships in the code and ticked as Published, so
+the database and the site say the same thing on day one.
+
+It is safe to re-run: rows are matched by key and updated in place, never
+duplicated. Rows you added yourself that don't match a key are reported and
+left alone. Add `--dry-run` to see what it would do first:
+
+```bash
+NOTION_TOKEN=ntn_… node scripts/seed-notion.mjs --dry-run
+```
+
+## 5. Editing
+
+- Find the row whose `Name` is the slot you want, change `Text`, and make
+  sure `Published` is ticked.
+- Changes appear within 60 seconds. To publish immediately:
+
+  ```bash
+  curl -X POST https://worldzombieday.co.uk/api/revalidate \
+    -H 'content-type: application/json' \
+    -d '{"secret":"<REVALIDATION_SECRET>"}'
+  ```
+
+- **Moving a row off `Done` doesn't blank the slot** — it falls back to the
+  built-in copy in the repo. To show nothing, you'd have to change the code.
+- Line breaks in `Text` become line breaks on the page.
+- Rows whose `Name` isn't a dotted key (e.g. `Notes to self`) are ignored,
+  so you can keep working notes in the database safely.
+
+## 6. The keys
+
+Keys are namespaced by page. To find the key for something on screen,
+search `content/site-copy.json` for the words you can see.
+
+| Prefix | Page |
+|---|---|
+| `site.` | name, tagline, meta description |
+| `home.` | the homepage, including `home.essentials.*` and `home.broadcast.*` |
+| `register.` | `/register` |
+| `rules.` | `/rules` — `rules.1` … `rules.8` are the numbered rules |
+| `faq.` | `/faq` — `faq.q1`/`faq.a1` … `faq.q8`/`faq.a8` |
+| `sponsors.` | `/sponsors` |
+| `gallery.` | `/gallery` |
+| `press.` | `/press` — boilerplate, key facts, usage terms |
+| `photo.` | `/photo-policy` |
+| `privacy.` | `/privacy` |
+| `footer.` | the footer on every page |
+
+### Things that are not editable in Notion
+
+- **Photographer credits and alt text** live in `content/photos.json`, not
+  Notion, so that a credit can't be removed by unticking a checkbox.
+- Navigation labels, the event date used in structured data, and social
+  URLs live in `lib/event.ts`.
+- The wordmark is `components/wordmark.tsx`.
