@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { getSiteCopy } from "@/lib/site-copy"
 import { Photo } from "@/components/photo"
-import { makeT } from "@/components/notion-text"
+import { makeT, makeS } from "@/components/notion-text"
 import { PageShell, Section } from "@/components/page-shell"
 import { photo, allPhotos } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 export default async function PhotoPolicyPage() {
   const copy = await getSiteCopy()
   const T = makeT(copy)
+  const S = makeS(copy)
 
   // One entry per photographer, in first-appearance order.
   const photographers = [...new Map(allPhotos().map((p) => [p.credit, p])).values()]
@@ -25,6 +26,7 @@ export default async function PhotoPolicyPage() {
   return (
     <PageShell
       title={<T k="photo.title" />}
+      titleText={S("photo.title")}
       standfirst={<T k="photo.standfirst" />}
       banner={
         <Photo

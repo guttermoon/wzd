@@ -3,7 +3,7 @@ import Link from "next/link"
 import { getSiteCopy } from "@/lib/site-copy"
 import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
-import { makeT } from "@/components/notion-text"
+import { makeT, makeS } from "@/components/notion-text"
 import { PageShell, Section } from "@/components/page-shell"
 import { EVENT } from "@/lib/event"
 
@@ -20,6 +20,7 @@ const FACTS = ["date", "place", "cost", "cause", "scale", "origin", "tags"]
 export default async function PressPage() {
   const copy = await getSiteCopy()
   const T = makeT(copy)
+  const S = makeS(copy)
 
   // Editable in Notion (press.photos.url). Only http(s) is honoured, so a
   // malformed or unexpected value falls back to the "not up yet" message
@@ -30,6 +31,7 @@ export default async function PressPage() {
   return (
     <PageShell
       title={<T k="press.title" />}
+      titleText={S("press.title")}
       standfirst={<T k="press.standfirst" />}
       banner={
         <Photo

@@ -468,6 +468,55 @@
     animation: hand-in-right 660ms var(--ease-cut) var(--delay, 0ms) both;
   }
 
+  /* Type arriving a word at a time, each word behind its own panel.
+
+     The word is inline-block so it can carry a transform and clip its own
+     panel; the trailing space stays outside the span, or the line would
+     not wrap. Nothing here is required for the word to be legible: with
+     no .swipe-word class the text simply sits there, which is what an
+     unarmed component renders. */
+  .swipe-word {
+    position: relative;
+    display: inline-block;
+    /* Clipping is what keeps each panel over its own word rather than the
+       next one. */
+    overflow: hidden;
+    /* An inline-block that clips its overflow aligns on its bottom margin
+       edge instead of its text baseline, which makes every line taller the
+       moment this arms. Taking it off the baseline entirely keeps the
+       armed and unarmed headings the same height. */
+    vertical-align: bottom;
+  }
+
+  .in-view .swipe-word {
+    animation: swipe-word-up 420ms var(--ease-cut) var(--delay, 0ms) both;
+  }
+
+  .in-view .swipe-word::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    /* Never able to swallow a click on a heading that wraps a link. */
+    pointer-events: none;
+    background-color: var(--bg);
+    animation: swipe-word-panel 420ms var(--ease-cut) var(--delay, 0ms) both;
+  }
+
+  /* On the blood field the panel has to be the field, not the page. */
+  .on-blood .in-view .swipe-word::after {
+    background-color: var(--blood);
+  }
+
+  @keyframes swipe-word-up {
+    from { transform: translateY(28%); }
+    to { transform: translateY(0); }
+  }
+
+  @keyframes swipe-word-panel {
+    from { transform: translateX(0); }
+    to { transform: translateX(101%); }
+  }
+
   /* ── Title-card motion ──────────────────────────────────────────────
      Saul Bass rules: hard geometry sliding in straight lines, arriving
      decisively and then staying put. Panels wipe away to expose type, as
@@ -619,7 +668,6 @@
   }
 }
 
-/* Anyone who has asked for less motion gets none of it. */
 /* Anyone who has asked for less motion gets the finished state directly:
    no masking panel, no travel, nothing to wait for. */
 @media (prefers-reduced-motion: reduce) {
@@ -633,7 +681,8 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .wipe::after {
+  .wipe::after,
+  .swipe-word::after {
     display: none;
   }
   .slide-up,

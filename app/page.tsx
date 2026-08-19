@@ -1,8 +1,9 @@
 import Link from "next/link"
 import { getSiteCopy } from "@/lib/site-copy"
-import { makeT } from "@/components/notion-text"
+import { makeT, makeS } from "@/components/notion-text"
 import { Photo } from "@/components/photo"
 import { Reveal } from "@/components/reveal"
+import { Swipe } from "@/components/swipe"
 import { Bars, type Bar } from "@/components/bars"
 import { Divider } from "@/components/divider"
 import { TornEdge } from "@/components/torn-edge"
@@ -29,6 +30,7 @@ const HERO_BARS: Bar[] = [
 export default async function HomePage() {
   const copy = await getSiteCopy()
   const T = makeT(copy)
+  const S = makeS(copy)
 
   const essentials = [
     { k: "when", href: "/faq" },
@@ -69,11 +71,15 @@ export default async function HomePage() {
             <Reveal variant="cut" as="p" className="display text-sm sm:text-base">
               <T k="home.hero.eyebrow" />
             </Reveal>
-            <Reveal variant="wipe-red" delay={90} className="mt-3">
-              <h1 className="display text-[clamp(2.5rem,7vw,5rem)]">
-                <T k="home.hero.title" />
-              </h1>
-            </Reveal>
+            {/* The one heading that arrives word by word. Every heading on
+                the site doing it would read as a novelty; the title card
+                is where it belongs. */}
+            <Swipe
+              text={S("home.hero.title")}
+              as="h1"
+              delay={140}
+              className="mt-3 display text-[clamp(2.5rem,7vw,5rem)]"
+            />
             <Reveal
               variant="slide-right"
               delay={180}
@@ -82,18 +88,24 @@ export default async function HomePage() {
             <Reveal variant="slide-up" delay={270} as="p" className="mt-6 max-w-[46ch] font-body text-lg">
               <T k="home.hero.standfirst" />
             </Reveal>
-            <Reveal variant="slide-up" delay={360} className="mt-8 flex flex-wrap gap-3">
-              <Link href="/register" className="btn bg-blood-text text-blood">
-                <T k="home.hero.cta.primary" />
-              </Link>
-              <a
-                href={EVENT.cause.donateUrl}
-                rel="noopener noreferrer"
-                className="btn border-2 border-blood-text text-blood-text"
-              >
-                <T k="home.hero.cta.secondary" />
-              </a>
-            </Reveal>
+            {/* The pair arrives as a beat of its own, one behind the other,
+                rather than appearing with the paragraph above them. */}
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Reveal variant="slide-left" delay={420}>
+                <Link href="/register" className="btn bg-blood-text text-blood">
+                  <T k="home.hero.cta.primary" />
+                </Link>
+              </Reveal>
+              <Reveal variant="slide-left" delay={520}>
+                <a
+                  href={EVENT.cause.donateUrl}
+                  rel="noopener noreferrer"
+                  className="btn border-2 border-blood-text text-blood-text"
+                >
+                  <T k="home.hero.cta.secondary" />
+                </a>
+              </Reveal>
+            </div>
           </div>
 
           <Photo

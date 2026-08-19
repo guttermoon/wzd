@@ -1,5 +1,6 @@
 import type React from "react"
 import { Reveal } from "@/components/reveal"
+import { Swipe } from "@/components/swipe"
 
 /**
  * The masthead every inner page shares: a big cut-paper title block over a
@@ -7,11 +8,18 @@ import { Reveal } from "@/components/reveal"
  */
 export function PageShell({
   title,
+  titleText,
   standfirst,
   banner,
   children,
 }: {
   title: React.ReactNode
+  /**
+   * The same heading as a plain string, from `makeS`. When it is given the
+   * heading arrives a word at a time instead of in one block; `title` still
+   * has to be passed, because it is what renders without JavaScript.
+   */
+  titleText?: string
   standfirst?: React.ReactNode
   /**
    * An optional band across the top of the page, above the title. For the
@@ -40,11 +48,22 @@ export function PageShell({
               .panel-ground in globals.css), so an overlay at auto paints
               underneath it. */}
           <div className="relative z-10 mt-6 lg:absolute lg:inset-0 lg:mt-0 lg:flex lg:items-end lg:pb-14">
-            <div className="mx-auto w-full max-w-page px-4 sm:px-6">
+            {/* on-blood: the panel each word comes out from has to be the
+                slab it sits on, not the page behind it. */}
+            <div className="on-blood mx-auto w-full max-w-page px-4 sm:px-6">
               <Reveal variant="slide-right" className="inline-block">
-                <h1 className="display bg-blood px-5 py-3 text-[clamp(2.25rem,6vw,4rem)] text-blood-text">
-                  {title}
-                </h1>
+                {titleText ? (
+                  <Swipe
+                    text={titleText}
+                    as="h1"
+                    delay={220}
+                    className="display bg-blood px-5 py-3 text-[clamp(2.25rem,6vw,4rem)] text-blood-text"
+                  />
+                ) : (
+                  <h1 className="display bg-blood px-5 py-3 text-[clamp(2.25rem,6vw,4rem)] text-blood-text">
+                    {title}
+                  </h1>
+                )}
               </Reveal>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { getSiteCopy } from "@/lib/site-copy"
-import { makeT } from "@/components/notion-text"
+import { makeT, makeS } from "@/components/notion-text"
 import { PageShell, Section } from "@/components/page-shell"
 import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
@@ -17,10 +17,12 @@ export const metadata: Metadata = {
 export default async function SponsorsPage() {
   const copy = await getSiteCopy()
   const T = makeT(copy)
+  const S = makeS(copy)
 
   return (
     <PageShell
       title={<T k="sponsors.title" />}
+      titleText={S("sponsors.title")}
       standfirst={<T k="sponsors.standfirst" />}
       banner={
         <Photo
