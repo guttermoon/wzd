@@ -63,7 +63,10 @@ export default async function SponsorsPage() {
       <Section>
         <Photo
           photo={photo("kissing-booth")}
-          sizes="(min-width: 72rem) 68rem, 100vw"
+          bleed="full"
+          ratio="2/1"
+          sizes="100vw"
+          className="breakout"
           caption="A sponsor activation on the route — Apocalypse Events' kissing booth."
         />
       </Section>

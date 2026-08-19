@@ -22,6 +22,7 @@ export const EVENT = {
   cause: {
     name: "The Dead Good Club",
     legalForm: "Community Interest Company",
+    url: "https://deadgoodclub.com/",
     donateUrl: "https://paa.ge/worldzombieday",
     donateLabel: "paa.ge/worldzombieday",
   },

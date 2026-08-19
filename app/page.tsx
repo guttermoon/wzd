@@ -51,14 +51,19 @@ export default async function HomePage() {
           </a>
         </Reveal>
 
-        <Reveal variant="wipe" delay={450} className="mt-10">
-          <Photo
-            photo={photo("bridge-horde")}
-            priority
-            sizes="(min-width: 72rem) 68rem, 100vw"
-          />
-        </Reveal>
       </section>
+
+      {/* The horde runs the full width of the screen — the first thing that
+          says this is not a column of text with pictures in it. */}
+      <Reveal variant="wipe" delay={450} className="mt-10 w-full">
+        <Photo
+          photo={photo("bridge-horde")}
+          priority
+          bleed="full"
+          ratio="21/9"
+          sizes="100vw"
+        />
+      </Reveal>
 
       <div className="torn-bar mt-12" aria-hidden="true" />
 
@@ -89,10 +94,14 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── What it is ─────────────────────────────────────────────────── */}
-      <section className="mx-auto w-full max-w-page px-4 py-14 sm:px-6">
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
-          <div className="prose-wzd">
+      {/* ── What it is ───────────────────────────────────────────────────
+          The sections below run the full width of the screen and pad only
+          their text side back to the container line, so each photograph
+          reaches the edge. The splits are deliberately uneven — 7/5 then
+          5/7 — so no two rows scan the same way. */}
+      <section className="w-full py-14">
+        <div className="edge-right items-center gap-8 lg:gap-0">
+          <div className="prose-wzd px-4 sm:px-6 lg:col-start-2 lg:px-0 lg:pe-12">
             <h2 className="display text-[clamp(1.75rem,4vw,2.75rem)]">
               <T k="home.about.title" />
             </h2>
@@ -101,17 +110,22 @@ export default async function HomePage() {
           </div>
           <Photo
             photo={photo("leicester-square-banner")}
-            sizes="(min-width: 64rem) 34rem, 100vw"
+            bleed="right"
+            ratio="4/3"
+            sizes="(min-width: 64rem) 55vw, 100vw"
+            className="lg:col-start-3"
           />
         </div>
 
-        <div className="mt-14 grid gap-10 lg:grid-cols-2 lg:gap-14">
+        <div className="edge-left mt-20 items-center gap-8 lg:gap-0">
           <Photo
             photo={photo("the-horde")}
-            sizes="(min-width: 64rem) 34rem, 100vw"
-            className="lg:order-last"
+            bleed="left"
+            ratio="3/2"
+            sizes="(min-width: 64rem) 55vw, 100vw"
+            className="lg:col-start-1 lg:row-start-1"
           />
-          <div className="prose-wzd">
+          <div className="prose-wzd px-4 sm:px-6 lg:col-start-2 lg:row-start-1 lg:px-0 lg:ps-12">
             <h2 className="display text-[clamp(1.75rem,4vw,2.75rem)]">
               <T k="home.day.title" />
             </h2>
@@ -129,9 +143,9 @@ export default async function HomePage() {
       <div className="torn-bar" aria-hidden="true" />
 
       {/* ── Everyone's welcome ─────────────────────────────────────────── */}
-      <section className="bg-surface py-14">
-        <div className="mx-auto grid w-full max-w-page gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-14">
-          <div className="prose-wzd">
+      <section className="w-full bg-surface py-14">
+        <div className="edge-right items-center gap-8 lg:gap-0">
+          <div className="prose-wzd px-4 sm:px-6 lg:col-start-2 lg:px-0 lg:pe-12">
             <h2 className="display text-[clamp(1.75rem,4vw,2.75rem)]">
               <T k="register.access.title" />
             </h2>
@@ -144,7 +158,10 @@ export default async function HomePage() {
           </div>
           <Photo
             photo={photo("family-kerb")}
-            sizes="(min-width: 64rem) 34rem, 100vw"
+            bleed="right"
+            ratio="5/4"
+            sizes="(min-width: 64rem) 55vw, 100vw"
+            className="lg:col-start-3"
           />
         </div>
       </section>
@@ -159,9 +176,14 @@ export default async function HomePage() {
           <p><T k="home.cause.body2" /></p>
           <p><T k="home.cause.body3" /></p>
         </div>
-        <a href={EVENT.cause.donateUrl} rel="noopener noreferrer" className="btn btn-primary mt-6">
-          <T k="home.cause.cta" />
-        </a>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <a href={EVENT.cause.donateUrl} rel="noopener noreferrer" className="btn btn-primary">
+            <T k="home.cause.cta" />
+          </a>
+          <a href={EVENT.cause.url} rel="noopener noreferrer" className="btn btn-secondary">
+            Visit {EVENT.cause.name}
+          </a>
+        </div>
       </section>
 
       {/* ── Final call to action ───────────────────────────────────────── */}

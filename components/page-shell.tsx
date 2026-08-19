@@ -1,4 +1,5 @@
 import type React from "react"
+import { Reveal } from "@/components/reveal"
 
 /**
  * The masthead every inner page shares: a big cut-paper title block over a
@@ -15,13 +16,23 @@ export function PageShell({
 }) {
   return (
     <div className="mx-auto w-full max-w-page px-4 py-10 sm:px-6 sm:py-14">
+      {/* The title card, played once. A panel wipes off the heading, the
+          rule drives in from the left, the standfirst follows — 90ms
+          apart, which is the middle of the 80-120ms house stagger. */}
       <header>
-        <h1 className="display text-[clamp(2.25rem,7vw,4.5rem)]">{title}</h1>
-        <div className="slab-rule mt-4" />
+        <Reveal variant="wipe">
+          <h1 className="display text-[clamp(2.25rem,7vw,4.5rem)]">{title}</h1>
+        </Reveal>
+        <Reveal variant="slide-right" delay={90} className="slab-rule mt-4" />
         {standfirst ? (
-          <p className="mt-5 max-w-[60ch] font-body text-lg leading-relaxed text-muted sm:text-xl">
+          <Reveal
+            variant="slide-up"
+            delay={180}
+            as="p"
+            className="mt-5 max-w-[60ch] font-body text-lg leading-relaxed text-muted sm:text-xl"
+          >
             {standfirst}
-          </p>
+          </Reveal>
         ) : null}
       </header>
       {children}
@@ -44,9 +55,13 @@ export function Section({
   return (
     <section id={id} className={`mt-12 ${className}`}>
       {title ? (
-        <h2 className="display mb-4 text-[clamp(1.5rem,3.5vw,2.25rem)]">{title}</h2>
+        <Reveal variant="wipe" className="mb-4">
+          <h2 className="display text-[clamp(1.5rem,3.5vw,2.25rem)]">{title}</h2>
+        </Reveal>
       ) : null}
-      {children}
+      <Reveal variant="slide-up" delay={90}>
+        {children}
+      </Reveal>
     </section>
   )
 }

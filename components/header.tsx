@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { NAV } from "@/lib/event"
-import { Wordmark } from "@/components/wordmark"
+import { BrainMark } from "@/components/brain-mark"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 /**
@@ -12,9 +12,11 @@ import { ThemeToggle } from "@/components/theme-toggle"
 export function Header() {
   return (
     <header className="border-b-2 border-rule bg-bg">
-      <div className="mx-auto flex max-w-page items-center justify-between gap-4 px-4 py-4 sm:px-6">
-        <Link href="/" className="block w-[190px] shrink-0 py-1 sm:w-[240px]">
-          <Wordmark />
+      <div className="mx-auto flex max-w-page items-center justify-between gap-4 px-4 py-3 sm:px-6">
+        {/* The mark alone. It squares up with the theme toggle and the menu
+            button at 44px, which is what keeps the bar tight. */}
+        <Link href="/" className="block h-11 w-11 shrink-0">
+          <BrainMark />
           <span className="sr-only">World Zombie Day: London — home</span>
         </Link>
 

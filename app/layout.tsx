@@ -5,6 +5,7 @@ import { Grandstander, Raleway } from "next/font/google"
 import "./globals.css"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { VhsFilter } from "@/components/vhs-filter"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Analytics } from "@/components/analytics"
 import { getSiteCopy } from "@/lib/site-copy"
@@ -130,6 +131,7 @@ export default async function RootLayout({
           <main id="main">{children}</main>
           <Footer copy={copy} />
           <Analytics />
+          <VhsFilter />
         </ThemeProvider>
       </body>
     </html>

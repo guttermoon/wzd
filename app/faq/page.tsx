@@ -61,6 +61,7 @@ export default async function FaqPage() {
       <Section>
         <Photo
           photo={photo("zombie-dog")}
+          tilt
           sizes="(min-width: 48rem) 32rem, 100vw"
           className="max-w-lg"
           caption="Yes, dogs really are welcome."

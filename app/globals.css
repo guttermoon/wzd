@@ -84,6 +84,14 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* Full-bleed panels are allowed to reach past the container. `clip`
+     rather than `hidden`: hidden would make the page a scroll container
+     and break position: sticky. */
+  html,
+  body {
+    overflow-x: clip;
+  }
+
   /* Visible focus everywhere, in both themes. Never removed. */
   :focus-visible {
     outline: 3px solid var(--focus);
@@ -166,37 +174,30 @@
      scanline: a moving VHS artefact would be exactly the flashing-content
      problem the site is meant to avoid. */
 
+  /* ── The tape transfer ──────────────────────────────────────────────
+     Four layers, in this order: the channel split and grain (SVG, see
+     components/vhs-filter.tsx), the colour cast, the bloom, and the
+     scanlines. Everything is static — a photograph that flickers is a
+     seizure risk and fails WCAG 2.3.1, so nothing here moves, ever. */
   .vhs {
     position: relative;
     display: block;
     overflow: hidden;
-    /* Tape-transfer look: pushed saturation, crushed blacks, a warm bias. */
-    filter: saturate(1.35) contrast(1.12) brightness(0.96) sepia(0.12)
-      hue-rotate(-6deg);
   }
 
-  /* Scanlines and the soft vignette of a CRT. */
-  .vhs::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image:
-      repeating-linear-gradient(
-        to bottom,
-        rgb(0 0 0 / 0.16) 0px,
-        rgb(0 0 0 / 0.16) 1px,
-        transparent 1px,
-        transparent 3px
-      ),
-      radial-gradient(
-        ellipse at center,
-        transparent 55%,
-        rgb(0 0 0 / 0.38) 100%
-      );
+  .vhs img {
+    display: block;
+    /* url() first: the channel split works on the untinted image, the way
+       a tape lays the channels down before anything grades them. Then the
+       grade — pushed hard, and warm: a tape that has been through the
+       machine too many times loses the blues first. */
+    filter: url(#vhs-tape) saturate(1.7) contrast(1.04) brightness(1.06)
+      hue-rotate(-12deg);
   }
 
-  /* Chromatic misregistration — the red/cyan fringe of a worn tape. */
+  /* The magenta cast of a tape played once too often, and the bloom that
+     comes with it. Screened, so it lifts the highlights rather than
+     greying the whole frame. */
   .vhs::before {
     content: "";
     position: absolute;
@@ -204,30 +205,162 @@
     z-index: 1;
     pointer-events: none;
     mix-blend-mode: screen;
-    opacity: 0.22;
+    opacity: 0.42;
+    /* Magenta through the body of the frame, a hot red bloom off one
+       corner, and just enough cyan in the opposite corner to keep the
+       fringe reading as misregistration rather than a colour wash. */
     background:
-      linear-gradient(90deg, rgb(255 0 40 / 0.55), transparent 12%),
-      linear-gradient(270deg, rgb(0 200 255 / 0.5), transparent 12%);
+      radial-gradient(ellipse at 35% 30%, rgb(255 30 130 / 0.62), transparent 70%),
+      linear-gradient(210deg, rgb(255 70 30 / 0.45), transparent 55%),
+      linear-gradient(20deg, rgb(0 170 255 / 0.16), transparent 30%);
   }
 
-  .vhs img {
-    display: block;
+  /* Scanlines and the vignette of a CRT. Deliberately gentle: a 4px period
+     at low alpha reads as texture, where a tighter, harder stripe strobes
+     against the eye when the page scrolls. */
+  .vhs::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background-image:
+      repeating-linear-gradient(
+        to bottom,
+        rgb(0 0 0 / 0.09) 0px,
+        rgb(0 0 0 / 0.09) 1px,
+        transparent 1px,
+        transparent 4px
+      ),
+      radial-gradient(ellipse at center, transparent 62%, rgb(0 0 0 / 0.26) 100%);
   }
 
-  /* Six hand-cut frames. Corners sit a few percent off square, so the
-     shapes read as cut paper without ever slicing into a face. */
-  .cut-0 { clip-path: polygon(0% 2.5%, 98.5% 0%, 100% 97%, 1.5% 100%); }
-  .cut-1 { clip-path: polygon(1.5% 0%, 100% 2%, 98% 100%, 0% 96.5%); }
-  .cut-2 { clip-path: polygon(0% 0%, 97.5% 1.5%, 100% 98.5%, 2% 97%); }
-  .cut-3 { clip-path: polygon(2% 1%, 100% 0%, 97.5% 99%, 0% 100%); }
-  .cut-4 { clip-path: polygon(0% 1.5%, 99% 0%, 100% 98%, 2.5% 100%); }
-  .cut-5 { clip-path: polygon(1% 0%, 98% 2.5%, 100% 100%, 0% 98%); }
+  /* Anyone who has asked for higher contrast or less visual noise gets the
+     photograph, not the artefacts. */
+  @media (prefers-contrast: more) {
+    .vhs img { filter: none; }
+    .vhs::before,
+    .vhs::after { display: none; }
+  }
 
-  /* A slight tilt, alternating, for grid layouts only. */
+  /* ── The shapes photographs sit in ──────────────────────────────────
+     Saul Bass cuts paper: hard angular panels, no two the same, running
+     off the edge of the composition rather than sitting politely in the
+     middle of it. Six frames, chosen per photo by a hash of its slug so a
+     given photo always gets the same one.
+
+     The cut is deep enough to read as a cut — 6-10% of the width, against
+     the 1-2% these had before, which looked like a rendering fault. The
+     angles fall on the vertical edges, where a horde photographed at
+     street level has nothing but pavement and sky. */
+  .cut-0 { clip-path: polygon(0% 0%, 100% 6%, 100% 94%, 0% 100%); }
+  .cut-1 { clip-path: polygon(0% 6%, 100% 0%, 100% 100%, 0% 94%); }
+  .cut-2 { clip-path: polygon(0% 0%, 100% 0%, 92% 100%, 0% 100%); }
+  .cut-3 { clip-path: polygon(8% 0%, 100% 0%, 100% 100%, 0% 100%); }
+  .cut-4 { clip-path: polygon(0% 4%, 100% 0%, 94% 100%, 0% 96%); }
+  .cut-5 { clip-path: polygon(6% 0%, 100% 4%, 100% 96%, 0% 100%); }
+
+  /* Edge-hugging panels get their angle on the inner edge — the one
+     facing the text. The outer edge stays flush with the viewport, or the
+     panel stops looking like it runs off the screen. */
+  .cut-inner-l { clip-path: polygon(7% 0%, 100% 0%, 100% 100%, 0% 100%); }
+  .cut-inner-r { clip-path: polygon(0% 0%, 100% 0%, 93% 100%, 0% 100%); }
+  /* Full width: the angle goes on the horizontal edges instead. */
+  .cut-band { clip-path: polygon(0% 3%, 100% 0%, 100% 97%, 0% 100%); }
+
+  /* A slight tilt for the smaller in-column photographs. */
   .tilt-a { transform: rotate(-1.15deg); }
   .tilt-b { transform: rotate(0.85deg); }
   .tilt-c { transform: rotate(-0.55deg); }
 
+  /* Rows where the photograph hugs an edge of the screen.
+
+     The gutter is a grid *column*, not padding. Padding would have to be a
+     percentage of the text cell, which is not the width the container line
+     is measured from — and a Tailwind `px-` utility would win the cascade
+     against it anyway, since utilities are emitted after this layer. As a
+     column it is measured against the section, which is the full width of
+     the screen, and nothing competes with it.
+
+     72rem is max-w-page; 1.5rem is the page gutter from sm up. Below lg
+     both collapse to a single column and the cells carry their own
+     padding. */
+  .edge-right,
+  .edge-left {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    .edge-right {
+      grid-template-columns:
+        max(1.5rem, calc((100% - 72rem) / 2))
+        minmax(0, 30rem)
+        minmax(0, 1fr);
+    }
+
+    .edge-left {
+      grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 30rem)
+        max(1.5rem, calc((100% - 72rem) / 2));
+    }
+  }
+
+  /* The flat colour field the panels are laid on, offset so the angled
+     edge has something to cut against. Zombie Red is a display colour and
+     this is the largest display surface on the site. */
+  .panel-ground {
+    position: relative;
+  }
+
+  .panel-ground::before {
+    content: "";
+    position: absolute;
+    /* Offset down only. The panel already touches the viewport edge, so an
+       outward offset would open a horizontal scrollbar. */
+    inset: 0.9rem 0 -0.9rem 0;
+    z-index: 0;
+    background-color: var(--accent);
+    clip-path: polygon(0% 4%, 100% 0%, 100% 96%, 0% 100%);
+  }
+
+  .panel-ground > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Escape a centred container, for the lone full-width photograph on an
+     inner page. The gutter utilities above are the better tool when the
+     text sits beside the photograph; this one is for when it does not. */
+  .breakout {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+  }
+
+  /* Credits sit back on the container line even when the panel does not,
+     so a photographer's name is never pushed off the screen. */
+  .credit-inset { padding-inline: 1rem; }
+
+  @media (min-width: 640px) {
+    .credit-inset { padding-inline: 1.5rem; }
+  }
+
+  /* The blood arrives once: both layers slide up, the darker one a beat
+     behind, and then they stop. Values are SVG user units, not pixels —
+     the viewBox is 1440x200. */
+  @keyframes drip-settle {
+    from { transform: translateY(34px); }
+    to { transform: translateY(0); }
+  }
+
+  .in-view .drip-front {
+    animation: drip-settle 520ms var(--ease-cut) both;
+  }
+
+  .in-view .drip-back {
+    animation: drip-settle 640ms var(--ease-cut) 110ms both;
+  }
 
   /* ── Title-card motion ──────────────────────────────────────────────
      Saul Bass rules: hard geometry sliding in straight lines, arriving
