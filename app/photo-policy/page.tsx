@@ -45,7 +45,6 @@ export default async function PhotoPolicyPage() {
         <Photo
           photo={photo("selfie")}
           sizes="(min-width: 72rem) 68rem, 100vw"
-          imageClassName="border-2 border-rule"
         />
       </Section>
 
@@ -91,15 +90,7 @@ export default async function PhotoPolicyPage() {
         <p className="prose-wzd font-body"><T k="photo.credits.body" /></p>
         <ul className="mt-6 grid gap-2 font-body sm:grid-cols-2 lg:grid-cols-3">
           {photographers.map((p) => (
-            <li key={p.credit}>
-              {p.creditUrl ? (
-                <a className="link" href={p.creditUrl} rel="noopener noreferrer">
-                  {p.credit}
-                </a>
-              ) : (
-                p.credit
-              )}
-            </li>
+            <li key={p.credit}>{p.credit}</li>
           ))}
         </ul>
       </Section>

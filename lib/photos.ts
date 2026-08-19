@@ -8,14 +8,11 @@ export interface Photo {
   source: string
   /** Photographer. Required: nothing renders without one. */
   credit: string
-  creditUrl?: string
   /** Describes the scene for someone who can't see it. Never the credit. */
   alt: string
   slot?: string
   /** Note about an uncertain or disputed credit, surfaced in IMAGES.md. */
   creditNote?: string
-  /** Whether the photo is offered on the press page. */
-  press?: boolean
 }
 
 const photos = registry as Photo[]
@@ -35,10 +32,6 @@ export function photo(slug: string): Photo {
 
 export function allPhotos(): Photo[] {
   return photos
-}
-
-export function pressPhotos(): Photo[] {
-  return photos.filter((p) => p.press !== false)
 }
 
 interface Rendition {
@@ -82,8 +75,4 @@ export function srcSet(photo: Photo): string {
 
 export function fallbackSrc(photo: Photo): string {
   return `/photos/${photo.slug}-${widestWidth(photo)}.jpg`
-}
-
-export function pressSrc(photo: Photo): string {
-  return `/press/${photo.slug}-press.jpg`
 }

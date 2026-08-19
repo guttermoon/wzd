@@ -12,7 +12,7 @@ import { chromium } from "@playwright/test"
 
 const base = process.argv[2] || "http://localhost:3000"
 const axe = readFileSync("node_modules/axe-core/axe.min.js", "utf8")
-const ROUTES = ["/", "/register", "/rules", "/faq", "/gallery", "/sponsors", "/press", "/photo-policy", "/privacy"]
+const ROUTES = ["/", "/register", "/rules", "/faq", "/sponsors", "/press", "/photo-policy", "/privacy"]
 const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"]
 
 const browser = await chromium.launch({

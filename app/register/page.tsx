@@ -38,7 +38,6 @@ export default async function RegisterPage() {
         photo={photo("leake-street-crowd")}
         sizes="(min-width: 72rem) 68rem, 100vw"
         className="mt-10"
-        imageClassName="border-2 border-rule"
       />
 
       <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-14">

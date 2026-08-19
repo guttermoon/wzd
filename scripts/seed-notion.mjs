@@ -20,9 +20,7 @@ import { Client } from "@notionhq/client"
 const dryRun = process.argv.includes("--dry-run")
 const token = process.env.NOTION_TOKEN
 const databaseId =
-  process.env.NOTION_CONTENT_DATABASE_ID ||
-  process.env.NOTION_DATABASE_ID ||
-  "3c16f6ccb2c180e087a4da55703d5792"
+  process.env.NOTION_DATABASE_ID || "3c16f6ccb2c180e087a4da55703d5792"
 
 if (!token) {
   console.error("NOTION_TOKEN is not set. See docs/NOTION_SETUP.md.")

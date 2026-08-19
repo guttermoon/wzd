@@ -12,6 +12,11 @@
 --------------------------------------------------------------------------- */
 
 :root {
+  /* The footer's blood block is the same red in both themes: white on it
+     measures 7.35:1, and it has to read as blood, not as a theme accent. */
+  --blood: #a81e11;
+  --blood-text: #ffffff;
+
   --bg: #f4f1ea; /* paper */
   --surface: #eae5da;
   --text: #141210; /* 16.57:1 on --bg */
@@ -127,6 +132,77 @@
   .prose-wzd li {
     line-height: 1.65;
   }
+
+
+  /* ── Photographs: VHS tape, cut into asymmetric frames ──────────────
+     After the Saul Bass collage idiom — pictures held in hand-cut shapes
+     rather than neat rectangles.
+
+     Everything here is static. No flicker, no animation, no rolling
+     scanline: a moving VHS artefact would be exactly the flashing-content
+     problem the site is meant to avoid. */
+
+  .vhs {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    /* Tape-transfer look: pushed saturation, crushed blacks, a warm bias. */
+    filter: saturate(1.35) contrast(1.12) brightness(0.96) sepia(0.12)
+      hue-rotate(-6deg);
+  }
+
+  /* Scanlines and the soft vignette of a CRT. */
+  .vhs::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      repeating-linear-gradient(
+        to bottom,
+        rgb(0 0 0 / 0.16) 0px,
+        rgb(0 0 0 / 0.16) 1px,
+        transparent 1px,
+        transparent 3px
+      ),
+      radial-gradient(
+        ellipse at center,
+        transparent 55%,
+        rgb(0 0 0 / 0.38) 100%
+      );
+  }
+
+  /* Chromatic misregistration — the red/cyan fringe of a worn tape. */
+  .vhs::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: 0.22;
+    background:
+      linear-gradient(90deg, rgb(255 0 40 / 0.55), transparent 12%),
+      linear-gradient(270deg, rgb(0 200 255 / 0.5), transparent 12%);
+  }
+
+  .vhs img {
+    display: block;
+  }
+
+  /* Six hand-cut frames. Corners sit a few percent off square, so the
+     shapes read as cut paper without ever slicing into a face. */
+  .cut-0 { clip-path: polygon(0% 2.5%, 98.5% 0%, 100% 97%, 1.5% 100%); }
+  .cut-1 { clip-path: polygon(1.5% 0%, 100% 2%, 98% 100%, 0% 96.5%); }
+  .cut-2 { clip-path: polygon(0% 0%, 97.5% 1.5%, 100% 98.5%, 2% 97%); }
+  .cut-3 { clip-path: polygon(2% 1%, 100% 0%, 97.5% 99%, 0% 100%); }
+  .cut-4 { clip-path: polygon(0% 1.5%, 99% 0%, 100% 98%, 2.5% 100%); }
+  .cut-5 { clip-path: polygon(1% 0%, 98% 2.5%, 100% 100%, 0% 98%); }
+
+  /* A slight tilt, alternating, for grid layouts only. */
+  .tilt-a { transform: rotate(-1.15deg); }
+  .tilt-b { transform: rotate(0.85deg); }
+  .tilt-c { transform: rotate(-0.55deg); }
 
   /* Buttons — 44px minimum target, both themes. */
   .btn {

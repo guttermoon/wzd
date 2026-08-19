@@ -48,7 +48,6 @@ export default async function RulesPage() {
           <Photo
             photo={photo("steward-crossing")}
             sizes="(min-width: 64rem) 34rem, 100vw"
-            imageClassName="border-2 border-rule"
           />
         </div>
       </Section>

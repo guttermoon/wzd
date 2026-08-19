@@ -60,7 +60,7 @@ for (const path of [...walk("app"), ...walk("components")]) {
 console.log(`✓ <img> is only emitted by components/photo.tsx`)
 
 // 4 ── the rendered pages actually show the credits
-const ROUTES = ["/", "/register", "/rules", "/faq", "/gallery", "/sponsors", "/press", "/photo-policy"]
+const ROUTES = ["/", "/register", "/rules", "/faq", "/sponsors", "/press", "/photo-policy"]
 try {
   await fetch(base, { signal: AbortSignal.timeout(2000) })
 } catch {

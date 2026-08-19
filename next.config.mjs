@@ -18,6 +18,7 @@ const nextConfig = {
       { source: "/become-a-sponsor", destination: "/sponsors", permanent: true },
       { source: "/privacy-policy", destination: "/privacy", permanent: true },
       { source: "/zombiedigest", destination: "/", permanent: true },
+      { source: "/gallery", destination: "/press", permanent: true },
       { source: "/win", destination: "/", permanent: true },
       { source: "/map", destination: "/faq", permanent: true },
       { source: "/t-shirts", destination: "/", permanent: true },

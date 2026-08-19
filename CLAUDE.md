@@ -6,10 +6,10 @@ London**, migrated off WordPress. None of the blog template remains.
 
 ## What the site is
 
-- Next.js 14 (app router) + Tailwind, deployed on Vercel. Nine static
+- Next.js 14 (app router) + Tailwind, deployed on Vercel. Eight static
   routes, no database, no blog.
-- `/` `/register` `/rules` `/faq` `/gallery` `/sponsors` `/press`
-  `/photo-policy` `/privacy`. Primary nav is the first six
+- `/` `/register` `/rules` `/faq` `/sponsors` `/press` `/photo-policy`
+  `/privacy`. Primary nav is the first five
   (`NAV` in `lib/event.ts`); the rest sit in the footer (`FOOTER_NAV`).
 - Every route is a server component that does
   `const T = makeT(await getSiteCopy())` and renders `<T k="…" />`.
@@ -34,7 +34,7 @@ Two layers, and the first one is complete on its own:
 
 Keys are dotted and lowercase (`home.hero.title`, `faq.q3`,
 `sponsors.onsite.amount`), namespaced per page: `site.` `home.` `register.`
-`rules.` `faq.` `sponsors.` `photo.` `press.` `gallery.` `privacy.`
+`rules.` `faq.` `sponsors.` `photo.` `press.` `privacy.`
 `footer.`.
 
 `components/notion-text.tsx` exports `makeT` (renders a key, newlines →
@@ -62,18 +62,9 @@ Do not add an `<img>`, a CSS `background-image` of a photograph, or a
 Renditions are built by `scripts/prepare-images.mjs` from
 `assets/originals/` (gitignored) — run `npm run images` after adding one.
 
-Layout: `public/photos/` (responsive renditions), `public/video/` (the
-broadcast), `public/press/` (2400px downloads + the hand-drawn
-`wordmark.svg`). Everything there except `wordmark.svg` is generated, as is
+Layout: `public/photos/` (responsive renditions) and `public/press/`
+(2400px downloads + the hand-drawn `wordmark.svg`). Everything there except `wordmark.svg` is generated, as is
 `content/photo-renditions.json` — don't hand-edit any of it.
-
-## The video contains flashing images
-
-`public/video/world-zombie.{mp4,webm}` (the Channel 56 spoof broadcast)
-was measured at six large luminance swings in one second — over the WCAG
-2.3.1 limit of three. `components/broadcast.tsx` therefore has **no
-autoplay and no loop**, shows a warning before playback, and has its own
-pause control. Don't "improve" it by autoplaying.
 
 ## Design and accessibility
 

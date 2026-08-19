@@ -21,6 +21,8 @@ const config: Config = {
         accent: "var(--accent)",
         "accent-text": "var(--accent-text)",
         rule: "var(--rule)",
+        blood: "var(--blood)",
+        "blood-text": "var(--blood-text)",
         edge: "var(--border)",
       },
       fontFamily: {

@@ -3,7 +3,6 @@ export const config = {
   notion: {
     token: process.env.NOTION_TOKEN,
     databaseId: process.env.NOTION_DATABASE_ID,
-    contentDatabaseId: process.env.NOTION_CONTENT_DATABASE_ID,
   },
   revalidation: {
     secret: process.env.REVALIDATION_SECRET,

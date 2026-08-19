@@ -64,7 +64,6 @@ export default async function FaqPage() {
           sizes="(min-width: 48rem) 32rem, 100vw"
           className="max-w-lg"
           caption="Yes, dogs really are welcome."
-          imageClassName="border-2 border-rule"
         />
       </Section>
 

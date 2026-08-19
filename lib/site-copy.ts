@@ -31,8 +31,8 @@ function extractPlainText(richText: any[]): string {
 export const getSiteCopy = cache(async (): Promise<SiteCopy> => {
   const copy: SiteCopy = { ...(defaults as SiteCopy) }
 
-  const databaseId = config.notion.contentDatabaseId || config.notion.databaseId
-  if (!databaseId || !config.notion.token) return copy
+  const { databaseId, token } = config.notion
+  if (!databaseId || !token) return copy
 
   try {
     let cursor: string | undefined = undefined

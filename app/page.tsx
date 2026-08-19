@@ -2,7 +2,6 @@ import Link from "next/link"
 import { getSiteCopy } from "@/lib/site-copy"
 import { makeT } from "@/components/notion-text"
 import { Photo } from "@/components/photo"
-import { Broadcast } from "@/components/broadcast"
 import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
 
@@ -54,7 +53,6 @@ export default async function HomePage() {
           priority
           sizes="(min-width: 72rem) 68rem, 100vw"
           className="mt-10"
-          imageClassName="border-2 border-rule"
         />
       </section>
 
@@ -95,7 +93,6 @@ export default async function HomePage() {
           <Photo
             photo={photo("leicester-square-banner")}
             sizes="(min-width: 64rem) 34rem, 100vw"
-            imageClassName="border-2 border-rule"
           />
         </div>
 
@@ -104,7 +101,6 @@ export default async function HomePage() {
             photo={photo("the-horde")}
             sizes="(min-width: 64rem) 34rem, 100vw"
             className="lg:order-last"
-            imageClassName="border-2 border-rule"
           />
           <div className="prose-wzd">
             <h2 className="display text-[clamp(1.75rem,4vw,2.75rem)]">
@@ -140,7 +136,6 @@ export default async function HomePage() {
           <Photo
             photo={photo("family-kerb")}
             sizes="(min-width: 64rem) 34rem, 100vw"
-            imageClassName="border-2 border-rule"
           />
         </div>
       </section>
@@ -158,24 +153,6 @@ export default async function HomePage() {
         <a href={EVENT.charity.donateUrl} rel="noopener noreferrer" className="btn btn-primary mt-6">
           <T k="home.charity.cta" />
         </a>
-      </section>
-
-      {/* ── Broadcast ──────────────────────────────────────────────────── */}
-      <section className="bg-surface py-14">
-        <div className="mx-auto w-full max-w-page px-4 sm:px-6">
-          <h2 className="display text-[clamp(1.75rem,4vw,2.75rem)]">
-            <T k="home.broadcast.title" />
-          </h2>
-          <p className="mt-3 max-w-[52ch] font-body text-muted">
-            <T k="home.broadcast.body" />
-          </p>
-          <div className="mt-6">
-            <Broadcast
-              warning={copy["home.broadcast.warning"]}
-              label={copy["home.broadcast.label"]}
-            />
-          </div>
-        </div>
       </section>
 
       {/* ── Final call to action ───────────────────────────────────────── */}

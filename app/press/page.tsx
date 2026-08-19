@@ -4,7 +4,7 @@ import { getSiteCopy } from "@/lib/site-copy"
 import { makeT } from "@/components/notion-text"
 import { PageShell, Section } from "@/components/page-shell"
 import { Photo } from "@/components/photo"
-import { photo, pressPhotos, pressSrc } from "@/lib/photos"
+import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
 
 export const revalidate = 60
@@ -21,6 +21,12 @@ export default async function PressPage() {
   const copy = await getSiteCopy()
   const T = makeT(copy)
 
+  // Editable in Notion (press.photos.url). Only http(s) is honoured, so a
+  // malformed or unexpected value falls back to the "not up yet" message
+  // rather than becoming a live link.
+  const raw = (copy["press.photos.url"] ?? "").trim()
+  const photoFolder = /^https?:\/\//i.test(raw) ? raw : ""
+
   return (
     <PageShell title={<T k="press.title" />} standfirst={<T k="press.standfirst" />}>
       <div className="cut-panel mt-10 p-6">
@@ -36,7 +42,6 @@ export default async function PressPage() {
         photo={photo("the-horde")}
         sizes="(min-width: 72rem) 68rem, 100vw"
         className="mt-10"
-        imageClassName="border-2 border-rule"
       />
 
       <Section title={<T k="press.facts.title" />}>
@@ -73,36 +78,25 @@ export default async function PressPage() {
         </p>
       </Section>
 
-      {/* Photography. Every download names its photographer in the visible
-          label, so a credit cannot be lost between here and publication. */}
+      {/* Photography lives in an external folder so it can be repointed
+          year to year from Notion, without a deploy. */}
       <Section title={<T k="press.photos.title" />}>
-        <p className="prose-wzd font-body"><T k="press.photos.body" /></p>
-        <ul className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {pressPhotos().map((p) => (
-            <li key={p.slug}>
-              <Photo
-                photo={p}
-                sizes="(min-width: 64rem) 22rem, (min-width: 40rem) 45vw, 100vw"
-                imageClassName="border-2 border-rule"
-              />
-              <p className="mt-3 font-body text-sm">
-                <span className="block text-muted">
-                  Credit exactly as: <span className="text-text">Photo: {p.credit}</span>
-                </span>
-                <a
-                  href={pressSrc(p)}
-                  download={`wzd-london-${p.slug}-photo-by-${p.credit
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, "-")
-                    .replace(/(^-|-$)/g, "")}.jpg`}
-                  className="link mt-1 inline-flex min-h-[44px] items-center"
-                >
-                  <T k="press.photos.download" /> — photo by {p.credit}
-                </a>
-              </p>
-            </li>
-          ))}
-        </ul>
+        <p className="prose-wzd font-body">
+          <T k="press.photos.body" />
+        </p>
+        {photoFolder ? (
+          <a
+            href={photoFolder}
+            rel="noopener noreferrer"
+            className="btn btn-primary mt-6"
+          >
+            <T k="press.photos.cta" />
+          </a>
+        ) : (
+          <p className="prose-wzd mt-4 font-body text-muted">
+            <T k="press.photos.pending" />
+          </p>
+        )}
       </Section>
 
       <Section title={<T k="press.coverage.title" />}>

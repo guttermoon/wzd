@@ -73,7 +73,6 @@ lib/          site-copy.ts (Notion) · photos.ts (registry) · event.ts (dates, 
 docs/         IMAGES.md (photo manifest) · NOTION_SETUP.md
 scripts/      image pipeline, Notion seeding, the two check scripts
 public/photos/  responsive renditions, built — do not edit by hand
-public/video/   the Channel 56 broadcast, built from the GIF
 public/press/   press-resolution downloads, plus the hand-drawn wordmark.svg
 assets/originals/  photographers' full-size files (gitignored, ~31MB)
 ```
@@ -98,7 +97,7 @@ copy from Notion.
 
 | Command | What it does |
 |---|---|
-| `npm run images` | Rebuilds web/press renditions from the originals, and the video from the GIF. Needs the originals in `assets/originals/`. |
+| `npm run images` | Rebuilds the web and press renditions from the originals. Needs the originals in `assets/originals/`. |
 | `npm run check:credits` | Verifies every photo is credited and no raw `<img>` slips past. |
 | `npm run check:a11y` | Runs axe-core over every route in both themes, plus keyboard checks. Start the server first. |
 | `npm run seed:notion` | Creates/updates one Notion row per copy key, pre-filled and live. Needs `NOTION_TOKEN`. Safe to re-run. |
@@ -142,7 +141,7 @@ anyone. It informed the letterform choices and nothing else. `*.ttf` and
 ## Accessibility
 
 Targeting WCAG 2.2 AA, and checked rather than assumed — `npm run check:a11y`
-reports zero axe violations across all nine routes in both themes.
+reports zero axe violations across every route in both themes.
 
 - Contrast is measured, not eyeballed: body text is at least 4.5:1 in both
   themes, and the accent red is a different red in each because a red that
@@ -152,6 +151,5 @@ reports zero axe violations across all nine routes in both themes.
 - The FAQ is a native `<details>`, so it works with a keyboard and before
   JavaScript loads.
 - Text never sits on top of a photograph.
-- **The Channel 56 video contains flashing images** — measured at six large
-  luminance swings in one second, above the WCAG 2.3.1 limit. It never
-  autoplays, is labelled before you start it, and has its own pause control.
+- The VHS treatment on photographs is static — no flicker, no animation —
+  so it can't trip the flashing thresholds in WCAG 2.3.1.

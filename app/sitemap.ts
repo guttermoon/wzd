@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next"
 import { SITE_URL } from "@/lib/site"
-import { NAV, FOOTER_NAV } from "@/lib/event"
+import { NAV, FOOTER_NAV, LEGAL_NAV } from "@/lib/event"
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = [...NAV, ...FOOTER_NAV].map((item) => item.href)
+  const routes = [...NAV, ...FOOTER_NAV, ...LEGAL_NAV].map((item) => item.href)
   return routes.map((href) => ({
     url: `${SITE_URL}${href === "/" ? "" : href}`,
     lastModified: new Date(),
