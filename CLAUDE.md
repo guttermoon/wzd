@@ -1,89 +1,107 @@
-# The Dead Good Club — project guide
+# World Zombie Day: London — project guide
 
-Read this before assuming anything: this repo **started as a Notion blog
-template but no longer is one**. It is a single-page vintage-magazine site
-("The Dead Good Club") with Notion as its copy CMS.
+Read this before assuming anything. This repo began as a Notion blog
+template and was rebuilt in August 2026 as the site for **World Zombie Day:
+London**, migrated off WordPress. None of the blog template remains.
 
 ## What the site is
 
-- Next.js 14 (app router) + Tailwind. Homepage (`app/page.tsx`) renders
-  `components/vintage-strip.tsx` — a long scrolling 1960s-UFO-magazine strip
-  centered at 1200px. This IS the product; the blog routes still exist but
-  are legacy template code (see "Pending decisions").
-- Every strip section has an anchor id and a name, listed in the header's
-  SECTIONS dropdown (`components/header.tsx` → `homeSections`): cover,
-  birch-trail, seeing-is-disbelieving, condon-report, other-enemy,
-  bird-brains, anatomical-anomalies, redacted-report, signals-from-space,
-  environmental-quality, join-the-club.
-- Page end order: magazine strip (flush) → coupon strip
-  (`components/vintage-footer.tsx`) → black links footer
-  (`components/footer.tsx`) → copyright line.
+- Next.js 14 (app router) + Tailwind, deployed on Vercel. Nine static
+  routes, no database, no blog.
+- `/` `/register` `/rules` `/faq` `/gallery` `/sponsors` `/press`
+  `/photo-policy` `/privacy`. Primary nav is the first six
+  (`NAV` in `lib/event.ts`); the rest sit in the footer (`FOOTER_NAV`).
+- Every route is a server component that does
+  `const T = makeT(await getSiteCopy())` and renders `<T k="…" />`.
 
-## Notion content model (IMPORTANT — do not guess)
+## The copy system (IMPORTANT — do not guess)
 
-**One database: `dgc-pages`** (`NOTION_DATABASE_ID`, shared with the
-integration). It holds BOTH:
+Two layers, and the first one is complete on its own:
 
-1. **Site pages/posts** — rows with Slug, Category, etc. (template model).
-2. **Homepage copy rows** — Title starts with `home.` (e.g.
-   `home.cover.title`), value in the **Text** rich-text property,
-   **Published** checkbox must be ticked. ~111 rows exist, one per text slot.
+1. **`content/site-copy.json`** — the built-in text for every key. The site
+   renders correctly with **no Notion credentials at all**. Never delete a
+   key from here to "move it to Notion"; Notion overrides, it doesn't own.
+2. **Notion database `wzd-pages`** (`NOTION_DATABASE_ID`,
+   `3c16f6ccb2c180e087a4da55703d5792`) — rows with `Name` = the key and
+   `Text` = the copy. Currently 192 rows, one per key. Fetched in one
+   paginated query by `lib/site-copy.ts`; rows whose title isn't a dotted
+   key are ignored.
+   The live/draft gate is deliberately flexible (`isLive()` in
+   `lib/site-copy.ts`): a `Published` checkbox if the database has one,
+   else a `Status` of Done/Published/Live/Complete, else everything is
+   live. This database uses `Status`. Don't hard-code one property name —
+   the owner configures the database, not us.
 
-Code paths:
-- `lib/homepage-content.ts` → `getHomeText()` fetches all Published
-  `home.*` rows in one query (uses `NOTION_CONTENT_DATABASE_ID` if set,
-  else `NOTION_DATABASE_ID`).
-- `components/notion-text.tsx` → `makeT(content)` returns `<T k="...">`
-  which renders the Notion override or its fallback children. Newlines in
-  Notion text become `<br/>`.
-- `vintage-strip.tsx` and `vintage-footer.tsx` receive `content` via props
-  from `app/page.tsx` / `app/layout.tsx`. Every editable slot is wrapped in
-  `<T>`; the full key list is in `NOTION_SETUP.md` §6.
-- `lib/notion.ts` `getAllPosts()` **skips `home.*` rows** so copy never
-  appears as posts. Keep that invariant if you touch the query.
-- Letter-stack display words (vertical OTHER, tilted ENEMY letters) and the
-  Signals rail words are design elements, intentionally NOT keyed.
+Keys are dotted and lowercase (`home.hero.title`, `faq.q3`,
+`sponsors.onsite.amount`), namespaced per page: `site.` `home.` `register.`
+`rules.` `faq.` `sponsors.` `photo.` `press.` `gallery.` `privacy.`
+`footer.`.
 
-Revalidation is 60s, so Notion edits appear within a minute.
+`components/notion-text.tsx` exports `makeT` (renders a key, newlines →
+`<br/>`) and `makeS` (plain string, for attributes).
 
-## Interactive bits (plain inline scripts, not React)
+**If you add a `<T k="…">`, add the key to `content/site-copy.json` too** —
+otherwise the slot renders empty. And add a matching Notion row, or the
+owner can't edit it.
 
-The redacted-poster rub-to-reveal and the ENEMY letter reveal are vanilla
-inline `<script dangerouslySetInnerHTML>` IIFEs inside `vintage-strip.tsx`.
-This is deliberate: the published artifact strips React hydration, and
-inline scripts survive. Keep new interactions in that style if they must
-work in the artifact.
+Revalidation is 60s. `POST /api/revalidate` with the secret to force it.
 
-The Book Club coupon in `vintage-footer.tsx` is a live newsletter form
-("use client") posting to the stub `app/api/newsletter/route.ts` — swap the
-stub's internals when a provider (e.g. MailerLite) is chosen.
+## Photographs — credit is enforced, not conventional
 
-## Artifact preview workflow
+The owner's standing instruction is that **every photograph is published
+with its photographer's name**. That is enforced in three places:
 
-The design is reviewed as a self-contained HTML artifact at
-https://claude.ai/code/artifact/37efcca1-f652-47f0-be0c-9f4b327a2a15
-(favicon 🛸 — keep both stable; republish the same file path/URL).
+- `lib/photos.ts` — `photo(slug)` throws if the credit is missing.
+- `components/photo.tsx` — the **only** component allowed to emit an
+  `<img>`. It always renders "Photo: <credit>" in a `<figcaption>`.
+- `scripts/check-credits.mjs` — fails if any of the above is violated, if a
+  rendition is orphaned, or if a raw `<img>` appears anywhere else.
 
-Build with `scripts/build-artifact.mjs` (see header comment): run the dev
-server, save the rendered page as `home-raw.html` and its compiled CSS as
-`layout.css` in a work dir, then run the script there. It inlines the
-latin-subset next/font woff2 files as base64 `@font-face`, downscales
-photos to WebP data URIs stored once as `:root` CSS variables, rewrites
-`<img src>`/svg `href` attributes directly, and keeps only the inline
-scripts (enemy/redact). Zero external URLs may remain — the artifact CSP
-blocks all network requests. If a new font/image/script is added to the
-site, add it to the script's lists (`NEEDED_VARS`, `images`, script filter).
+Do not add an `<img>`, a CSS `background-image` of a photograph, or a
+`next/image` outside that component. Registry: `content/photos.json`.
+Renditions are built by `scripts/prepare-images.mjs` from
+`assets/originals/` (gitignored) — run `npm run images` after adding one.
 
-## Pending decisions / gotchas
+Layout: `public/photos/` (responsive renditions), `public/video/` (the
+broadcast), `public/press/` (2400px downloads + the hand-drawn
+`wordmark.svg`). Everything there except `wordmark.svg` is generated, as is
+`content/photo-renditions.json` — don't hand-edit any of it.
 
-- Branch `claude/notion-webpages-no-blog-q44tkm` (unmerged) replaces the
-  blog with Notion-backed pages rendered by slug (`app/[slug]/page.tsx`,
-  `HOME_SLUG`). The owner considers the site "amended to a site setup", so
-  expect this direction; the blog routes on main are effectively legacy.
-  The header/footer nav item "Resources" still points at `/blog`.
-- `app/api/test-notion/route.ts` has a known pre-existing TS error — ignore
-  it in `tsc` output.
-- Commit identity must be `Claude <noreply@anthropic.com>`; never rewrite
-  already-merged history (the stop-hook flags upstream commits — leave them).
-- Env vars: see `.env.example`. Locally, Notion calls fail gracefully to
-  built-in fallback copy, so the site renders fully without credentials.
+## The video contains flashing images
+
+`public/video/world-zombie.{mp4,webm}` (the Channel 56 spoof broadcast)
+was measured at six large luminance swings in one second — over the WCAG
+2.3.1 limit of three. `components/broadcast.tsx` therefore has **no
+autoplay and no loop**, shows a warning before playback, and has its own
+pause control. Don't "improve" it by autoplaying.
+
+## Design and accessibility
+
+- Saul Bass tribute after the site's own 2016 design: black, bone white,
+  blood red, all caps. Display **Grandstander**, body **Raleway**.
+- **Hitchcock must never be committed or served.** The owner's instruction,
+  verbatim: "Hitchcock was created by Matt Terich, based on the work of Saul
+  Bass. Please do not redistribute these files in any way. They can be
+  downloaded for free at http://typographica.org/001110.php" — serving a
+  webfont is redistribution, so it is not in the repo, not in any font
+  stack, and `*.ttf` / `Hitchcock*` are gitignored. The site does not use
+  it; Grandstander does that job.
+- Colours are CSS variables in `app/globals.css`: `:root` is light, `.dark`
+  overrides. Never give a colour its only definition inside one theme.
+  Both reds are contrast-checked; they differ per theme deliberately.
+- Caps come from `text-transform` (`.display`), never from typed capitals.
+- Target is WCAG 2.2 AA and it currently passes clean:
+  `npx next start & npm run check:a11y` → 0 violations, 9 routes × 2 themes.
+  Keep it there.
+
+## Gotchas
+
+- Commit identity must be `Claude <noreply@anthropic.com>`.
+- Old WordPress URLs are redirected in `next.config.mjs`. If you rename a
+  route, add a redirect — those links are in a decade of press coverage.
+- `POST /api/revalidate` requires `REVALIDATION_SECRET`; it returns 503 if
+  unset. (The template's version skipped the check when no secret was sent.)
+- `app/api/newsletter/route.ts` is an unused stub returning 501 on purpose,
+  so it can't silently swallow email addresses.
+- 301 photographs are still on the old WordPress site and could not be
+  fetched from this environment. See `docs/IMAGES.md`.

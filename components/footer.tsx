@@ -1,93 +1,76 @@
 import Link from "next/link"
-import { Github, Twitter, Linkedin } from "lucide-react"
-import { getSectionContent } from "@/lib/notion-content"
+import { EVENT, NAV, FOOTER_NAV } from "@/lib/event"
+import { makeT, type SiteCopy } from "@/components/notion-text"
 
-const DEFAULT_TAGLINE =
-  "A dead good periodical of dispatches, features, and curiosities. Typeset in the cloud, delivered on digital paper."
-
-export async function Footer() {
-  const content = await getSectionContent("footer")
+export function Footer({ copy }: { copy: SiteCopy }) {
+  const T = makeT(copy)
 
   return (
-    <footer className="bg-black text-paper">
-      <div className="container py-12">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2">
-          <div>
-            <h3 className="font-display text-2xl uppercase tracking-wide">
-              The Dead Good Club
-            </h3>
-            {content?.html ? (
-              <div
-                className="mt-4 font-serif italic text-paper/70 [&_p]:my-2"
-                dangerouslySetInnerHTML={{ __html: content.html }}
-              />
-            ) : (
-              <p className="mt-4 font-serif italic text-paper/70">
-                {DEFAULT_TAGLINE}
-              </p>
-            )}
+    <footer className="mt-16 border-t-2 border-rule bg-bg">
+      <div className="torn-bar" aria-hidden="true" />
+      <div className="mx-auto max-w-page px-4 py-12 sm:px-6">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="lg:col-span-2">
+            <p className="display text-2xl">World Zombie Day: London</p>
+            <p className="mt-3 max-w-[46ch] font-body text-muted">
+              <T k="footer.tagline" />
+            </p>
+            <p className="mt-3 font-body text-muted">
+              <T k="footer.charity" />{" "}
+              <a className="link" href={EVENT.charity.donateUrl} rel="noopener noreferrer">
+                {EVENT.charity.donateLabel}
+              </a>
+            </p>
           </div>
 
-          <div className="space-y-10">
-          <div>
-            <h4 className="border-b border-paper/30 pb-2 font-mono text-sm uppercase tracking-[0.2em] text-paper/60">
-              Contents
-            </h4>
-            <ul className="mt-4 space-y-2 font-mono text-sm uppercase tracking-wider">
-              {[
-                { name: "Home", href: "/" },
-                { name: "Resources", href: "/blog" },
-                { name: "Sections", href: "/categories" },
-                { name: "About", href: "/about" },
-              ].map((item) => (
-                <li key={item.name}>
+          <nav aria-label="Footer">
+            <h2 className="display text-sm tracking-wide text-muted">Pages</h2>
+            <ul className="mt-3 space-y-1">
+              {[...NAV, ...FOOTER_NAV].map((item) => (
+                <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="inline-block py-1 text-paper/80 transition-colors hover:bg-paper hover:text-ink"
+                    className="link inline-flex min-h-[44px] items-center font-body"
                   >
                     {item.name}
                   </Link>
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           <div>
-            <h4 className="border-b border-paper/30 pb-2 font-mono text-sm uppercase tracking-[0.2em] text-paper/60">
-              Directory
-            </h4>
-            <div className="mt-4 flex gap-3">
-              <Link
-                href="#"
-                aria-label="Twitter"
-                className="border border-paper/40 p-2 text-paper/80 transition-colors hover:bg-paper hover:text-ink"
-              >
-                <Twitter className="h-5 w-5" />
-              </Link>
-              <Link
-                href="#"
-                aria-label="GitHub"
-                className="border border-paper/40 p-2 text-paper/80 transition-colors hover:bg-paper hover:text-ink"
-              >
-                <Github className="h-5 w-5" />
-              </Link>
-              <Link
-                href="#"
-                aria-label="LinkedIn"
-                className="border border-paper/40 p-2 text-paper/80 transition-colors hover:bg-paper hover:text-ink"
-              >
-                <Linkedin className="h-5 w-5" />
-              </Link>
-            </div>
-          </div>
+            <h2 className="display text-sm tracking-wide text-muted">
+              <T k="footer.contact.title" />
+            </h2>
+            <p className="mt-3 font-body">
+              <a className="link break-words" href={`mailto:${EVENT.email}`}>
+                {EVENT.email}
+              </a>
+            </p>
+
+            <h2 className="display mt-6 text-sm tracking-wide text-muted">
+              <T k="footer.follow.title" />
+            </h2>
+            <ul className="mt-3 space-y-1">
+              {EVENT.social.map((item) => (
+                <li key={item.url}>
+                  <a
+                    className="link inline-flex min-h-[44px] items-center font-body"
+                    href={item.url}
+                    rel="noopener noreferrer"
+                  >
+                    {item.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        <div className="mt-10 border-t border-paper/20 pt-6 text-center">
-          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-paper/50">
-            © 2026 The Dead Good Club — printed in the cloud — all rights reserved
-          </p>
-        </div>
+        <p className="mt-12 border-t-2 border-edge pt-6 font-body text-sm text-muted">
+          © {new Date().getFullYear()} World Zombie Day: London. <T k="footer.colophon" />
+        </p>
       </div>
     </footer>
   )

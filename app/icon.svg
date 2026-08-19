@@ -1,1 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="82" font-size="82">🛸</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" fill="#0B0B0B"/>
+  <circle cx="16" cy="16" r="11" fill="#FF2E1F"/>
+  <g stroke="#0B0B0B" stroke-width="1.6" fill="none" stroke-linecap="round">
+    <path d="M16 8c-3.2 0-5 2.3-5 4.6s1.8 2.8 1.8 4.6-2.3 1.8-2.3 3.7"/>
+    <path d="M16 8c3.2 0 5 2.3 5 4.6s-1.8 2.8-1.8 4.6 2.3 1.8 2.3 3.7"/>
+  </g>
+</svg>

@@ -1,117 +1,63 @@
 import type React from "react"
 import type { Metadata } from "next"
-import {
-  Anton,
-  Newsreader,
-  Courier_Prime,
-  Archivo,
-  Oswald,
-  Playfair_Display,
-  Libre_Baskerville,
-  Special_Elite,
-  Spicy_Rice,
-  Grandstander,
-} from "next/font/google"
+import { Grandstander, Raleway } from "next/font/google"
+
 import "./globals.css"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { VintageFooter } from "@/components/vintage-footer"
-import { Toaster } from "@/components/ui/toaster"
-import { getCategories } from "@/lib/notion"
-import { getHomeText } from "@/lib/homepage-content"
+import { ThemeProvider } from "@/components/theme-provider"
+import { getSiteCopy } from "@/lib/site-copy"
+import { EVENT } from "@/lib/event"
 import { SITE_URL } from "@/lib/site"
 
-const anton = Anton({
-  weight: "400",
+/**
+ * Display type. Grandstander in all caps stands in for the Saul Bass hand
+ * lettering of the old site — set with text-transform, never typed as
+ * capitals, so screen readers still read words rather than letters.
+ */
+const grandstander = Grandstander({
+  weight: ["600", "700", "800"],
   subsets: ["latin"],
+  display: "swap",
   variable: "--font-display",
 })
 
-const newsreader = Newsreader({
+const raleway = Raleway({
   subsets: ["latin"],
-  style: ["normal", "italic"],
-  variable: "--font-serif",
+  display: "swap",
+  variable: "--font-body",
 })
 
-const courierPrime = Courier_Prime({
-  weight: ["400", "700"],
-  subsets: ["latin"],
-  variable: "--font-mono",
-})
-
-const archivo = Archivo({
-  subsets: ["latin"],
-  variable: "--font-grotesk",
-})
-
-const oswald = Oswald({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
-  variable: "--font-oswald",
-})
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["700", "900"],
-  style: ["normal", "italic"],
-  variable: "--font-playfair",
-})
-
-const libreBaskerville = Libre_Baskerville({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
-  variable: "--font-basker",
-})
-
-const specialElite = Special_Elite({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-typewriter",
-})
-
-const spicyRice = Spicy_Rice({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-spicy",
-})
-
-const grandstander = Grandstander({
-  weight: ["400", "500"],
-  subsets: ["latin"],
-  variable: "--font-grand",
-})
-
-const archivoBold = Archivo({
-  weight: "700",
-  subsets: ["latin"],
-  variable: "--font-archblack",
-})
+const title = "World Zombie Day: London"
+const description =
+  "A free, family-friendly charity zombie walk through central London. Saturday 10 October 2026."
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  title: { default: title, template: `%s — ${title}` },
+  description,
   alternates: { canonical: "/" },
-  title: "The Dead Good Club",
-  description:
-    "A dead good periodical. Dispatches, features, and curiosities — printed on digital paper, powered by Notion.",
-  keywords: ["blog", "magazine", "notion", "cms", "vintage", "zine"],
-  authors: [{ name: "The Dead Good Club" }],
+  keywords: [
+    "World Zombie Day",
+    "zombie walk London",
+    "London events",
+    "charity walk",
+    "Halloween London",
+  ],
   openGraph: {
-    title: "The Dead Good Club",
-    description:
-      "A dead good periodical. Dispatches, features, and curiosities — printed on digital paper.",
+    title,
+    description,
     type: "website",
-    locale: "en_US",
+    locale: "en_GB",
     url: "/",
-    siteName: "The Dead Good Club",
-    images: [{ url: "/og.jpg", width: 1200, height: 630 }],
+    siteName: title,
+    images: [{ url: "/photos/bridge-horde-1600.jpg", width: 1600, height: 1199 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "The Dead Good Club",
-    description:
-      "A dead good periodical. Dispatches, features, and curiosities — printed on digital paper.",
-    images: ["/og.jpg"],
+    title,
+    description,
+    images: ["/photos/bridge-horde-1600.jpg"],
   },
 }
 
@@ -121,19 +67,32 @@ const structuredData = {
     {
       "@type": "Organization",
       "@id": `${SITE_URL}/#organization`,
-      name: "The Dead Good Club",
+      name: title,
       url: SITE_URL,
-      logo: `${SITE_URL}/icon.svg`,
+      email: EVENT.email,
+      sameAs: EVENT.social.map((s) => s.url),
     },
     {
-      "@type": "WebSite",
-      "@id": `${SITE_URL}/#website`,
-      url: SITE_URL,
-      name: "The Dead Good Club",
-      description:
-        "A dead good periodical. Dispatches, features, and curiosities — printed on digital paper.",
-      publisher: { "@id": `${SITE_URL}/#organization` },
-      inLanguage: "en",
+      "@type": "Event",
+      "@id": `${SITE_URL}/#event`,
+      name: `${title} 2026`,
+      description,
+      startDate: EVENT.startsAt,
+      eventStatus: "https://schema.org/EventScheduled",
+      eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+      location: {
+        "@type": "Place",
+        name: "Central London",
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: EVENT.locality,
+          addressRegion: EVENT.region,
+          addressCountry: EVENT.country,
+        },
+      },
+      organizer: { "@id": `${SITE_URL}/#organization` },
+      isAccessibleForFree: true,
+      image: [`${SITE_URL}/photos/bridge-horde-1600.jpg`],
     },
   ],
 }
@@ -145,23 +104,31 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const categories = await getCategories()
-  const homeContent = await getHomeText()
+  const copy = await getSiteCopy()
 
   return (
-    <html lang="en">
-      <body
-        className={`${anton.variable} ${newsreader.variable} ${courierPrime.variable} ${archivo.variable} ${oswald.variable} ${playfair.variable} ${libreBaskerville.variable} ${specialElite.variable} ${spicyRice.variable} ${grandstander.variable} ${archivoBold.variable} font-serif paper`}
-      >
+    <html
+      lang="en-GB"
+      // next-themes writes the class before paint; React must not complain.
+      suppressHydrationWarning
+      className={`${grandstander.variable} ${raleway.variable}`}
+    >
+      <body className="font-body">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
-        <Header categories={categories} />
-        <main>{children}</main>
-        <VintageFooter content={homeContent} />
-        <Footer />
-        <Toaster />
+        <ThemeProvider>
+          <a
+            href="#main"
+            className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:border-2 focus:border-rule focus:bg-bg focus:px-4 focus:py-3 focus:text-text"
+          >
+            Skip to content
+          </a>
+          <Header />
+          <main id="main">{children}</main>
+          <Footer copy={copy} />
+        </ThemeProvider>
       </body>
     </html>
   )

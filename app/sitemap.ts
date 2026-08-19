@@ -1,29 +1,13 @@
 import type { MetadataRoute } from "next"
 import { SITE_URL } from "@/lib/site"
-import { getAllPosts } from "@/lib/notion"
+import { NAV, FOOTER_NAV } from "@/lib/event"
 
-export const revalidate = 3600
-
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticRoutes = ["", "/blog", "/about", "/contact", "/categories"].map(
-    (path) => ({
-      url: `${SITE_URL}${path || "/"}`,
-      changeFrequency: "weekly" as const,
-      priority: path === "" ? 1 : 0.6,
-    }),
-  )
-
-  let postRoutes: MetadataRoute.Sitemap = []
-  try {
-    const posts = await getAllPosts()
-    postRoutes = posts.map((post) => ({
-      url: `${SITE_URL}/blog/${post.slug}`,
-      lastModified: post.publishedAt || undefined,
-      changeFrequency: "monthly" as const,
-      priority: 0.5,
-    }))
-  } catch {
-    // Notion unavailable — ship the static routes only
-  }
-  return [...staticRoutes, ...postRoutes]
+export default function sitemap(): MetadataRoute.Sitemap {
+  const routes = [...NAV, ...FOOTER_NAV].map((item) => item.href)
+  return routes.map((href) => ({
+    url: `${SITE_URL}${href === "/" ? "" : href}`,
+    lastModified: new Date(),
+    changeFrequency: href === "/" ? "weekly" : "monthly",
+    priority: href === "/" ? 1 : href === "/register" ? 0.9 : 0.7,
+  }))
 }
