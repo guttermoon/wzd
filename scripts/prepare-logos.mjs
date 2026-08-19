@@ -53,10 +53,12 @@ const retarget = (svg) =>
 
 writeFileSync("/tmp/mark-tight.svg", retarget(stripped))
 const brainFull = optimise("/tmp/mark-tight.svg", `${OUT}/brain.svg`, 1)
-// The favicon and the O of LONDON both render small; a coarser trace is
-// indistinguishable there and a third of the weight.
+// The favicon and the masthead mark both render at 44px or less, where the
+// reduced coordinate precision is invisible and the file is a third of the
+// weight. The masthead copy is inlined into every page, so that matters.
 const brainSmall = optimise("/tmp/mark-tight.svg", "/tmp/brain-small.svg", 0)
 writeFileSync("app/icon.svg", brainSmall)
+writeFileSync(`${OUT}/brain-mark.svg`, brainSmall)
 
 await sharp(Buffer.from(brainFull)).resize({ width: 512 }).png().toFile(`${OUT}/brain-512.png`)
 
@@ -82,5 +84,5 @@ const wordmark = optimise("/tmp/wordmark-raw.svg", `${OUT}/wordmark.svg`, 1)
 
 const kb = (s) => (Buffer.byteLength(s) / 1024).toFixed(1)
 console.log(`brain.svg    ${kb(brainFull)}KB   (full detail)`)
-console.log(`app/icon.svg ${kb(brainSmall)}KB   (favicon)`)
+console.log(`app/icon.svg ${kb(brainSmall)}KB   (favicon + masthead)`)
 console.log(`wordmark.svg ${kb(wordmark)}KB   (${letterPaths} lettering paths → currentColor)`)

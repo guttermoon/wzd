@@ -40,8 +40,10 @@ export default async function PressPage() {
 
       <Photo
         photo={photo("the-horde")}
-        sizes="(min-width: 72rem) 68rem, 100vw"
-        className="mt-10"
+        bleed="full"
+        ratio="21/9"
+        sizes="100vw"
+        className="breakout mt-10"
       />
 
       <Section title={<T k="press.facts.title" />}>

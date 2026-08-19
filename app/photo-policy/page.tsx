@@ -44,7 +44,10 @@ export default async function PhotoPolicyPage() {
       <Section>
         <Photo
           photo={photo("selfie")}
-          sizes="(min-width: 72rem) 68rem, 100vw"
+          bleed="full"
+          ratio="2/1"
+          sizes="100vw"
+          className="breakout"
         />
       </Section>
 

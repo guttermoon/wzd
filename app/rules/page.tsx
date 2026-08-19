@@ -47,6 +47,7 @@ export default async function RulesPage() {
           <p className="prose-wzd font-body"><T k="rules.stewards.body" /></p>
           <Photo
             photo={photo("steward-crossing")}
+            tilt
             sizes="(min-width: 64rem) 34rem, 100vw"
           />
         </div>

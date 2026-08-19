@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { EVENT, NAV, FOOTER_NAV, LEGAL_NAV } from "@/lib/event"
 import { makeT, type SiteCopy } from "@/components/notion-text"
+import { Reveal } from "@/components/reveal"
 
 /** Minimal glyphs, so no icon dependency is pulled in for four links. */
 const ICONS: Record<string, string> = {
@@ -27,28 +28,34 @@ export function Footer({ copy }: { copy: SiteCopy }) {
           </p>
         </div>
 
-        <svg
-          viewBox="0 0 1440 120"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-          focusable="false"
-          className="mt-8 block h-[70px] w-full sm:h-[110px]"
-        >
-          <path
-            d="M0 62c150-38 290 26 430 30 160 5 300-46 470-40 150 5 290 52 430 40 60-5 100-14 110-18v46H0Z"
-            fill="var(--blood)"
-            opacity="0.35"
-          />
-          <path
-            d="M0 78c170-30 300 18 450 22 170 5 320-38 500-30 140 6 270 40 380 30 60-5 100-12 110-16v36H0Z"
-            fill="var(--blood)"
-            opacity="0.6"
-          />
-          <path
-            d="M0 96c180-24 320 12 480 16 180 5 330-26 520-20 130 4 250 26 350 20 50-3 80-8 90-10v18H0Z"
-            fill="var(--blood)"
-          />
-        </svg>
+        {/* Blood that has run down the page and pooled at the foot of it.
+            Two layers, the darker one behind and a little higher. Each is
+            an uneven pool plus a handful of streaks that ran down into it
+            — no two the same width, no two the same length, and never
+            evenly spaced, or it reads as a row of flames.
+
+            It arrives once: the layers slide up, the back one a beat
+            behind, and then both stop. Nothing loops. A band that moved
+            forever would need a pause control under WCAG 2.2.2, and the
+            house style is that things arrive and stay still. */}
+        <Reveal variant="slide-up" className="mt-10 block">
+          <svg
+            viewBox="0 0 1440 220"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+            focusable="false"
+            className="drip block h-[120px] w-full sm:h-[180px]"
+          >
+            <g className="drip-back" fill="var(--blood)" opacity="0.5">
+              <path d="M0,152 L66,143 L116,150 L188,138 L231,148 L288,135 L376,142 L415,151 L476,139 L572,145 L616,134 L694,149 L746,137 L812,143 L862,150 L934,138 L977,148 L1034,135 L1122,142 L1161,151 L1222,139 L1318,145 L1362,134 L1440,149 L1440,220 L0,220 Z" />
+              <path d="M251,176 C253,107 262,85 262,79 C262,62 280,62 280,79 C280,85 283,107 285,176 Z M730,176 C731,121 733,107 733,103 C733,90 747,90 747,103 C747,107 753,121 754,176 Z M1010,176 C1012,95 1024,67 1024,60 C1024,37 1048,37 1048,60 C1048,67 1052,95 1054,176 Z M1264,176 C1265,130 1268,119 1268,116 C1268,108 1276,108 1276,116 C1276,119 1279,130 1280,176 Z" />
+            </g>
+            <g className="drip-front" fill="var(--blood)">
+              <path d="M0,170 L52,151 L130,167 L174,148 L270,161 L331,155 L370,169 L458,158 L515,149 L558,164 L630,152 L680,168 L746,159 L798,151 L876,167 L920,148 L1016,161 L1077,155 L1116,169 L1204,158 L1261,149 L1304,164 L1376,152 L1426,168 L1440,159 L1440,220 L0,220 Z" />
+              <path d="M127,194 C129,101 142,64 142,57 C142,33 168,33 168,57 C168,64 171,101 173,194 Z M382,194 C383,134 386,113 386,110 C386,99 398,99 398,110 C398,113 401,134 402,194 Z M587,194 C590,91 605,53 605,43 C605,11 639,11 639,43 C639,53 646,91 649,194 Z M885,194 C886,124 888,97 888,93 C888,80 902,80 902,93 C902,97 910,124 911,194 Z M1133,194 C1135,108 1138,75 1138,68 C1138,49 1158,49 1158,68 C1158,75 1169,108 1171,194 Z M1339,194 C1340,137 1345,118 1345,115 C1345,106 1355,106 1355,115 C1355,118 1356,137 1357,194 Z" />
+            </g>
+          </svg>
+        </Reveal>
       </div>
 
       <div className="bg-blood text-blood-text">
@@ -92,6 +99,14 @@ export function Footer({ copy }: { copy: SiteCopy }) {
             <T k="footer.cause" />{" "}
             <a
               className="underline decoration-2 underline-offset-4 hover:no-underline"
+              href={EVENT.cause.url}
+              rel="noopener noreferrer"
+            >
+              {EVENT.cause.name}
+            </a>{" "}
+            &middot;{" "}
+            <a
+              className="underline decoration-2 underline-offset-4 hover:no-underline"
               href={EVENT.cause.donateUrl}
               rel="noopener noreferrer"
             >
@@ -110,7 +125,6 @@ export function Footer({ copy }: { copy: SiteCopy }) {
           {/* Small print. */}
           <p className="mt-6 font-body text-sm text-blood-text/85">
             © {new Date().getFullYear()} World Zombie Day: London.{" "}
-            <T k="footer.colophon" />{" "}
             {LEGAL_NAV.map((item) => (
               <Link
                 key={item.href}
