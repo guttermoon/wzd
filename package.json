@@ -10,12 +10,14 @@
     "images": "node scripts/prepare-images.mjs",
     "check:credits": "node scripts/check-credits.mjs",
     "check:a11y": "node scripts/check-a11y.mjs",
-    "seed:notion": "node scripts/seed-notion.mjs"
+    "seed:notion": "node scripts/seed-notion.mjs",
+    "logos": "node scripts/prepare-logos.mjs"
   },
   "dependencies": {
     "@notionhq/client": "^4.0.1",
     "next": "14.2.35",
     "next-themes": "^0.4.6",
+    "posthog-js": "^1.418.4",
     "react": "^18",
     "react-dom": "^18"
   },
@@ -29,8 +31,9 @@
     "ffmpeg-static": "^5.2.0",
     "postcss": "^8.5",
     "sharp": "^0.35.3",
+    "svgo": "^4.0.2",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
   },
-  "description": "World Zombie Day: London \u2014 a free charity zombie walk, with copy managed in Notion."
+  "description": "World Zombie Day: London — a free Community Fundraising zombie walk, with copy managed in Notion."
 }

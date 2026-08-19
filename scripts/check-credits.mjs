@@ -53,14 +53,17 @@ const walk = (dir) =>
     return entry.isDirectory() ? walk(path) : [path]
   })
 for (const path of [...walk("app"), ...walk("components")]) {
-  if (!/\.tsx$/.test(path) || path.endsWith("components/photo.tsx")) continue
+  // components/photo.tsx is the credit-bearing component; wordmark.tsx
+  // renders the logo, which is artwork rather than a photograph.
+  const ALLOWED = ["components/photo.tsx", "components/wordmark.tsx"]
+  if (!/\.tsx$/.test(path) || ALLOWED.some((a) => path.endsWith(a))) continue
   const source = readFileSync(path, "utf8")
   if (/<img[\s>]/.test(source)) fail(`${path} renders a raw <img>; use <Photo> so a credit is emitted`)
 }
 console.log(`✓ <img> is only emitted by components/photo.tsx`)
 
 // 4 ── the rendered pages actually show the credits
-const ROUTES = ["/", "/register", "/rules", "/faq", "/gallery", "/sponsors", "/press", "/photo-policy"]
+const ROUTES = ["/", "/register", "/rules", "/faq", "/sponsors", "/press", "/photo-policy"]
 try {
   await fetch(base, { signal: AbortSignal.timeout(2000) })
 } catch {
@@ -74,8 +77,10 @@ for (const route of ROUTES) {
   const body = html.split("<script>self.__next_f")[0]
   const figures = (body.match(/<figure/g) || []).length
   const credits = (body.match(/Photo:/g) || []).length
-  const imgs = (body.match(/<img /g) || []).length
-  if (imgs !== figures) fail(`${route}: ${imgs} <img> but ${figures} <figure>`)
+  // Only photographs count here. The logo lives under /brand/ and is
+  // artwork, not a photograph, so it carries no credit line.
+  const photoImgs = (body.match(/<img[^>]+\/photos\//g) || []).length
+  if (photoImgs !== figures) fail(`${route}: ${photoImgs} photo <img> but ${figures} <figure>`)
   if (credits < figures) fail(`${route}: ${figures} figures but only ${credits} credits`)
   console.log(`  ${route.padEnd(15)} ${figures} photos, ${credits} credits`)
 }

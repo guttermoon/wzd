@@ -13,9 +13,15 @@ export const EVENT = {
   locality: "London",
   region: "Greater London",
   country: "GB",
-  email: "megan@worldzombieday.co.uk",
-  charity: {
+  email: "info@worldzombieday.co.uk",
+  /**
+   * Who the event raises money for. The Dead Good Club is a Community
+   * Interest Company, so this is a community fundraising event and the
+   * site must never describe it as a charity.
+   */
+  cause: {
     name: "The Dead Good Club",
+    legalForm: "Community Interest Company",
     donateUrl: "https://paa.ge/worldzombieday",
     donateLabel: "paa.ge/worldzombieday",
   },
@@ -33,12 +39,13 @@ export const NAV = [
   { name: "Register", href: "/register" },
   { name: "Rules", href: "/rules" },
   { name: "FAQ", href: "/faq" },
-  { name: "Gallery", href: "/gallery" },
   { name: "Sponsors", href: "/sponsors" },
 ] as const
 
 export const FOOTER_NAV = [
   { name: "Press kit", href: "/press" },
   { name: "Photo policy", href: "/photo-policy" },
-  { name: "Privacy", href: "/privacy" },
 ] as const
+
+/** Small print, set in the footer's bottom rule rather than the nav list. */
+export const LEGAL_NAV = [{ name: "Privacy", href: "/privacy" }] as const

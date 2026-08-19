@@ -12,7 +12,7 @@ import { chromium } from "@playwright/test"
 
 const base = process.argv[2] || "http://localhost:3000"
 const axe = readFileSync("node_modules/axe-core/axe.min.js", "utf8")
-const ROUTES = ["/", "/register", "/rules", "/faq", "/gallery", "/sponsors", "/press", "/photo-policy", "/privacy"]
+const ROUTES = ["/", "/register", "/rules", "/faq", "/sponsors", "/press", "/photo-policy", "/privacy"]
 const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"]
 
 const browser = await chromium.launch({
@@ -81,11 +81,13 @@ if (!(await faqItem.evaluate((d) => d.open))) {
 } else console.log("  ✓ FAQ opens from the keyboard")
 
 await page.goto(base + "/", { waitUntil: "networkidle" })
-const toggle = page.getByRole("button", { name: /switch to (light|dark) theme/i })
+// Entrance animations run on load; let them finish before driving the UI.
+await page.waitForTimeout(1200)
+const toggle = page.getByRole("button", { name: /switch to (light|dark) mode/i })
 const before = await page.evaluate(() => document.documentElement.className)
 await toggle.click()
 await page.waitForFunction((b) => document.documentElement.className !== b, before)
-console.log("  ✓ theme toggle has an accessible name and switches theme")
+console.log("  ✓ theme toggle has an accessible name and switches mode")
 
 await ctx.close()
 await browser.close()

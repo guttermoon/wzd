@@ -1,8 +1,9 @@
 # World Zombie Day: London
 
 The site for [World Zombie Day: London](https://worldzombieday.co.uk) — a
-free charity zombie walk through central London on the second Saturday of
-October. Next one: **Saturday 10 October 2026**.
+free Community Fundraising event — a zombie walk through central London on
+the second Saturday of October. It raises money for The Dead Good Club, a
+Community Interest Company. Next one: **Saturday 10 October 2026**.
 
 Next.js 14 (app router) and Tailwind, deployed on Vercel. All the words on
 the site are editable in Notion without touching code.
@@ -73,7 +74,6 @@ lib/          site-copy.ts (Notion) · photos.ts (registry) · event.ts (dates, 
 docs/         IMAGES.md (photo manifest) · NOTION_SETUP.md
 scripts/      image pipeline, Notion seeding, the two check scripts
 public/photos/  responsive renditions, built — do not edit by hand
-public/video/   the Channel 56 broadcast, built from the GIF
 public/press/   press-resolution downloads, plus the hand-drawn wordmark.svg
 assets/originals/  photographers' full-size files (gitignored, ~31MB)
 ```
@@ -98,7 +98,8 @@ copy from Notion.
 
 | Command | What it does |
 |---|---|
-| `npm run images` | Rebuilds web/press renditions from the originals, and the video from the GIF. Needs the originals in `assets/originals/`. |
+| `npm run images` | Rebuilds the web renditions from the originals. Needs the originals in `assets/originals/`. |
+| `npm run logos` | Rebuilds `public/brand/` and the favicon from the official artwork in `public/logos/`. |
 | `npm run check:credits` | Verifies every photo is credited and no raw `<img>` slips past. |
 | `npm run check:a11y` | Runs axe-core over every route in both themes, plus keyboard checks. Start the server first. |
 | `npm run seed:notion` | Creates/updates one Notion row per copy key, pre-filled and live. Needs `NOTION_TOKEN`. Safe to re-run. |
@@ -125,8 +126,22 @@ Black, bone white and blood red, everything in caps — a Saul Bass tribute,
 following the site's own 2016 design. Dark is the default; there's a light
 theme, and a first-time visitor whose system asks for light gets light.
 
+Palette, type and tone follow the World Zombie Day style guide: Zombie Red
+`#E74C3C`, Dark Grey `#404040`, Black `#333333`, Greige `#F5E9DA`.
+
 Display type is **Grandstander**, body is **Raleway**, both from Google
 Fonts and self-hosted by `next/font`.
+
+The guide names **Crackhouse** for display. No licence for it could be
+found, so the font is not shipped and not used for headings. It survives
+where it belongs — in the logo — by being traced to vector paths, so the
+letterforms are on the page without the font itself ever being served.
+
+One deliberate departure from the guide: Zombie Red can't carry body-size
+text. It measures 3.19:1 on Greige and 3.31:1 on Black, and white on it is
+3.82:1 — all fine for large display type, all short of the 4.5:1 that body
+text and links need. So the brand red does headlines, rules and fills,
+and a tuned red of the same family does links, small text and buttons.
 
 The 2016 site set its headlines in **Hitchcock**. We do not ship it:
 
@@ -142,7 +157,7 @@ anyone. It informed the letterform choices and nothing else. `*.ttf` and
 ## Accessibility
 
 Targeting WCAG 2.2 AA, and checked rather than assumed — `npm run check:a11y`
-reports zero axe violations across all nine routes in both themes.
+reports zero axe violations across every route in both themes.
 
 - Contrast is measured, not eyeballed: body text is at least 4.5:1 in both
   themes, and the accent red is a different red in each because a red that
@@ -152,6 +167,5 @@ reports zero axe violations across all nine routes in both themes.
 - The FAQ is a native `<details>`, so it works with a keyboard and before
   JavaScript loads.
 - Text never sits on top of a photograph.
-- **The Channel 56 video contains flashing images** — measured at six large
-  luminance swings in one second, above the WCAG 2.3.1 limit. It never
-  autoplays, is labelled before you start it, and has its own pause control.
+- The VHS treatment on photographs is static — no flicker, no animation —
+  so it can't trip the flashing thresholds in WCAG 2.3.1.

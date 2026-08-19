@@ -20,7 +20,11 @@ const config: Config = {
         muted: "var(--muted)",
         accent: "var(--accent)",
         "accent-text": "var(--accent-text)",
+        "on-accent": "var(--on-accent)",
+        "accent-strong": "var(--accent-strong)",
         rule: "var(--rule)",
+        blood: "var(--blood)",
+        "blood-text": "var(--blood-text)",
         edge: "var(--border)",
       },
       fontFamily: {

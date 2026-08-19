@@ -18,7 +18,21 @@ import {
  * Renditions are pre-built by scripts/prepare-images.mjs, so this is a
  * plain <picture>: WebP where supported, JPEG everywhere else, and real
  * width/height so nothing shifts as it loads.
+ *
+ * The VHS treatment and the hand-cut frame are applied here, so they are
+ * consistent everywhere and impossible to forget. Both are pure CSS and
+ * entirely static — see the note in globals.css about why nothing moves.
  */
+
+/** Stable per-photo variation: same photo always gets the same cut. */
+function hash(slug: string): number {
+  let h = 0
+  for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) | 0
+  return Math.abs(h)
+}
+
+const TILTS = ["tilt-a", "tilt-b", "tilt-c"]
+
 export function Photo({
   photo,
   sizes = "100vw",
@@ -26,6 +40,7 @@ export function Photo({
   className = "",
   imageClassName = "",
   caption,
+  tilt = false,
 }: {
   photo: PhotoData
   sizes?: string
@@ -34,13 +49,18 @@ export function Photo({
   imageClassName?: string
   /** Optional editorial caption, shown above the credit. */
   caption?: React.ReactNode
+  /** Adds a slight rotation. For grids; leave off for full-width images. */
+  tilt?: boolean
 }) {
   const width = widestWidth(photo)
   const height = Math.round(width / aspect(photo))
+  const seed = hash(photo.slug)
+  const cut = `cut-${seed % 6}`
+  const rotation = tilt ? TILTS[seed % TILTS.length] : ""
 
   return (
-    <figure className={className}>
-      <picture>
+    <figure className={`${rotation} ${className}`}>
+      <picture className={`vhs ${cut} ${imageClassName}`}>
         <source type="image/webp" srcSet={srcSet(photo)} sizes={sizes} />
         <img
           src={fallbackSrc(photo)}
@@ -51,21 +71,12 @@ export function Photo({
           loading={priority ? "eager" : "lazy"}
           decoding={priority ? "sync" : "async"}
           fetchPriority={priority ? "high" : undefined}
-          className={`h-auto w-full ${imageClassName}`}
+          className="h-auto w-full"
         />
       </picture>
       <figcaption className="mt-2 font-body text-sm leading-snug text-muted">
         {caption ? <span className="mb-1 block text-text">{caption}</span> : null}
-        <span>
-          Photo:{" "}
-          {photo.creditUrl ? (
-            <a className="link" href={photo.creditUrl} rel="noopener noreferrer">
-              {photo.credit}
-            </a>
-          ) : (
-            photo.credit
-          )}
-        </span>
+        <span>Photo: {photo.credit}</span>
       </figcaption>
     </figure>
   )

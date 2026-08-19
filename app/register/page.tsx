@@ -29,7 +29,7 @@ export default async function RegisterPage() {
         <p className="prose-wzd mt-3 font-body">
           <T k="register.status.body" />
         </p>
-        <p className="display mt-5 inline-block border-2 border-accent px-4 py-3 text-accent">
+        <p className="display mt-5 inline-block border-2 border-accent px-4 py-3 text-accent-text">
           <T k="register.status.cta" />
         </p>
       </div>
@@ -38,7 +38,6 @@ export default async function RegisterPage() {
         photo={photo("leake-street-crowd")}
         sizes="(min-width: 72rem) 68rem, 100vw"
         className="mt-10"
-        imageClassName="border-2 border-rule"
       />
 
       <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-14">
@@ -51,11 +50,11 @@ export default async function RegisterPage() {
         <Section title={<T k="register.access.title" />} className="mt-0">
           <p className="prose-wzd font-body"><T k="register.access.body" /></p>
         </Section>
-        <Section title={<T k="register.charity.title" />} className="mt-0">
-          <p className="prose-wzd font-body"><T k="register.charity.body" /></p>
+        <Section title={<T k="register.cause.title" />} className="mt-0">
+          <p className="prose-wzd font-body"><T k="register.cause.body" /></p>
           <p className="mt-4">
-            <a className="link font-body" href={EVENT.charity.donateUrl} rel="noopener noreferrer">
-              {EVENT.charity.donateLabel}
+            <a className="link font-body" href={EVENT.cause.donateUrl} rel="noopener noreferrer">
+              {EVENT.cause.donateLabel}
             </a>
           </p>
         </Section>

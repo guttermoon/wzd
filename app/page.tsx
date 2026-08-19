@@ -2,7 +2,7 @@ import Link from "next/link"
 import { getSiteCopy } from "@/lib/site-copy"
 import { makeT } from "@/components/notion-text"
 import { Photo } from "@/components/photo"
-import { Broadcast } from "@/components/broadcast"
+import { Reveal } from "@/components/reveal"
 import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
 
@@ -26,36 +26,38 @@ export default async function HomePage() {
           The headline sits in its own block, not on top of the photo, so
           it stays legible whatever the image does at small sizes. */}
       <section className="mx-auto w-full max-w-page px-4 pt-10 sm:px-6 sm:pt-14">
-        <p className="display text-sm text-accent sm:text-base">
+        <Reveal variant="cut" as="p" className="display text-sm text-accent-text sm:text-base">
           <T k="home.hero.eyebrow" />
-        </p>
-        <h1 className="display mt-3 text-[clamp(2.5rem,9vw,6rem)]">
-          <T k="home.hero.title" />
-        </h1>
-        <div className="slab-rule mt-5" />
-        <p className="mt-6 max-w-[52ch] font-body text-lg leading-relaxed sm:text-xl">
+        </Reveal>
+        <Reveal variant="wipe" delay={90} className="mt-3">
+          <h1 className="display text-[clamp(2.5rem,9vw,6rem)]">
+            <T k="home.hero.title" />
+          </h1>
+        </Reveal>
+        <Reveal variant="slide-right" delay={180} className="slab-rule mt-5" />
+        <Reveal variant="slide-up" delay={270} as="p" className="mt-6 max-w-[52ch] font-body text-lg sm:text-xl">
           <T k="home.hero.standfirst" />
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
+        </Reveal>
+        <Reveal variant="slide-up" delay={360} className="mt-8 flex flex-wrap gap-3">
           <Link href="/register" className="btn btn-primary">
             <T k="home.hero.cta.primary" />
           </Link>
           <a
-            href={EVENT.charity.donateUrl}
+            href={EVENT.cause.donateUrl}
             rel="noopener noreferrer"
             className="btn btn-secondary"
           >
             <T k="home.hero.cta.secondary" />
           </a>
-        </div>
+        </Reveal>
 
-        <Photo
-          photo={photo("bridge-horde")}
-          priority
-          sizes="(min-width: 72rem) 68rem, 100vw"
-          className="mt-10"
-          imageClassName="border-2 border-rule"
-        />
+        <Reveal variant="wipe" delay={450} className="mt-10">
+          <Photo
+            photo={photo("bridge-horde")}
+            priority
+            sizes="(min-width: 72rem) 68rem, 100vw"
+          />
+        </Reveal>
       </section>
 
       <div className="torn-bar mt-12" aria-hidden="true" />
@@ -68,15 +70,20 @@ export default async function HomePage() {
             <T k="home.essentials.title" />
           </h2>
           <dl className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {essentials.map((item) => (
-              <div key={item.k} className="border-l-4 border-accent pl-4">
+            {essentials.map((item, i) => (
+              <Reveal
+                key={item.k}
+                variant="slide-right"
+                delay={i * 100}
+                className="border-l-4 border-accent pl-4"
+              >
                 <dt className="display text-base">
                   <T k={`home.essentials.${item.k}.label`} />
                 </dt>
-                <dd className="mt-2 font-body leading-relaxed text-muted">
+                <dd className="mt-2 font-body text-muted">
                   <T k={`home.essentials.${item.k}.value`} />
                 </dd>
-              </div>
+              </Reveal>
             ))}
           </dl>
         </div>
@@ -95,7 +102,6 @@ export default async function HomePage() {
           <Photo
             photo={photo("leicester-square-banner")}
             sizes="(min-width: 64rem) 34rem, 100vw"
-            imageClassName="border-2 border-rule"
           />
         </div>
 
@@ -104,7 +110,6 @@ export default async function HomePage() {
             photo={photo("the-horde")}
             sizes="(min-width: 64rem) 34rem, 100vw"
             className="lg:order-last"
-            imageClassName="border-2 border-rule"
           />
           <div className="prose-wzd">
             <h2 className="display text-[clamp(1.75rem,4vw,2.75rem)]">
@@ -140,42 +145,23 @@ export default async function HomePage() {
           <Photo
             photo={photo("family-kerb")}
             sizes="(min-width: 64rem) 34rem, 100vw"
-            imageClassName="border-2 border-rule"
           />
         </div>
       </section>
 
-      {/* ── Charity ────────────────────────────────────────────────────── */}
+      {/* ── The cause ────────────────────────────────────────────────────── */}
       <section className="mx-auto w-full max-w-page px-4 py-14 sm:px-6">
         <div className="prose-wzd">
           <h2 className="display text-[clamp(1.75rem,4vw,2.75rem)]">
-            <T k="home.charity.title" />
+            <T k="home.cause.title" />
           </h2>
-          <p><T k="home.charity.body1" /></p>
-          <p><T k="home.charity.body2" /></p>
-          <p><T k="home.charity.body3" /></p>
+          <p><T k="home.cause.body1" /></p>
+          <p><T k="home.cause.body2" /></p>
+          <p><T k="home.cause.body3" /></p>
         </div>
-        <a href={EVENT.charity.donateUrl} rel="noopener noreferrer" className="btn btn-primary mt-6">
-          <T k="home.charity.cta" />
+        <a href={EVENT.cause.donateUrl} rel="noopener noreferrer" className="btn btn-primary mt-6">
+          <T k="home.cause.cta" />
         </a>
-      </section>
-
-      {/* ── Broadcast ──────────────────────────────────────────────────── */}
-      <section className="bg-surface py-14">
-        <div className="mx-auto w-full max-w-page px-4 sm:px-6">
-          <h2 className="display text-[clamp(1.75rem,4vw,2.75rem)]">
-            <T k="home.broadcast.title" />
-          </h2>
-          <p className="mt-3 max-w-[52ch] font-body text-muted">
-            <T k="home.broadcast.body" />
-          </p>
-          <div className="mt-6">
-            <Broadcast
-              warning={copy["home.broadcast.warning"]}
-              label={copy["home.broadcast.label"]}
-            />
-          </div>
-        </div>
       </section>
 
       {/* ── Final call to action ───────────────────────────────────────── */}

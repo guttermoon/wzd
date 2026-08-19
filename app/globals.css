@@ -12,28 +12,59 @@
 --------------------------------------------------------------------------- */
 
 :root {
-  --bg: #f4f1ea; /* paper */
-  --surface: #eae5da;
-  --text: #141210; /* 16.57:1 on --bg */
-  --muted: #57534c; /* 6.78:1 on --bg */
-  --accent: #b3170d; /* 6.11:1 on --bg; white on it is 6.90:1 */
-  --accent-text: #ffffff; /* text placed on --accent */
-  --rule: #141210;
-  --border: #b8b1a4; /* 3.1:1 on --bg — non-text contrast */
+  /* ── The World Zombie Day palette ───────────────────────────────────
+     Taken from the style guide: Zombie Red #E74C3C, Dark Grey #404040,
+     Black #333333, Greige #F5E9DA.
+
+     One deliberate departure. Zombie Red measures 3.19:1 on Greige and
+     3.31:1 on Black — fine for large display type (the 3:1 bar) but short
+     of the 4.5:1 needed for body text and links, whichever way round you
+     put it. So the brand red is used for headlines, rules and fills, and
+     --accent-text carries a tuned red of the same family for anything at
+     body size. Both are measured, not guessed. */
+
+  --zombie-red: #e74c3c; /* display only: ≥24px, or ≥18.66px bold */
+  --greige: #f5e9da;
+  --dark-grey: #404040;
+  --near-black: #333333;
+
+  /* The footer's blood block: identical in both themes, because it has to
+     read as blood rather than as a theme accent. White on it is 6.02:1. */
+  --blood: #b03a2e;
+  --blood-text: #ffffff;
+
+  /* Light — Greige ground */
+  --bg: var(--greige);
+  --surface: #ebddca;
+  --text: var(--near-black); /* 10.56:1 */
+  --muted: #5f574b; /* 5.95:1 */
+  --accent: var(--zombie-red); /* decorative fills, rules, large display */
+  --accent-text: #b03a2e; /* 5.03:1 on the ground — links and small red */
+  --accent-strong: #b03a2e; /* interactive fills: white on it is 6.02:1 */
+  --on-accent: #ffffff;
+  --rule: var(--near-black);
+  --border: #847763; /* 3.66:1 — non-text UI */
   --focus: #0057d8;
 
   --radius: 0rem;
+
+  /* Sharp ease-out: quick departure, decisive stop, no overshoot of its
+     own — the overshoot lives in the keyframes. */
+  --ease-cut: cubic-bezier(0.16, 0.84, 0.28, 1);
 }
 
 .dark {
-  --bg: #0b0b0b;
-  --surface: #161616;
-  --text: #f2f1ed; /* 17.41:1 on --bg */
-  --muted: #b0aea8; /* 8.87:1 on --bg */
-  --accent: #ff2e1f; /* 5.31:1 on --bg; black on it is 5.31:1 */
-  --accent-text: #0b0b0b;
-  --rule: #f2f1ed;
-  --border: #494845; /* 3.2:1 on --bg */
+  /* Dark — Black ground, Dark Grey panels */
+  --bg: var(--near-black);
+  --surface: var(--dark-grey);
+  --text: var(--greige); /* 10.56:1 */
+  --muted: #bfb4a6; /* 6.19:1, and 5.55:1 on --surface */
+  --accent: var(--zombie-red);
+  --accent-text: #ff8a7a; /* 5.52:1 on the ground — links and small red */
+  --accent-strong: #b03a2e; /* interactive fills: white on it is 6.02:1 */
+  --on-accent: #ffffff;
+  --rule: var(--greige);
+  --border: #8f8f8f; /* 3.91:1 */
   --focus: #7fb2ff;
 }
 
@@ -62,7 +93,7 @@
   /* Links carry an underline so colour is never the only signal. */
   .prose-wzd a,
   a.link {
-    color: var(--accent);
+    color: var(--accent-text);
     text-decoration: underline;
     text-underline-offset: 0.2em;
     text-decoration-thickness: 2px;
@@ -110,8 +141,8 @@
     font-family: var(--font-display), "Arial Black", Impact, sans-serif;
     text-transform: uppercase;
     font-weight: 700;
-    letter-spacing: -0.01em;
-    line-height: 0.95;
+    letter-spacing: 0.02em; /* style guide: +.02em on uppercase */
+    line-height: 1.1; /* style guide: 1.1–1.2 for headings */
   }
 
   /* Body copy inside long-form pages. */
@@ -119,13 +150,195 @@
     max-width: 68ch;
   }
 
-  .prose-wzd p {
+  /* style guide: 1.5 for paragraphs */
+  .prose-wzd p,
+  .prose-wzd li {
     margin-block: 1rem;
-    line-height: 1.65;
+    line-height: 1.5;
   }
 
-  .prose-wzd li {
-    line-height: 1.65;
+
+  /* ── Photographs: VHS tape, cut into asymmetric frames ──────────────
+     After the Saul Bass collage idiom — pictures held in hand-cut shapes
+     rather than neat rectangles.
+
+     Everything here is static. No flicker, no animation, no rolling
+     scanline: a moving VHS artefact would be exactly the flashing-content
+     problem the site is meant to avoid. */
+
+  .vhs {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    /* Tape-transfer look: pushed saturation, crushed blacks, a warm bias. */
+    filter: saturate(1.35) contrast(1.12) brightness(0.96) sepia(0.12)
+      hue-rotate(-6deg);
+  }
+
+  /* Scanlines and the soft vignette of a CRT. */
+  .vhs::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      repeating-linear-gradient(
+        to bottom,
+        rgb(0 0 0 / 0.16) 0px,
+        rgb(0 0 0 / 0.16) 1px,
+        transparent 1px,
+        transparent 3px
+      ),
+      radial-gradient(
+        ellipse at center,
+        transparent 55%,
+        rgb(0 0 0 / 0.38) 100%
+      );
+  }
+
+  /* Chromatic misregistration — the red/cyan fringe of a worn tape. */
+  .vhs::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: 0.22;
+    background:
+      linear-gradient(90deg, rgb(255 0 40 / 0.55), transparent 12%),
+      linear-gradient(270deg, rgb(0 200 255 / 0.5), transparent 12%);
+  }
+
+  .vhs img {
+    display: block;
+  }
+
+  /* Six hand-cut frames. Corners sit a few percent off square, so the
+     shapes read as cut paper without ever slicing into a face. */
+  .cut-0 { clip-path: polygon(0% 2.5%, 98.5% 0%, 100% 97%, 1.5% 100%); }
+  .cut-1 { clip-path: polygon(1.5% 0%, 100% 2%, 98% 100%, 0% 96.5%); }
+  .cut-2 { clip-path: polygon(0% 0%, 97.5% 1.5%, 100% 98.5%, 2% 97%); }
+  .cut-3 { clip-path: polygon(2% 1%, 100% 0%, 97.5% 99%, 0% 100%); }
+  .cut-4 { clip-path: polygon(0% 1.5%, 99% 0%, 100% 98%, 2.5% 100%); }
+  .cut-5 { clip-path: polygon(1% 0%, 98% 2.5%, 100% 100%, 0% 98%); }
+
+  /* A slight tilt, alternating, for grid layouts only. */
+  .tilt-a { transform: rotate(-1.15deg); }
+  .tilt-b { transform: rotate(0.85deg); }
+  .tilt-c { transform: rotate(-0.55deg); }
+
+
+  /* ── Title-card motion ──────────────────────────────────────────────
+     Saul Bass rules: hard geometry sliding in straight lines, arriving
+     decisively and then staying put. Panels wipe away to expose type, as
+     though a card were pulled off the artwork underneath.
+
+     Only transform and opacity are animated, so everything stays on the
+     compositor. Nothing animates until .in-view is set, and nothing
+     depends on animation to become visible — see components/reveal.tsx.
+     Durations 300–700ms, sharp ease-out, a 3px overshoot at most. */
+
+  /* A panel of ground colour sits over the element and slides off it. */
+  .wipe {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .wipe::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    background-color: var(--bg);
+    transform: translateX(0);
+    z-index: 2;
+    /* A mask covers content; it must never also swallow clicks on it. */
+    pointer-events: none;
+  }
+
+  .wipe-surface::after {
+    background-color: var(--surface);
+  }
+
+  .wipe-red::after {
+    background-color: var(--accent);
+  }
+
+  .in-view.wipe::after {
+    animation: wipe-off 520ms var(--ease-cut) both;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  @keyframes wipe-off {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(101%);
+    }
+  }
+
+  /* Elements enter from an edge, overshoot 3px, and stop. */
+  .slide-up,
+  .slide-left,
+  .slide-right {
+    opacity: 0;
+  }
+
+  .in-view.slide-up {
+    animation: slide-up 460ms var(--ease-cut) both;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  .in-view.slide-left {
+    animation: slide-left 460ms var(--ease-cut) both;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  .in-view.slide-right {
+    animation: slide-right 460ms var(--ease-cut) both;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(28px); }
+    70%  { opacity: 1; transform: translateY(-3px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slide-left {
+    from { opacity: 0; transform: translateX(36px); }
+    70%  { opacity: 1; transform: translateX(-3px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes slide-right {
+    from { opacity: 0; transform: translateX(-36px); }
+    70%  { opacity: 1; transform: translateX(3px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* A hard cut: no travel, no fade-in ramp. */
+  .cut { opacity: 0; }
+  .in-view.cut {
+    animation: hard-cut 1ms linear both;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  @keyframes hard-cut {
+    to { opacity: 1; }
+  }
+
+  /* Hover: a small shift and a colour swap. Never a bounce or a scale. */
+  .btn {
+    transition:
+      transform 140ms linear,
+      background-color 140ms linear,
+      color 140ms linear;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
   }
 
   /* Buttons — 44px minimum target, both themes. */
@@ -144,10 +357,14 @@
     text-decoration: none;
   }
 
+  /* Buttons use the deeper brand red, not Zombie Red: white on Zombie Red
+     is 3.82:1, which only clears the bar for large display type, and a
+     button is not the place to lean on that exemption. Same hue family,
+     6.02:1 with white. */
   .btn-primary {
-    background-color: var(--accent);
-    color: var(--accent-text);
-    border-color: var(--accent);
+    background-color: var(--accent-strong);
+    color: var(--on-accent);
+    border-color: var(--accent-strong);
   }
 
   .btn-secondary {
@@ -164,6 +381,8 @@
 }
 
 /* Anyone who has asked for less motion gets none of it. */
+/* Anyone who has asked for less motion gets the finished state directly:
+   no masking panel, no travel, nothing to wait for. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -174,5 +393,18 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  .wipe::after {
+    display: none;
+  }
+  .slide-up,
+  .slide-left,
+  .slide-right,
+  .cut {
+    opacity: 1;
+    transform: none;
+  }
+  .btn:hover {
+    transform: none;
   }
 }

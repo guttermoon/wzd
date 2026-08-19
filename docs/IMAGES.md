@@ -80,17 +80,6 @@ The full-resolution originals live in `assets/originals/`, which is
 gitignored — about 31 MB, and reproducible only from the
 photographers' files. **Keep a backup outside this repository.**
 
-## The video
-
-`world-zombie-1-min.gif` was a 6.9 MB, 121-frame animated GIF of a
-spoof "Channel 56" news broadcast. It ships as MP4 + WebM (about
-1.2 MB) with a poster frame.
-
-**It contains flashing images.** Measured at six large luminance
-swings inside one second, against a WCAG 2.3.1 limit of three per
-second. It therefore never autoplays, carries a visible warning, and
-has its own pause control. Do not change it to autoplay.
-
 ## Still on the old WordPress site
 
 The WordPress export lists **301 attachments** that were not

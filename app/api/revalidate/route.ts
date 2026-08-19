@@ -1,7 +1,7 @@
 import { revalidatePath } from "next/cache"
 import { NextRequest, NextResponse } from "next/server"
 
-import { NAV, FOOTER_NAV } from "@/lib/event"
+import { NAV, FOOTER_NAV, LEGAL_NAV } from "@/lib/event"
 
 /**
  * Forces a re-fetch of the Notion copy without waiting for the 60s window.
@@ -31,7 +31,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: "Invalid secret" }, { status: 401 })
   }
 
-  const known = new Set<string>([...NAV, ...FOOTER_NAV].map((item) => item.href))
+  const known = new Set<string>(
+    [...NAV, ...FOOTER_NAV, ...LEGAL_NAV].map((item) => item.href),
+  )
 
   if (body.path) {
     // Only revalidate paths this site actually serves.

@@ -6,6 +6,7 @@ import "./globals.css"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Analytics } from "@/components/analytics"
 import { getSiteCopy } from "@/lib/site-copy"
 import { EVENT } from "@/lib/event"
 import { SITE_URL } from "@/lib/site"
@@ -30,7 +31,7 @@ const raleway = Raleway({
 
 const title = "World Zombie Day: London"
 const description =
-  "A free, family-friendly charity zombie walk through central London. Saturday 10 October 2026."
+  "A free, family-friendly Community Fundraising event — a zombie walk through central London. Saturday 10 October 2026."
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
     "World Zombie Day",
     "zombie walk London",
     "London events",
-    "charity walk",
+    "community fundraiser",
     "Halloween London",
   ],
   openGraph: {
@@ -128,6 +129,7 @@ export default async function RootLayout({
           <Header />
           <main id="main">{children}</main>
           <Footer copy={copy} />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
