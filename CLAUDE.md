@@ -85,13 +85,17 @@ everywhere at once.
   rules and large headings; `--accent-text` is a tuned red for links and
   small text; `--accent-strong` backs buttons because white on Zombie Red
   is only 3.82:1. Don't collapse the three back into one.
-- Logo: the official lock-up from the style guide kit, in
-  `public/logos/` (source) → `public/brand/` (built by
-  `npm run logos`). Two variants, swapped by CSS not JS so there's no
-  flash. Both are marked decorative; the accessible name comes from the
-  link that wraps them, because the hidden variant exposes nothing.
-  The guide forbids stretching, recolouring or effects — the script only
-  trims and resizes.
+- Logo: `public/logos/` is the source of truth (owner-supplied);
+  `public/brand/` and `app/icon.svg` are built from it by `npm run logos`.
+  All vector. The brain-globe comes from the supplied SVG, used as-is bar
+  precision and viewBox. The **lettering is Crackhouse, traced to paths** —
+  there is no vector for it and no webfont licence, so tracing is how the
+  letterforms reach the page without the font ever being served.
+  `components/wordmark.tsx` inlines the SVG so the lettering can take
+  `currentColor` and follow the theme; it's marked decorative and the
+  accessible name comes from the link wrapping it.
+  The guide forbids stretching, recolouring and effects — the script only
+  reduces precision and crops the viewBox.
 - Display **Grandstander**, body **Raleway**. Crackhouse is the guide's
   display face but is not shipped — see the font note below.
 - **Hitchcock must never be committed or served.** The owner's instruction,

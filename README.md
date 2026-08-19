@@ -98,7 +98,7 @@ copy from Notion.
 | Command | What it does |
 |---|---|
 | `npm run images` | Rebuilds the web renditions from the originals. Needs the originals in `assets/originals/`. |
-| `npm run logos` | Rebuilds `public/brand/` from the official logo artwork in `public/logos/`. |
+| `npm run logos` | Rebuilds `public/brand/` and the favicon from the official artwork in `public/logos/`. |
 | `npm run check:credits` | Verifies every photo is credited and no raw `<img>` slips past. |
 | `npm run check:a11y` | Runs axe-core over every route in both themes, plus keyboard checks. Start the server first. |
 | `npm run seed:notion` | Creates/updates one Notion row per copy key, pre-filled and live. Needs `NOTION_TOKEN`. Safe to re-run. |
@@ -129,9 +129,12 @@ Palette, type and tone follow the World Zombie Day style guide: Zombie Red
 `#E74C3C`, Dark Grey `#404040`, Black `#333333`, Greige `#F5E9DA`.
 
 Display type is **Grandstander**, body is **Raleway**, both from Google
-Fonts and self-hosted by `next/font`. The guide names **Crackhouse** for
-display; it isn't shipped, because it isn't a webfont we hold a licence to
-redistribute.
+Fonts and self-hosted by `next/font`.
+
+The guide names **Crackhouse** for display. No licence for it could be
+found, so the font is not shipped and not used for headings. It survives
+where it belongs — in the logo — by being traced to vector paths, so the
+letterforms are on the page without the font itself ever being served.
 
 One deliberate departure from the guide: Zombie Red can't carry body-size
 text. It measures 3.19:1 on Greige and 3.31:1 on Black, and white on it is

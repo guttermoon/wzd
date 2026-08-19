@@ -71,9 +71,12 @@ export default async function PressPage() {
 
       <Section title={<T k="press.logo.title" />}>
         <p className="prose-wzd font-body"><T k="press.logo.body" /></p>
-        <p className="mt-4">
-          <a href="/press/wordmark.svg" download className="btn btn-secondary">
+        <p className="mt-4 flex flex-wrap gap-3">
+          <a href="/brand/wordmark.svg" download className="btn btn-secondary">
             Download the wordmark (SVG)
+          </a>
+          <a href="/brand/brain.svg" download className="btn btn-secondary">
+            Download the brain mark (SVG)
           </a>
         </p>
       </Section>
