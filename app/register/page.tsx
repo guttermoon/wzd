@@ -37,7 +37,7 @@ export default async function RegisterPage() {
       <Photo
         photo={photo("leake-street-crowd")}
         bleed="full"
-        ratio="21/9"
+        ratio="32/9"
         sizes="100vw"
         className="breakout mt-10"
       />

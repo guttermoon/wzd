@@ -45,7 +45,7 @@ export default async function PhotoPolicyPage() {
         <Photo
           photo={photo("selfie")}
           bleed="full"
-          ratio="2/1"
+          ratio="3/1"
           sizes="100vw"
           className="breakout"
         />

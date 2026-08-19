@@ -26,6 +26,7 @@ const config: Config = {
         blood: "var(--blood)",
         "blood-text": "var(--blood-text)",
         edge: "var(--border)",
+        ink: "var(--near-black)",
       },
       fontFamily: {
         display: ["var(--font-display)", "Arial Black", "Impact", "sans-serif"],

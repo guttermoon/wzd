@@ -64,7 +64,7 @@ export default async function SponsorsPage() {
         <Photo
           photo={photo("kissing-booth")}
           bleed="full"
-          ratio="2/1"
+          ratio="3/1"
           sizes="100vw"
           className="breakout"
           caption="A sponsor activation on the route — Apocalypse Events' kissing booth."

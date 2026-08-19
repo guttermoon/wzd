@@ -41,7 +41,7 @@ export function VhsFilter() {
             values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"
             result="red"
           />
-          <feOffset in="red" dx="-2.5" dy="0" result="redShifted" />
+          <feOffset in="red" dx="-1.8" dy="0" result="redShifted" />
           <feColorMatrix
             in="SourceGraphic"
             type="matrix"
@@ -55,7 +55,7 @@ export function VhsFilter() {
             values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0"
             result="blue"
           />
-          <feOffset in="blue" dx="2.5" dy="1" result="blueShifted" />
+          <feOffset in="blue" dx="1.8" dy="0.8" result="blueShifted" />
           <feBlend in="redShifted" in2="greenShifted" mode="screen" result="rg" />
           <feBlend in="rg" in2="blueShifted" mode="screen" result="split" />
 

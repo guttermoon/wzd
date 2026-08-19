@@ -3,10 +3,25 @@ import { getSiteCopy } from "@/lib/site-copy"
 import { makeT } from "@/components/notion-text"
 import { Photo } from "@/components/photo"
 import { Reveal } from "@/components/reveal"
+import { Bars, type Bar } from "@/components/bars"
 import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
 
 export const revalidate = 60
+
+/**
+ * The slabs behind the hero type. Lengths and depths are all different and
+ * none is level, which is the whole point — a set of matched bars reads as
+ * a table, not a title card. They stop clear of the middle so nothing lands
+ * on the type.
+ */
+const HERO_BARS: Bar[] = [
+  { from: "left", top: "14%", left: "0", width: "26%", height: "18px", tilt: -1.4, tone: "ink", delay: 0 },
+  { from: "right", top: "38%", right: "0", width: "34%", height: "12px", tilt: 0.9, tone: "ink", delay: 100 },
+  { from: "top", top: "0", left: "62%", width: "14px", height: "30%", tilt: 1.8, tone: "ink", delay: 200 },
+  { from: "bottom", bottom: "0", left: "22%", width: "10px", height: "26%", tilt: -2.2, tone: "ink", delay: 290 },
+  { from: "left", bottom: "18%", left: "0", width: "16%", height: "10px", tilt: 1.2, tone: "ink", delay: 380 },
+]
 
 export default async function HomePage() {
   const copy = await getSiteCopy()
@@ -23,47 +38,86 @@ export default async function HomePage() {
   return (
     <>
       {/* ── Hero ───────────────────────────────────────────────────────
-          The headline sits in its own block, not on top of the photo, so
-          it stays legible whatever the image does at small sizes. */}
-      <section className="mx-auto w-full max-w-page px-4 pt-10 sm:px-6 sm:pt-14">
-        <Reveal variant="cut" as="p" className="display text-sm text-accent-text sm:text-base">
-          <T k="home.hero.eyebrow" />
-        </Reveal>
-        <Reveal variant="wipe" delay={90} className="mt-3">
-          <h1 className="display text-[clamp(2.5rem,9vw,6rem)]">
-            <T k="home.hero.title" />
-          </h1>
-        </Reveal>
-        <Reveal variant="slide-right" delay={180} className="slab-rule mt-5" />
-        <Reveal variant="slide-up" delay={270} as="p" className="mt-6 max-w-[52ch] font-body text-lg sm:text-xl">
-          <T k="home.hero.standfirst" />
-        </Reveal>
-        <Reveal variant="slide-up" delay={360} className="mt-8 flex flex-wrap gap-3">
-          <Link href="/register" className="btn btn-primary">
-            <T k="home.hero.cta.primary" />
-          </Link>
-          <a
-            href={EVENT.cause.donateUrl}
-            rel="noopener noreferrer"
-            className="btn btn-secondary"
-          >
-            <T k="home.hero.cta.secondary" />
-          </a>
-        </Reveal>
+          The Saul Bass composition: a flat field of colour carrying the
+          type, with small photographic panels tucked into the corners of
+          it. The photographs are accents, not the subject — none of them
+          is more than a couple of columns wide, and none sits in the
+          middle. Black slabs drive in from the edges behind the type.
 
+          The field is --blood rather than Zombie Red because everything on
+          it is text: white on Zombie Red measures 3.82:1, which is short of
+          the 4.5:1 body copy needs, and white on --blood is 6.02:1. */}
+      <section className="on-blood relative w-full overflow-hidden bg-blood text-blood-text">
+        <Bars bars={HERO_BARS} />
+
+        <div className="relative mx-auto grid w-full max-w-page grid-cols-2 gap-4 px-4 py-12 sm:px-6 lg:grid-cols-12 lg:gap-5 lg:py-20">
+          <Photo
+            photo={photo("half-face-portrait")}
+            priority
+            ratio="3/4"
+            sizes="(min-width: 64rem) 11rem, 45vw"
+            className="photo-mini tilt-a lg:col-span-2 lg:col-start-1 lg:row-start-1"
+          />
+
+          {/* Type first on a phone: the panels are accents, and nobody
+              should meet a photograph before they meet the name of the
+              event. On lg the grid puts it back in the middle. */}
+          <div className="order-first col-span-2 lg:order-none lg:col-span-6 lg:col-start-4 lg:row-span-3 lg:row-start-1 lg:self-center">
+            <Reveal variant="cut" as="p" className="display text-sm sm:text-base">
+              <T k="home.hero.eyebrow" />
+            </Reveal>
+            <Reveal variant="wipe-red" delay={90} className="mt-3">
+              <h1 className="display text-[clamp(2.5rem,7vw,5rem)]">
+                <T k="home.hero.title" />
+              </h1>
+            </Reveal>
+            <Reveal
+              variant="slide-right"
+              delay={180}
+              className="mt-5 h-[6px] w-full bg-blood-text"
+            />
+            <Reveal variant="slide-up" delay={270} as="p" className="mt-6 max-w-[46ch] font-body text-lg">
+              <T k="home.hero.standfirst" />
+            </Reveal>
+            <Reveal variant="slide-up" delay={360} className="mt-8 flex flex-wrap gap-3">
+              <Link href="/register" className="btn bg-blood-text text-blood">
+                <T k="home.hero.cta.primary" />
+              </Link>
+              <a
+                href={EVENT.cause.donateUrl}
+                rel="noopener noreferrer"
+                className="btn border-2 border-blood-text text-blood-text"
+              >
+                <T k="home.hero.cta.secondary" />
+              </a>
+            </Reveal>
+          </div>
+
+          <Photo
+            photo={photo("zombies-crossing")}
+            priority
+            ratio="2/3"
+            sizes="(min-width: 64rem) 11rem, 45vw"
+            className="photo-mini tilt-c lg:col-span-2 lg:col-start-11 lg:row-span-2 lg:row-start-1"
+          />
+
+          <Photo
+            photo={photo("piccadilly-rain")}
+            priority
+            ratio="4/3"
+            sizes="(min-width: 64rem) 16rem, 45vw"
+            className="photo-mini tilt-b lg:col-span-3 lg:col-start-1 lg:row-start-3"
+          />
+
+          <Photo
+            photo={photo("teddy-bear")}
+            priority
+            ratio="1/1"
+            sizes="(min-width: 64rem) 11rem, 45vw"
+            className="photo-mini tilt-a lg:col-span-2 lg:col-start-11 lg:row-start-3"
+          />
+        </div>
       </section>
-
-      {/* The horde runs the full width of the screen — the first thing that
-          says this is not a column of text with pictures in it. */}
-      <Reveal variant="wipe" delay={450} className="mt-10 w-full">
-        <Photo
-          photo={photo("bridge-horde")}
-          priority
-          bleed="full"
-          ratio="21/9"
-          sizes="100vw"
-        />
-      </Reveal>
 
       <div className="torn-bar mt-12" aria-hidden="true" />
 
@@ -112,7 +166,7 @@ export default async function HomePage() {
             photo={photo("leicester-square-banner")}
             bleed="right"
             ratio="4/3"
-            sizes="(min-width: 64rem) 55vw, 100vw"
+            sizes="(min-width: 64rem) 26rem, 100vw"
             className="lg:col-start-3"
           />
         </div>
@@ -122,7 +176,7 @@ export default async function HomePage() {
             photo={photo("the-horde")}
             bleed="left"
             ratio="3/2"
-            sizes="(min-width: 64rem) 55vw, 100vw"
+            sizes="(min-width: 64rem) 26rem, 100vw"
             className="lg:col-start-1 lg:row-start-1"
           />
           <div className="prose-wzd px-4 sm:px-6 lg:col-start-2 lg:row-start-1 lg:px-0 lg:ps-12">
@@ -160,7 +214,7 @@ export default async function HomePage() {
             photo={photo("family-kerb")}
             bleed="right"
             ratio="5/4"
-            sizes="(min-width: 64rem) 55vw, 100vw"
+            sizes="(min-width: 64rem) 26rem, 100vw"
             className="lg:col-start-3"
           />
         </div>
