@@ -1,10 +1,10 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { getSiteCopy } from "@/lib/site-copy"
-import { makeT } from "@/components/notion-text"
-import { PageShell, Section } from "@/components/page-shell"
 import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
+import { makeT } from "@/components/notion-text"
+import { PageShell, Section } from "@/components/page-shell"
 import { EVENT } from "@/lib/event"
 
 export const revalidate = 60
@@ -28,7 +28,19 @@ export default async function PressPage() {
   const photoFolder = /^https?:\/\//i.test(raw) ? raw : ""
 
   return (
-    <PageShell title={<T k="press.title" />} standfirst={<T k="press.standfirst" />}>
+    <PageShell
+      title={<T k="press.title" />}
+      standfirst={<T k="press.standfirst" />}
+      banner={
+        <Photo
+          photo={photo("stop-sign-couple")}
+          priority
+          bleed="full"
+          ratio="32/9"
+          sizes="100vw"
+        />
+      }
+    >
       <div className="cut-panel mt-10 p-6">
         <h2 className="display text-xl"><T k="press.contact.title" /></h2>
         <p className="mt-2 font-body">
@@ -37,14 +49,6 @@ export default async function PressPage() {
           </a>
         </p>
       </div>
-
-      <Photo
-        photo={photo("the-horde")}
-        bleed="full"
-        ratio="32/9"
-        sizes="100vw"
-        className="breakout mt-10"
-      />
 
       <Section title={<T k="press.facts.title" />}>
         <dl className="grid gap-6 sm:grid-cols-2">

@@ -20,8 +20,20 @@ export default async function RegisterPage() {
   const T = makeT(copy)
 
   return (
-    <PageShell title={<T k="register.title" />} standfirst={<T k="register.standfirst" />}>
-      {/* Registration status is the thing people came for — it goes first. */}
+    <PageShell
+      title={<T k="register.title" />}
+      standfirst={<T k="register.standfirst" />}
+      banner={
+        <Photo
+          photo={photo("leake-street-crowd")}
+          priority
+          bleed="full"
+          ratio="32/9"
+          sizes="100vw"
+        />
+      }
+    >
+      {/* Registration status is the thing people came for, so it goes first. */}
       <div className="cut-panel mt-10 p-6">
         <h2 className="display text-2xl">
           <T k="register.status.title" />
@@ -33,14 +45,6 @@ export default async function RegisterPage() {
           <T k="register.status.cta" />
         </p>
       </div>
-
-      <Photo
-        photo={photo("leake-street-crowd")}
-        bleed="full"
-        ratio="32/9"
-        sizes="100vw"
-        className="breakout mt-10"
-      />
 
       <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-14">
         <Section title={<T k="register.why.title" />} className="mt-0">

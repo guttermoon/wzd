@@ -37,7 +37,6 @@ const TILTS = ["tilt-a", "tilt-b", "tilt-c"]
 const BLEED_CUT = {
   left: "cut-inner-r",
   right: "cut-inner-l",
-  full: "cut-band",
 } as const
 
 export function Photo({
@@ -76,7 +75,15 @@ export function Photo({
   const width = widestWidth(photo)
   const height = Math.round(width / aspect(photo))
   const seed = hash(photo.slug)
-  const cut = bleed ? BLEED_CUT[bleed] : `cut-${seed % 6}`
+  // A full-width band picks one of five angles by the same slug hash that
+  // picks the in-column frames, so the band at the top of one page differs
+  // from the next and a given page always gets the same one.
+  const cut =
+    bleed === "full"
+      ? `cut-band-${seed % 5}`
+      : bleed
+        ? BLEED_CUT[bleed]
+        : `cut-${seed % 6}`
   const rotation = tilt && !bleed ? TILTS[seed % TILTS.length] : ""
 
   return (

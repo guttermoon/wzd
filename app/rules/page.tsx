@@ -9,7 +9,7 @@ export const revalidate = 60
 export const metadata: Metadata = {
   title: "Rules of conduct",
   description:
-    "The zombie rules of conduct for World Zombie Day: London — safety, costumes, crossings and behaviour on the day.",
+    "The zombie rules of conduct for World Zombie Day: London: safety, costumes, crossings and behaviour on the day.",
   alternates: { canonical: "/rules" },
 }
 
@@ -20,7 +20,19 @@ export default async function RulesPage() {
   const T = makeT(copy)
 
   return (
-    <PageShell title={<T k="rules.title" />} standfirst={<T k="rules.standfirst" />}>
+    <PageShell
+      title={<T k="rules.title" />}
+      standfirst={<T k="rules.standfirst" />}
+      banner={
+        <Photo
+          photo={photo("steward-crossing")}
+          priority
+          bleed="full"
+          ratio="32/9"
+          sizes="100vw"
+        />
+      }
+    >
       {/* A numbered list, not a set of headings: these are read in order. */}
       <ol className="prose-wzd mt-10 space-y-6">
         {RULES.map((n) => (
@@ -43,14 +55,7 @@ export default async function RulesPage() {
       </p>
 
       <Section title={<T k="rules.stewards.title" />}>
-        <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
-          <p className="prose-wzd font-body"><T k="rules.stewards.body" /></p>
-          <Photo
-            photo={photo("steward-crossing")}
-            tilt
-            sizes="(min-width: 64rem) 34rem, 100vw"
-          />
-        </div>
+        <p className="prose-wzd font-body"><T k="rules.stewards.body" /></p>
       </Section>
     </PageShell>
   )

@@ -4,6 +4,9 @@ import { makeT } from "@/components/notion-text"
 import { Photo } from "@/components/photo"
 import { Reveal } from "@/components/reveal"
 import { Bars, type Bar } from "@/components/bars"
+import { Divider } from "@/components/divider"
+import { TornEdge } from "@/components/torn-edge"
+import { Hand } from "@/components/hand"
 import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
 
@@ -119,15 +122,25 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <div className="torn-bar mt-12" aria-hidden="true" />
+      <Divider lead="left" className="mt-12" />
 
       {/* ── The essentials ─────────────────────────────────────────────
           Everything someone needs before they read anything else. */}
-      <section className="bg-surface py-12">
-        <div className="mx-auto w-full max-w-page px-4 sm:px-6">
-          <h2 className="display text-[clamp(1.75rem,4vw,2.75rem)]">
-            <T k="home.essentials.title" />
-          </h2>
+      <TornEdge />
+      <section className="relative overflow-hidden bg-surface py-12">
+        {/* Reaching in over the corner of the block. Behind everything,
+            inert, and gone below lg where there is no room for it. */}
+        <Hand
+          from="right"
+          delay={120}
+          className="right-0 top-2 hidden h-[190px] w-[135px] opacity-[0.14] lg:block"
+        />
+        <div className="relative mx-auto w-full max-w-page px-4 sm:px-6">
+          <Reveal variant="wipe-red">
+            <h2 className="display text-[clamp(1.75rem,4vw,2.75rem)]">
+              <T k="home.essentials.title" />
+            </h2>
+          </Reveal>
           <dl className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {essentials.map((item, i) => (
               <Reveal
@@ -153,6 +166,8 @@ export default async function HomePage() {
           their text side back to the container line, so each photograph
           reaches the edge. The splits are deliberately uneven — 7/5 then
           5/7 — so no two rows scan the same way. */}
+      <TornEdge />
+
       <section className="w-full py-14">
         <div className="edge-right items-center gap-8 lg:gap-0">
           <div className="prose-wzd px-4 sm:px-6 lg:col-start-2 lg:px-0 lg:pe-12">
@@ -194,9 +209,10 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <div className="torn-bar" aria-hidden="true" />
+      <Divider lead="right" />
 
       {/* ── Everyone's welcome ─────────────────────────────────────────── */}
+      <TornEdge />
       <section className="w-full bg-surface py-14">
         <div className="edge-right items-center gap-8 lg:gap-0">
           <div className="prose-wzd px-4 sm:px-6 lg:col-start-2 lg:px-0 lg:pe-12">
@@ -220,12 +236,23 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <TornEdge />
+
       {/* ── The cause ────────────────────────────────────────────────────── */}
-      <section className="mx-auto w-full max-w-page px-4 py-14 sm:px-6">
+      <section className="relative w-full overflow-hidden py-14">
+        <Hand
+          from="left"
+          tone="accent"
+          delay={80}
+          className="-left-6 bottom-4 hidden h-[220px] w-[155px] opacity-[0.18] lg:block"
+        />
+        <div className="relative mx-auto w-full max-w-page px-4 sm:px-6">
         <div className="prose-wzd">
-          <h2 className="display text-[clamp(1.75rem,4vw,2.75rem)]">
-            <T k="home.cause.title" />
-          </h2>
+          <Reveal variant="wipe-red">
+            <h2 className="display text-[clamp(1.75rem,4vw,2.75rem)]">
+              <T k="home.cause.title" />
+            </h2>
+          </Reveal>
           <p><T k="home.cause.body1" /></p>
           <p><T k="home.cause.body2" /></p>
           <p><T k="home.cause.body3" /></p>
@@ -237,6 +264,7 @@ export default async function HomePage() {
           <a href={EVENT.cause.url} rel="noopener noreferrer" className="btn btn-secondary">
             Visit {EVENT.cause.name}
           </a>
+        </div>
         </div>
       </section>
 

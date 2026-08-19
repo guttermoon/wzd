@@ -32,7 +32,19 @@ export default async function FaqPage() {
   }
 
   return (
-    <PageShell title={<T k="faq.title" />} standfirst={<T k="faq.standfirst" />}>
+    <PageShell
+      title={<T k="faq.title" />}
+      standfirst={<T k="faq.standfirst" />}
+      banner={
+        <Photo
+          photo={photo("london-eye-pair")}
+          priority
+          bleed="full"
+          ratio="32/9"
+          sizes="100vw"
+        />
+      }
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}

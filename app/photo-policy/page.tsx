@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { getSiteCopy } from "@/lib/site-copy"
+import { Photo } from "@/components/photo"
 import { makeT } from "@/components/notion-text"
 import { PageShell, Section } from "@/components/page-shell"
-import { Photo } from "@/components/photo"
 import { photo, allPhotos } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
 
@@ -11,7 +11,7 @@ export const revalidate = 60
 export const metadata: Metadata = {
   title: "Photo policy",
   description:
-    "Photography and filming at World Zombie Day: London — consent, the schedule, commercial restrictions, and how to credit.",
+    "Photography and filming at World Zombie Day: London: consent, the schedule, commercial restrictions, and how to credit.",
   alternates: { canonical: "/photo-policy" },
 }
 
@@ -23,7 +23,19 @@ export default async function PhotoPolicyPage() {
   const photographers = [...new Map(allPhotos().map((p) => [p.credit, p])).values()]
 
   return (
-    <PageShell title={<T k="photo.title" />} standfirst={<T k="photo.standfirst" />}>
+    <PageShell
+      title={<T k="photo.title" />}
+      standfirst={<T k="photo.standfirst" />}
+      banner={
+        <Photo
+          photo={photo("selfie")}
+          priority
+          bleed="full"
+          ratio="32/9"
+          sizes="100vw"
+        />
+      }
+    >
       <div className="prose-wzd mt-8">
         <p><T k="photo.intro1" /></p>
         <p><T k="photo.intro2" /></p>
@@ -39,16 +51,6 @@ export default async function PhotoPolicyPage() {
           <T k="photo.credit.body" />
         </blockquote>
         <p className="prose-wzd mt-4 font-body"><T k="photo.credit.tags" /></p>
-      </Section>
-
-      <Section>
-        <Photo
-          photo={photo("selfie")}
-          bleed="full"
-          ratio="3/1"
-          sizes="100vw"
-          className="breakout"
-        />
       </Section>
 
       <Section title={<T k="photo.rules.title" />}>

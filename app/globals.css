@@ -24,7 +24,8 @@
      body size. Both are measured, not guessed. */
 
   --zombie-red: #e74c3c; /* display only: ≥24px, or ≥18.66px bold */
-  --greige: #f5e9da;
+  --greige: #f5e9da; /* still the panel tint in light, and the ink in dark */
+  --paper: #fefefc;
   --dark-grey: #404040;
   --near-black: #333333;
 
@@ -33,17 +34,19 @@
   --blood: #b03a2e;
   --blood-text: #ffffff;
 
-  /* Light — Greige ground */
-  --bg: var(--greige);
+  /* Light — paper ground, greige panels. Everything below is measured
+     against #fefefc, not guessed; the greige panels are checked separately
+     because they are the darker of the two grounds. */
+  --bg: var(--paper);
   --surface: #ebddca;
-  --text: var(--near-black); /* 10.56:1 */
-  --muted: #5f574b; /* 5.95:1 */
-  --accent: var(--zombie-red); /* decorative fills, rules, large display */
-  --accent-text: #b03a2e; /* 5.03:1 on the ground — links and small red */
+  --text: var(--near-black); /* 12.51:1 on paper, 9.46:1 on greige */
+  --muted: #5f574b; /* 7.05:1 on paper, 5.33:1 on greige */
+  --accent: var(--zombie-red); /* 3.78:1 — decorative fills, rules, display */
+  --accent-text: #b03a2e; /* 5.96:1 on paper, 4.51:1 on greige */
   --accent-strong: #b03a2e; /* interactive fills: white on it is 6.02:1 */
   --on-accent: #ffffff;
   --rule: var(--near-black);
-  --border: #847763; /* 3.66:1 — non-text UI */
+  --border: #847763; /* 4.33:1 — non-text UI */
   --focus: #0057d8;
 
   --radius: 0rem;
@@ -267,8 +270,16 @@
      panel stops looking like it runs off the screen. */
   .cut-inner-l { clip-path: polygon(7% 0%, 100% 0%, 100% 100%, 0% 100%); }
   .cut-inner-r { clip-path: polygon(0% 0%, 100% 0%, 93% 100%, 0% 100%); }
-  /* Full width: the angle goes on the horizontal edges instead. */
-  .cut-band { clip-path: polygon(0% 3%, 100% 0%, 100% 97%, 0% 100%); }
+  /* Full width: the angle goes on the horizontal edges instead. Five of
+     them, so the band across the top of one page is not the band across
+     the top of the next — same idea, different cut. Chosen per photograph
+     by the same slug hash that picks the in-column frames, so a given page
+     always gets the same one. */
+  .cut-band-0 { clip-path: polygon(0% 4%, 100% 0%, 100% 96%, 0% 100%); }
+  .cut-band-1 { clip-path: polygon(0% 0%, 100% 5%, 100% 100%, 0% 95%); }
+  .cut-band-2 { clip-path: polygon(0% 0%, 100% 0%, 100% 92%, 0% 100%); }
+  .cut-band-3 { clip-path: polygon(0% 8%, 100% 0%, 100% 100%, 0% 100%); }
+  .cut-band-4 { clip-path: polygon(0% 6%, 100% 0%, 100% 94%, 0% 100%); }
 
   /* A slight tilt for the smaller in-column photographs. */
   .tilt-a { transform: rotate(-1.15deg); }
@@ -429,6 +440,32 @@
     from { transform: translateY(130%) rotate(var(--tilt, 0deg)); }
     70% { transform: translateY(-1.5%) rotate(var(--tilt, 0deg)); }
     to { transform: translateY(0) rotate(var(--tilt, 0deg)); }
+  }
+
+  /* A hand reaching in from the edge. It travels its own full width, then
+     overshoots by a couple of degrees and settles — the one place on the
+     site where something is allowed to wobble, because a limb that stops
+     dead reads as a diagram rather than a reach. */
+  @keyframes hand-in-left {
+    from { transform: translateX(-100%) rotate(-12deg); }
+    72% { transform: translateX(3%) rotate(4deg); }
+    88% { transform: translateX(-1%) rotate(-2deg); }
+    to { transform: translateX(0) rotate(0deg); }
+  }
+
+  @keyframes hand-in-right {
+    from { transform: translateX(100%) rotate(12deg); }
+    72% { transform: translateX(-3%) rotate(-4deg); }
+    88% { transform: translateX(1%) rotate(2deg); }
+    to { transform: translateX(0) rotate(0deg); }
+  }
+
+  .in-view .hand-left {
+    animation: hand-in-left 660ms var(--ease-cut) var(--delay, 0ms) both;
+  }
+
+  .in-view .hand-right {
+    animation: hand-in-right 660ms var(--ease-cut) var(--delay, 0ms) both;
   }
 
   /* ── Title-card motion ──────────────────────────────────────────────
@@ -602,7 +639,9 @@
   .slide-up,
   .slide-left,
   .slide-right,
-  .cut {
+  .cut,
+  .hand-left,
+  .hand-right {
     opacity: 1;
     transform: none;
   }

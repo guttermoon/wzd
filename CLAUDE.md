@@ -94,9 +94,11 @@ everywhere at once.
 ## Design and accessibility
 
 - Palette comes from the style guide: Zombie Red `#E74C3C`, Dark Grey
-  `#404040`, Black `#333333`, Greige `#F5E9DA`.
+  `#404040`, Black `#333333`, Greige `#F5E9DA`. Light mode's ground is
+  paper `#FEFEFC` (owner's choice); Greige is the panel tint on it, and the
+  ink in dark mode.
 - **Zombie Red is a display colour, not a text colour.** It measures
-  3.19:1 on Greige and 3.31:1 on Black — fine for large type (3:1), short
+  3.78:1 on paper and 3.31:1 on Black — fine for large type (3:1), short
   of the 4.5:1 body text needs. So `--accent` is Zombie Red for fills,
   rules and large headings; `--accent-text` is a tuned red for links and
   small text; `--accent-strong` backs buttons because white on Zombie Red

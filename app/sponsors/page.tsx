@@ -10,7 +10,7 @@ export const revalidate = 60
 export const metadata: Metadata = {
   title: "Become a sponsor",
   description:
-    "Sponsorship options for World Zombie Day: London — on-site promotion and online prize giveaways, raising funds for a good cause.",
+    "Sponsorship options for World Zombie Day: London: on-site promotion and online prize giveaways, raising funds for a good cause.",
   alternates: { canonical: "/sponsors" },
 }
 
@@ -19,7 +19,19 @@ export default async function SponsorsPage() {
   const T = makeT(copy)
 
   return (
-    <PageShell title={<T k="sponsors.title" />} standfirst={<T k="sponsors.standfirst" />}>
+    <PageShell
+      title={<T k="sponsors.title" />}
+      standfirst={<T k="sponsors.standfirst" />}
+      banner={
+        <Photo
+          photo={photo("groaning-group")}
+          priority
+          bleed="full"
+          ratio="32/9"
+          sizes="100vw"
+        />
+      }
+    >
       <div className="prose-wzd mt-8">
         <p><T k="sponsors.intro1" /></p>
         <p><T k="sponsors.intro2" /></p>
@@ -67,7 +79,7 @@ export default async function SponsorsPage() {
           ratio="3/1"
           sizes="100vw"
           className="breakout"
-          caption="A sponsor activation on the route — Apocalypse Events' kissing booth."
+          caption="A sponsor activation on the route, at Apocalypse Events' kissing booth."
         />
       </Section>
 
