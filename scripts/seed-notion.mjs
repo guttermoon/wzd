@@ -25,7 +25,7 @@ const databaseId =
   "3c16f6ccb2c180e087a4da55703d5792"
 
 if (!token) {
-  console.error("NOTION_TOKEN is not set. See NOTION_SETUP.md.")
+  console.error("NOTION_TOKEN is not set. See docs/NOTION_SETUP.md.")
   process.exit(1)
 }
 
@@ -49,7 +49,7 @@ const gate =
 if (!gate) missing.push('"Published" (Checkbox) or "Status"')
 if (missing.length) {
   console.error(`The database is missing: ${missing.join(", ")}.`)
-  console.error("Add them in Notion, then re-run. See NOTION_SETUP.md.")
+  console.error("Add them in Notion, then re-run. See docs/NOTION_SETUP.md.")
   process.exit(1)
 }
 console.log(`Database OK — title "${titleProp}", gate "${gate}".`)

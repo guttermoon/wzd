@@ -76,12 +76,12 @@ export function aspect(photo: Photo): number {
 
 export function srcSet(photo: Photo): string {
   return widths(photo)
-    .map((w) => `/images/${photo.slug}-${w}.webp ${w}w`)
+    .map((w) => `/photos/${photo.slug}-${w}.webp ${w}w`)
     .join(", ")
 }
 
 export function fallbackSrc(photo: Photo): string {
-  return `/images/${photo.slug}-${widestWidth(photo)}.jpg`
+  return `/photos/${photo.slug}-${widestWidth(photo)}.jpg`
 }
 
 export function pressSrc(photo: Photo): string {

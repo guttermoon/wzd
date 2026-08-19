@@ -62,11 +62,14 @@ Do not add an `<img>`, a CSS `background-image` of a photograph, or a
 Renditions are built by `scripts/prepare-images.mjs` from
 `assets/originals/` (gitignored) — run `npm run images` after adding one.
 
-`content/photo-renditions.json` is **generated**; don't hand-edit it.
+Layout: `public/photos/` (responsive renditions), `public/video/` (the
+broadcast), `public/press/` (2400px downloads + the hand-drawn
+`wordmark.svg`). Everything there except `wordmark.svg` is generated, as is
+`content/photo-renditions.json` — don't hand-edit any of it.
 
 ## The video contains flashing images
 
-`public/images/world-zombie.{mp4,webm}` (the Channel 56 spoof broadcast)
+`public/video/world-zombie.{mp4,webm}` (the Channel 56 spoof broadcast)
 was measured at six large luminance swings in one second — over the WCAG
 2.3.1 limit of three. `components/broadcast.tsx` therefore has **no
 autoplay and no loop**, shows a warning before playback, and has its own
@@ -101,4 +104,4 @@ pause control. Don't "improve" it by autoplaying.
 - `app/api/newsletter/route.ts` is an unused stub returning 501 on purpose,
   so it can't silently swallow email addresses.
 - 301 photographs are still on the old WordPress site and could not be
-  fetched from this environment. See `IMAGES.md`.
+  fetched from this environment. See `docs/IMAGES.md`.

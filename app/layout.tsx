@@ -51,13 +51,13 @@ export const metadata: Metadata = {
     locale: "en_GB",
     url: "/",
     siteName: title,
-    images: [{ url: "/images/bridge-horde-1600.jpg", width: 1600, height: 1199 }],
+    images: [{ url: "/photos/bridge-horde-1600.jpg", width: 1600, height: 1199 }],
   },
   twitter: {
     card: "summary_large_image",
     title,
     description,
-    images: ["/images/bridge-horde-1600.jpg"],
+    images: ["/photos/bridge-horde-1600.jpg"],
   },
 }
 
@@ -92,7 +92,7 @@ const structuredData = {
       },
       organizer: { "@id": `${SITE_URL}/#organization` },
       isAccessibleForFree: true,
-      image: [`${SITE_URL}/images/bridge-horde-1600.jpg`],
+      image: [`${SITE_URL}/photos/bridge-horde-1600.jpg`],
     },
   ],
 }

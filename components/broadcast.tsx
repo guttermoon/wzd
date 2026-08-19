@@ -54,12 +54,12 @@ export function Broadcast({
         playsInline
         controls
         preload="none"
-        poster="/images/world-zombie-poster.jpg"
+        poster="/video/world-zombie-poster.jpg"
         aria-label={label}
         className="w-full border-2 border-rule"
       >
-        <source src="/images/world-zombie.webm" type="video/webm" />
-        <source src="/images/world-zombie.mp4" type="video/mp4" />
+        <source src="/video/world-zombie.webm" type="video/webm" />
+        <source src="/video/world-zombie.mp4" type="video/mp4" />
         {label}
       </video>
       <button type="button" onClick={toggle} className="btn btn-secondary mt-3 text-sm">

@@ -51,7 +51,7 @@ cannot reach a page. `npm run check:credits` verifies it.
 ## Renditions
 
 `npm run images` reads `content/photos.json`, writes WebP at up to
-three widths plus a JPEG fallback into `public/images/`, and a
+three widths plus a JPEG fallback into `public/photos/`, and a
 2400px press JPEG into `public/press/`. Originals are never
 upscaled, so a small original gets fewer renditions:
 

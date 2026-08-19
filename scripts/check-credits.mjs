@@ -5,7 +5,7 @@
  *
  * Checks three things:
  *   1. every entry in content/photos.json has a non-empty credit
- *   2. every file in public/images is claimed by exactly one entry
+ *   2. every file in public/photos is claimed by exactly one entry
  *   3. no component renders an <img> outside components/photo.tsx, which is
  *      the only place that emits a credit
  * and then, if a server is running, that each rendered page shows as many
@@ -35,10 +35,10 @@ console.log(`✓ ${photos.length} photos, all credited (${new Set(photos.map((p)
 // 2 ── no orphan or unreferenced renditions
 const slugs = new Set(photos.map((p) => p.slug))
 const rendered = new Set()
-for (const file of readdirSync("public/images")) {
+for (const file of readdirSync("public/photos")) {
   const match = file.match(/^(.*)-(\d+)\.(webp|jpg)$/)
   if (!match) continue // the video and its poster
-  if (!slugs.has(match[1])) fail(`public/images/${file} belongs to no photo entry`)
+  if (!slugs.has(match[1])) fail(`public/photos/${file} belongs to no photo entry`)
   rendered.add(match[1])
 }
 for (const slug of slugs) {
