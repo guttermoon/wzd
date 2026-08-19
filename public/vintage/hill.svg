@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+  <defs>
+    <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d8d3c8"/>
+      <stop offset="0.5" stop-color="#b0aaa0"/>
+      <stop offset="1" stop-color="#7b756c"/>
+    </linearGradient>
+    <filter id="grain2">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix values="0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.2 0"/>
+      <feComposite operator="over" in2="SourceGraphic"/>
+    </filter>
+    <filter id="soft2"><feGaussianBlur stdDeviation="1.6"/></filter>
+    <radialGradient id="vign2" cx="0.5" cy="0.4" r="0.8">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.5"/>
+    </radialGradient>
+  </defs>
+  <g filter="url(#grain2)">
+    <rect width="800" height="1000" fill="url(#sky2)"/>
+    <ellipse cx="580" cy="160" rx="320" ry="42" fill="#c8c3b8" opacity="0.5" filter="url(#soft2)"/>
+    <ellipse cx="160" cy="260" rx="240" ry="30" fill="#a49e94" opacity="0.5" filter="url(#soft2)"/>
+    <!-- distant object -->
+    <ellipse cx="560" cy="300" rx="26" ry="6" fill="#2a2723" filter="url(#soft2)"/>
+    <!-- hillside -->
+    <path d="M0 640 Q200 560 420 610 T800 590 L800 1000 L0 1000 Z" fill="#4c473f"/>
+    <path d="M0 720 Q260 660 520 700 T800 690 L800 1000 L0 1000 Z" fill="#37332d"/>
+    <!-- grass texture strokes -->
+    <g stroke="#57524a" stroke-width="2" opacity="0.5">
+      <path d="M60 700 l8 -26 M120 690 l6 -22 M210 672 l7 -24 M300 686 l6 -20 M420 700 l8 -24 M540 692 l6 -20 M660 684 l7 -22 M740 692 l6 -18"/>
+    </g>
+    <!-- figures on the hill -->
+    <g fill="#211f1b">
+      <g transform="translate(300 606)">
+        <circle cx="0" cy="-34" r="8"/><path d="M-7 -28 L7 -28 L9 6 L4 6 L2 -8 L-2 -8 L-4 6 L-9 6 Z"/>
+      </g>
+      <g transform="translate(352 618)">
+        <circle cx="0" cy="-30" r="7"/><path d="M-6 -24 L6 -24 L8 8 L3 8 L1 -6 L-1 -6 L-3 8 L-8 8 Z"/>
+        <path d="M6 -22 L20 -34 L22 -31 L8 -19 Z"/>
+      </g>
+      <g transform="translate(258 626)">
+        <circle cx="0" cy="-26" r="6"/><path d="M-5 -21 L5 -21 L7 6 L2 6 L1 -5 L-1 -5 L-2 6 L-7 6 Z"/>
+      </g>
+    </g>
+  </g>
+  <rect width="800" height="1000" fill="url(#vign2)"/>
+</svg>
