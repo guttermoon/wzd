@@ -26,7 +26,7 @@ export default async function RulesPage() {
         {RULES.map((n) => (
           <li key={n} className="flex gap-4">
             <span
-              className="display shrink-0 text-3xl text-accent"
+              className="display shrink-0 text-3xl text-accent-text"
               aria-hidden="true"
             >
               {n}
@@ -38,7 +38,7 @@ export default async function RulesPage() {
         ))}
       </ol>
 
-      <p className="display mt-10 text-3xl text-accent">
+      <p className="display mt-10 text-3xl text-accent-text">
         <T k="rules.outro" />
       </p>
 

@@ -29,7 +29,7 @@ export default async function RegisterPage() {
         <p className="prose-wzd mt-3 font-body">
           <T k="register.status.body" />
         </p>
-        <p className="display mt-5 inline-block border-2 border-accent px-4 py-3 text-accent">
+        <p className="display mt-5 inline-block border-2 border-accent px-4 py-3 text-accent-text">
           <T k="register.status.cta" />
         </p>
       </div>

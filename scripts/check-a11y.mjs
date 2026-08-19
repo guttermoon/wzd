@@ -81,11 +81,13 @@ if (!(await faqItem.evaluate((d) => d.open))) {
 } else console.log("  ✓ FAQ opens from the keyboard")
 
 await page.goto(base + "/", { waitUntil: "networkidle" })
-const toggle = page.getByRole("button", { name: /switch to (light|dark) theme/i })
+// Entrance animations run on load; let them finish before driving the UI.
+await page.waitForTimeout(1200)
+const toggle = page.getByRole("button", { name: /switch to (light|dark) mode/i })
 const before = await page.evaluate(() => document.documentElement.className)
 await toggle.click()
 await page.waitForFunction((b) => document.documentElement.className !== b, before)
-console.log("  ✓ theme toggle has an accessible name and switches theme")
+console.log("  ✓ theme toggle has an accessible name and switches mode")
 
 await ctx.close()
 await browser.close()

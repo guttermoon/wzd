@@ -6,6 +6,7 @@ import "./globals.css"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Analytics } from "@/components/analytics"
 import { getSiteCopy } from "@/lib/site-copy"
 import { EVENT } from "@/lib/event"
 import { SITE_URL } from "@/lib/site"
@@ -128,6 +129,7 @@ export default async function RootLayout({
           <Header />
           <main id="main">{children}</main>
           <Footer copy={copy} />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>

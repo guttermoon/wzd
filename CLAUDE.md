@@ -66,10 +66,34 @@ Layout: `public/photos/` (responsive renditions) and `public/press/`
 (2400px downloads + the hand-drawn `wordmark.svg`). Everything there except `wordmark.svg` is generated, as is
 `content/photo-renditions.json` — don't hand-edit any of it.
 
+## The charity is settled
+
+**The Dead Good Club, permanently.** The style guide PDF says Hopefield
+Animal Sanctuary; it is out of date on that point and the owner has
+confirmed it. Do not "correct" the site to match it. The name and the
+donation link also appear in the credit text people are asked to paste when
+they post photos (`photo.credit.body`), so a change there has to be made
+everywhere at once.
+
 ## Design and accessibility
 
-- Saul Bass tribute after the site's own 2016 design: black, bone white,
-  blood red, all caps. Display **Grandstander**, body **Raleway**.
+- Palette comes from the style guide: Zombie Red `#E74C3C`, Dark Grey
+  `#404040`, Black `#333333`, Greige `#F5E9DA`.
+- **Zombie Red is a display colour, not a text colour.** It measures
+  3.19:1 on Greige and 3.31:1 on Black — fine for large type (3:1), short
+  of the 4.5:1 body text needs. So `--accent` is Zombie Red for fills,
+  rules and large headings; `--accent-text` is a tuned red for links and
+  small text; `--accent-strong` backs buttons because white on Zombie Red
+  is only 3.82:1. Don't collapse the three back into one.
+- Logo: the official lock-up from the style guide kit, in
+  `public/logos/` (source) → `public/brand/` (built by
+  `npm run logos`). Two variants, swapped by CSS not JS so there's no
+  flash. Both are marked decorative; the accessible name comes from the
+  link that wraps them, because the hidden variant exposes nothing.
+  The guide forbids stretching, recolouring or effects — the script only
+  trims and resizes.
+- Display **Grandstander**, body **Raleway**. Crackhouse is the guide's
+  display face but is not shipped — see the font note below.
 - **Hitchcock must never be committed or served.** The owner's instruction,
   verbatim: "Hitchcock was created by Matt Terich, based on the work of Saul
   Bass. Please do not redistribute these files in any way. They can be
@@ -81,6 +105,35 @@ Layout: `public/photos/` (responsive renditions) and `public/press/`
   overrides. Never give a colour its only definition inside one theme.
   Both reds are contrast-checked; they differ per theme deliberately.
 - Caps come from `text-transform` (`.display`), never from typed capitals.
+  Style guide metrics: +.02em on uppercase, 1.1 line-height on headings,
+  1.5 on paragraphs.
+
+## Motion
+
+Title-card animation, in `app/globals.css` and `components/reveal.tsx`:
+straight-line slides, panels wiping off type, hard cuts. 300–700ms, sharp
+ease-out, ≤3px overshoot, 80–120ms stagger, `transform`/`opacity` only.
+Elements stop when they arrive and stay still.
+
+Two rules that matter more than the look:
+
+- `prefers-reduced-motion` gets the finished state immediately — the
+  masking panel is `display: none`, nothing travels.
+- A masking panel must always be `pointer-events: none`, or it swallows
+  clicks on what it covers.
+
+If a `.wipe` ever leaves content permanently hidden, the cause is the
+animation not applying — check that any custom property it references is
+declared inside a selector. A `var()` that resolves to nothing invalidates
+the whole `animation` shorthand and silently yields `animation-name: none`.
+
+## Analytics
+
+PostHog and GA4 in `components/analytics.tsx`, both inert unless
+`NEXT_PUBLIC_POSTHOG_KEY` / `NEXT_PUBLIC_GA_ID` are set, so nothing is
+collected locally or on an unconfigured preview. Session recording off,
+autocapture off, DNT respected, IP anonymised. **`/privacy` describes
+exactly this** — change one and change the other.
 - Target is WCAG 2.2 AA and it currently passes clean:
   `npx next start & npm run check:a11y` → 0 violations, 9 routes × 2 themes.
   Keep it there.

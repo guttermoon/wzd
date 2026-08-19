@@ -13,8 +13,8 @@ export function Header() {
   return (
     <header className="border-b-2 border-rule bg-bg">
       <div className="mx-auto flex max-w-page items-center justify-between gap-4 px-4 py-4 sm:px-6">
-        <Link href="/" className="block w-[190px] shrink-0 text-text sm:w-[230px]">
-          <Wordmark className="w-full" />
+        <Link href="/" className="block w-[190px] shrink-0 py-1 sm:w-[240px]">
+          <Wordmark />
           <span className="sr-only">World Zombie Day: London — home</span>
         </Link>
 

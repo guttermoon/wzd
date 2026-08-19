@@ -46,7 +46,7 @@ export default async function FaqPage() {
               <T k={`faq.q${n}`} />
               <span
                 aria-hidden="true"
-                className="shrink-0 text-accent transition-transform group-open:rotate-45"
+                className="shrink-0 text-accent-text transition-transform group-open:rotate-45"
               >
                 +
               </span>

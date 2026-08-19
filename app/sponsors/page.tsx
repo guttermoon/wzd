@@ -29,7 +29,7 @@ export default async function SponsorsPage() {
         <div className="grid gap-8 lg:grid-cols-2">
           <article className="cut-panel p-6">
             <h3 className="display text-xl"><T k="sponsors.onsite.title" /></h3>
-            <p className="display mt-2 text-accent"><T k="sponsors.onsite.amount" /></p>
+            <p className="display mt-2 text-accent-text"><T k="sponsors.onsite.amount" /></p>
             <div className="prose-wzd mt-4 font-body">
               <p><T k="sponsors.onsite.body1" /></p>
               <p><T k="sponsors.onsite.body2" /></p>
@@ -50,7 +50,7 @@ export default async function SponsorsPage() {
 
           <article className="cut-panel p-6">
             <h3 className="display text-xl"><T k="sponsors.prize.title" /></h3>
-            <p className="display mt-2 text-accent"><T k="sponsors.prize.amount" /></p>
+            <p className="display mt-2 text-accent-text"><T k="sponsors.prize.amount" /></p>
             <p className="prose-wzd mt-4 font-body"><T k="sponsors.prize.body" /></p>
             <ul className="mt-4 list-disc space-y-2 pl-5 font-body">
               <li><T k="sponsors.prize.item1" /></li>

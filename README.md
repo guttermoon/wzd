@@ -97,7 +97,8 @@ copy from Notion.
 
 | Command | What it does |
 |---|---|
-| `npm run images` | Rebuilds the web and press renditions from the originals. Needs the originals in `assets/originals/`. |
+| `npm run images` | Rebuilds the web renditions from the originals. Needs the originals in `assets/originals/`. |
+| `npm run logos` | Rebuilds `public/brand/` from the official logo artwork in `public/logos/`. |
 | `npm run check:credits` | Verifies every photo is credited and no raw `<img>` slips past. |
 | `npm run check:a11y` | Runs axe-core over every route in both themes, plus keyboard checks. Start the server first. |
 | `npm run seed:notion` | Creates/updates one Notion row per copy key, pre-filled and live. Needs `NOTION_TOKEN`. Safe to re-run. |
@@ -124,8 +125,19 @@ Black, bone white and blood red, everything in caps — a Saul Bass tribute,
 following the site's own 2016 design. Dark is the default; there's a light
 theme, and a first-time visitor whose system asks for light gets light.
 
+Palette, type and tone follow the World Zombie Day style guide: Zombie Red
+`#E74C3C`, Dark Grey `#404040`, Black `#333333`, Greige `#F5E9DA`.
+
 Display type is **Grandstander**, body is **Raleway**, both from Google
-Fonts and self-hosted by `next/font`.
+Fonts and self-hosted by `next/font`. The guide names **Crackhouse** for
+display; it isn't shipped, because it isn't a webfont we hold a licence to
+redistribute.
+
+One deliberate departure from the guide: Zombie Red can't carry body-size
+text. It measures 3.19:1 on Greige and 3.31:1 on Black, and white on it is
+3.82:1 — all fine for large display type, all short of the 4.5:1 that body
+text and links need. So the brand red does headlines, rules and fills,
+and a tuned red of the same family does links, small text and buttons.
 
 The 2016 site set its headlines in **Hitchcock**. We do not ship it:
 
