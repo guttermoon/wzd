@@ -50,11 +50,11 @@ export default async function RegisterPage() {
         <Section title={<T k="register.access.title" />} className="mt-0">
           <p className="prose-wzd font-body"><T k="register.access.body" /></p>
         </Section>
-        <Section title={<T k="register.charity.title" />} className="mt-0">
-          <p className="prose-wzd font-body"><T k="register.charity.body" /></p>
+        <Section title={<T k="register.cause.title" />} className="mt-0">
+          <p className="prose-wzd font-body"><T k="register.cause.body" /></p>
           <p className="mt-4">
-            <a className="link font-body" href={EVENT.charity.donateUrl} rel="noopener noreferrer">
-              {EVENT.charity.donateLabel}
+            <a className="link font-body" href={EVENT.cause.donateUrl} rel="noopener noreferrer">
+              {EVENT.cause.donateLabel}
             </a>
           </p>
         </Section>

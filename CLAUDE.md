@@ -66,13 +66,29 @@ Layout: `public/photos/` (responsive renditions) and `public/press/`
 (2400px downloads + the hand-drawn `wordmark.svg`). Everything there except `wordmark.svg` is generated, as is
 `content/photo-renditions.json` — don't hand-edit any of it.
 
-## The charity is settled
+## Who we fundraise for — and what to call it
 
 **The Dead Good Club, permanently.** The style guide PDF says Hopefield
-Animal Sanctuary; it is out of date on that point and the owner has
-confirmed it. Do not "correct" the site to match it. The name and the
-donation link also appear in the credit text people are asked to paste when
-they post photos (`photo.credit.body`), so a change there has to be made
+Animal Sanctuary; it is out of date and the owner has confirmed it. Do not
+"correct" the site to match it.
+
+**The Dead Good Club is a Community Interest Company.** The site must
+never call this a charity — in the UK that word is regulated, and the
+owner's instruction is to state what it *is*, never what it is not.
+
+Approved wording:
+
+- **Community Interest Company** — when the legal form matters.
+- **Community Fundraising** / a community fundraising event — for the
+  event itself.
+- "fundraising for", "the cause", "good causes" — in running copy.
+
+Do not introduce a negative construction to explain the difference. The
+copy keys use `cause`, not `charity`, for the same reason.
+
+`EVENT.cause` in `lib/event.ts` holds the name and the donation link. The
+name and link also appear in the credit text people are asked to paste when
+they post photos (`photo.credit.body`), so a change has to be made
 everywhere at once.
 
 ## Design and accessibility
@@ -88,12 +104,17 @@ everywhere at once.
 - Logo: `public/logos/` is the source of truth (owner-supplied);
   `public/brand/` and `app/icon.svg` are built from it by `npm run logos`.
   All vector. The brain-globe comes from the supplied SVG, used as-is bar
-  precision and viewBox. The **lettering is Crackhouse, traced to paths** —
-  there is no vector for it and no webfont licence, so tracing is how the
-  letterforms reach the page without the font ever being served.
-  `components/wordmark.tsx` inlines the SVG so the lettering can take
-  `currentColor` and follow the theme; it's marked decorative and the
-  accessible name comes from the link wrapping it.
+  precision and viewBox. The **lettering is Crackhouse, and it is never
+  served as a font** — we hold no webfont licence. The supplied lock-up
+  already carries the letterforms as paths, so the build takes them from
+  there and changes only their fill, to `currentColor`. It builds from the
+  dark-background variant deliberately: there the lettering is pure
+  `#FEFEFE` and nothing else in the drawing uses that ink, so one file can
+  serve both themes; in the light-background variant the lettering shares
+  its grey with the globe's continents and the same swap would recolour
+  the artwork. `components/wordmark.tsx` inlines the SVG so the lettering
+  can follow the theme; it's marked decorative and the accessible name
+  comes from the link wrapping it.
   The guide forbids stretching, recolouring and effects — the script only
   reduces precision and crops the viewBox.
 - Display **Grandstander**, body **Raleway**. Crackhouse is the guide's

@@ -14,8 +14,14 @@ export const EVENT = {
   region: "Greater London",
   country: "GB",
   email: "info@worldzombieday.co.uk",
-  charity: {
+  /**
+   * Who the event raises money for. The Dead Good Club is a Community
+   * Interest Company, so this is a community fundraising event and the
+   * site must never describe it as a charity.
+   */
+  cause: {
     name: "The Dead Good Club",
+    legalForm: "Community Interest Company",
     donateUrl: "https://paa.ge/worldzombieday",
     donateLabel: "paa.ge/worldzombieday",
   },

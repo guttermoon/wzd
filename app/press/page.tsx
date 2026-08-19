@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/press" },
 }
 
-const FACTS = ["date", "place", "cost", "charity", "scale", "origin", "tags"]
+const FACTS = ["date", "place", "cost", "cause", "scale", "origin", "tags"]
 
 export default async function PressPage() {
   const copy = await getSiteCopy()

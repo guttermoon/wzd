@@ -89,13 +89,13 @@ export function Footer({ copy }: { copy: SiteCopy }) {
           </nav>
 
           <p className="mt-4 font-body">
-            <T k="footer.charity" />{" "}
+            <T k="footer.cause" />{" "}
             <a
               className="underline decoration-2 underline-offset-4 hover:no-underline"
-              href={EVENT.charity.donateUrl}
+              href={EVENT.cause.donateUrl}
               rel="noopener noreferrer"
             >
-              {EVENT.charity.donateLabel}
+              {EVENT.cause.donateLabel}
             </a>
           </p>
           <p className="mt-1 font-body">

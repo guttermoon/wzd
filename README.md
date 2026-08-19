@@ -1,8 +1,9 @@
 # World Zombie Day: London
 
 The site for [World Zombie Day: London](https://worldzombieday.co.uk) — a
-free charity zombie walk through central London on the second Saturday of
-October. Next one: **Saturday 10 October 2026**.
+free Community Fundraising event — a zombie walk through central London on
+the second Saturday of October. It raises money for The Dead Good Club, a
+Community Interest Company. Next one: **Saturday 10 October 2026**.
 
 Next.js 14 (app router) and Tailwind, deployed on Vercel. All the words on
 the site are editable in Notion without touching code.

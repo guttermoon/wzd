@@ -43,7 +43,7 @@ export default async function HomePage() {
             <T k="home.hero.cta.primary" />
           </Link>
           <a
-            href={EVENT.charity.donateUrl}
+            href={EVENT.cause.donateUrl}
             rel="noopener noreferrer"
             className="btn btn-secondary"
           >
@@ -149,18 +149,18 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Charity ────────────────────────────────────────────────────── */}
+      {/* ── The cause ────────────────────────────────────────────────────── */}
       <section className="mx-auto w-full max-w-page px-4 py-14 sm:px-6">
         <div className="prose-wzd">
           <h2 className="display text-[clamp(1.75rem,4vw,2.75rem)]">
-            <T k="home.charity.title" />
+            <T k="home.cause.title" />
           </h2>
-          <p><T k="home.charity.body1" /></p>
-          <p><T k="home.charity.body2" /></p>
-          <p><T k="home.charity.body3" /></p>
+          <p><T k="home.cause.body1" /></p>
+          <p><T k="home.cause.body2" /></p>
+          <p><T k="home.cause.body3" /></p>
         </div>
-        <a href={EVENT.charity.donateUrl} rel="noopener noreferrer" className="btn btn-primary mt-6">
-          <T k="home.charity.cta" />
+        <a href={EVENT.cause.donateUrl} rel="noopener noreferrer" className="btn btn-primary mt-6">
+          <T k="home.cause.cta" />
         </a>
       </section>
 
