@@ -6,18 +6,23 @@ import { ThemeToggle } from "@/components/theme-toggle"
 /**
  * Masthead and primary navigation.
  *
+ * No rule under it. A full-width hairline across the top of every page
+ * read as a border on the content rather than a division between the two,
+ * and the header does not scroll with the page, so nothing passes under it
+ * that needs separating.
+ *
  * The mobile menu is a native <details>, so it opens with the keyboard,
  * works before hydration, and needs no focus-trapping of its own.
  */
 export function Header() {
   return (
-    <header className="border-b-2 border-rule bg-bg">
+    <header className="bg-bg">
       <div className="mx-auto flex max-w-page items-center justify-between gap-4 px-4 py-3 sm:px-6">
         {/* The mark alone. It squares up with the theme toggle and the menu
             button at 44px, which is what keeps the bar tight. */}
         <Link href="/" className="block h-11 w-11 shrink-0">
           <BrainMark />
-          <span className="sr-only">World Zombie Day: London — home</span>
+          <span className="sr-only">World Zombie Day: London, home</span>
         </Link>
 
         <div className="flex items-center gap-2">

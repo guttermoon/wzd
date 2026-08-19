@@ -1,7 +1,9 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { getSiteCopy } from "@/lib/site-copy"
-import { makeT } from "@/components/notion-text"
+import { Photo } from "@/components/photo"
+import { photo } from "@/lib/photos"
+import { makeT, makeS } from "@/components/notion-text"
 import { PageShell, Section } from "@/components/page-shell"
 import { EVENT } from "@/lib/event"
 
@@ -16,9 +18,23 @@ export const metadata: Metadata = {
 export default async function PrivacyPage() {
   const copy = await getSiteCopy()
   const T = makeT(copy)
+  const S = makeS(copy)
 
   return (
-    <PageShell title={<T k="privacy.title" />} standfirst={<T k="privacy.standfirst" />}>
+    <PageShell
+      title={<T k="privacy.title" />}
+      titleText={S("privacy.title")}
+      standfirst={<T k="privacy.standfirst" />}
+      banner={
+        <Photo
+          photo={photo("makeup-blood")}
+          priority
+          bleed="full"
+          ratio="32/9"
+          sizes="100vw"
+        />
+      }
+    >
       <p className="mt-4 font-body text-sm text-muted">
         <T k="privacy.updated" />
       </p>

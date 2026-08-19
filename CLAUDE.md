@@ -94,9 +94,11 @@ everywhere at once.
 ## Design and accessibility
 
 - Palette comes from the style guide: Zombie Red `#E74C3C`, Dark Grey
-  `#404040`, Black `#333333`, Greige `#F5E9DA`.
+  `#404040`, Black `#333333`, Greige `#F5E9DA`. Light mode's ground is
+  paper `#FEFEFC` (owner's choice); Greige is the panel tint on it, and the
+  ink in dark mode.
 - **Zombie Red is a display colour, not a text colour.** It measures
-  3.19:1 on Greige and 3.31:1 on Black — fine for large type (3:1), short
+  3.78:1 on paper and 3.31:1 on Black — fine for large type (3:1), short
   of the 4.5:1 body text needs. So `--accent` is Zombie Red for fills,
   rules and large headings; `--accent-text` is a tuned red for links and
   small text; `--accent-strong` backs buttons because white on Zombie Red
@@ -135,17 +137,37 @@ everywhere at once.
 
 ## Motion
 
-Title-card animation, in `app/globals.css` and `components/reveal.tsx`:
-straight-line slides, panels wiping off type, hard cuts. 300–700ms, sharp
-ease-out, ≤3px overshoot, 80–120ms stagger, `transform`/`opacity` only.
-Elements stop when they arrive and stay still.
+Title-card animation, in `app/globals.css`: straight-line slides, panels
+wiping off type, hard cuts. 300–700ms, sharp ease-out, ≤3px overshoot,
+80–120ms stagger, `transform`/`opacity` only. Elements stop when they
+arrive and stay still. Five components carry it:
 
-Two rules that matter more than the look:
+- `reveal.tsx` — a block arrives: slide, cut, or a panel pulled off it.
+- `swipe.tsx` — type arrives a word at a time, 60ms apart, each word behind
+  its own panel. Takes a **string** (`makeS`, not `<T>`, which returns
+  nodes with `<br/>` in them). The word span is `vertical-align: bottom`
+  because an inline-block that clips its overflow otherwise aligns on its
+  margin edge and every line grows taller the moment it arms.
+- `bars.tsx` — slabs drive in from the four edges, different lengths, off
+  square by a degree or two. `divider.tsx` is three of them as a section
+  break.
+- `hand.tsx` — a zombie hand reaches in from an edge, overshoots and
+  settles. The only thing on the site allowed to wobble.
 
-- `prefers-reduced-motion` gets the finished state immediately — the
-  masking panel is `display: none`, nothing travels.
+Every one of them is **opt-in**: the finished state renders, and the
+animation classes are added only after the component mounts and confirms
+the browser can and should animate. Nothing is ever hidden waiting for a
+script.
+
+Three rules that matter more than the look:
+
+- `prefers-reduced-motion` gets the finished state immediately — masking
+  panels are `display: none`, nothing travels.
 - A masking panel must always be `pointer-events: none`, or it swallows
   clicks on what it covers.
+- Check any new entrance with JS disabled and under reduced motion, by
+  screenshot. The failure mode is an invisible page that looks perfectly
+  healthy in the DOM.
 
 If a `.wipe` ever leaves content permanently hidden, the cause is the
 animation not applying — check that any custom property it references is

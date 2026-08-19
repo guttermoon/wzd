@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { getSiteCopy } from "@/lib/site-copy"
-import { makeT } from "@/components/notion-text"
+import { makeT, makeS } from "@/components/notion-text"
 import { PageShell, Section } from "@/components/page-shell"
 import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
@@ -19,6 +19,7 @@ const QUESTIONS = ["1", "2", "3", "4", "5", "6", "7", "8"]
 export default async function FaqPage() {
   const copy = await getSiteCopy()
   const T = makeT(copy)
+  const S = makeS(copy)
 
   // Mirrors the visible copy so search engines get the same answers.
   const faqSchema = {
@@ -32,7 +33,20 @@ export default async function FaqPage() {
   }
 
   return (
-    <PageShell title={<T k="faq.title" />} standfirst={<T k="faq.standfirst" />}>
+    <PageShell
+      title={<T k="faq.title" />}
+      titleText={S("faq.title")}
+      standfirst={<T k="faq.standfirst" />}
+      banner={
+        <Photo
+          photo={photo("london-eye-pair")}
+          priority
+          bleed="full"
+          ratio="32/9"
+          sizes="100vw"
+        />
+      }
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}

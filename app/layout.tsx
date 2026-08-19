@@ -32,11 +32,11 @@ const raleway = Raleway({
 
 const title = "World Zombie Day: London"
 const description =
-  "A free, family-friendly Community Fundraising event — a zombie walk through central London. Saturday 10 October 2026."
+  "A free, family-friendly Community Fundraising event: a zombie walk through central London. Saturday 10 October 2026."
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: title, template: `%s — ${title}` },
+  title: { default: title, template: `%s | ${title}` },
   description,
   alternates: { canonical: "/" },
   keywords: [
