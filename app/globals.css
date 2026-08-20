@@ -156,11 +156,28 @@
   /* Third-party embeds size and centre themselves. Everything on this site
      is set from the left, and nothing is allowed to reach past the
      container, so whatever the script injects is pinned to both. */
-  .zeffy-embed,
-  .zeffy-embed > *,
-  .zeffy-embed iframe {
-    max-width: 100%;
-    margin-inline: 0;
+  .zeffy-embed {
+    /* Capped, so the form cannot run the width of the page, and pinned to
+       the left of whatever space is left over. */
+    max-width: 46rem;
+    margin-inline: 0 auto;
+  }
+
+  /* Their script builds its own wrappers inside ours, and at least one of
+     them centres itself. Only a direct-child rule was reaching the first
+     level, so anything auto-margined below that stayed centred; three
+     levels covers every wrapper they nest without reaching into the form
+     itself, where an auto margin might be centring a button on purpose.
+
+     `!important` because these are inline styles on elements we do not
+     own, and `:where()` keeps the specificity at zero so nothing else on
+     the site has to out-rank it. */
+  .zeffy-embed > :where(*),
+  .zeffy-embed > :where(*) > :where(*),
+  .zeffy-embed > :where(*) > :where(*) > :where(*),
+  .zeffy-embed :where(iframe) {
+    max-width: 100% !important;
+    margin-inline: 0 auto !important;
   }
 
   /* Display type: Grandstander, always caps, tight and heavy. */
