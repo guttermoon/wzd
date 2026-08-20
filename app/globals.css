@@ -234,6 +234,16 @@
     filter: url(#vhs-tape) saturate(0.85) contrast(1.04) brightness(0.94);
   }
 
+  /* Crowds take the whole treatment at about half strength: the weaker
+     filter, a lighter wash, finer scanlines, less vignette. On a single
+     large subject the split and the tear read as texture; on two hundred
+     small ones they read as noise, and the one thing the picture has to
+     say is that there are two hundred of them. Which photographs count is
+     the `busy` flag in content/photos.json. */
+  .vhs-light img {
+    filter: url(#vhs-tape-light) saturate(0.9) contrast(1.02) brightness(0.97);
+  }
+
   /* The magenta cast of a tape played once too often, and the bloom that
      comes with it. Screened, so it lifts the highlights rather than
      greying the whole frame. */
@@ -280,6 +290,22 @@
         transparent 4px
       ),
       radial-gradient(ellipse at center, transparent 64%, rgb(0 0 0 / 0.24) 100%);
+  }
+
+  .vhs-light::before {
+    opacity: 0.26;
+  }
+
+  .vhs-light::after {
+    background-image:
+      repeating-linear-gradient(
+        to bottom,
+        rgb(0 0 0 / 0.08) 0px,
+        rgb(0 0 0 / 0.08) 1px,
+        transparent 1px,
+        transparent 5px
+      ),
+      radial-gradient(ellipse at center, transparent 70%, rgb(0 0 0 / 0.16) 100%);
   }
 
   /* Anyone who has asked for higher contrast or less visual noise gets the

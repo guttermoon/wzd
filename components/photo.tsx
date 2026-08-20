@@ -21,7 +21,9 @@ import {
  *
  * The tape treatment and the shape both live here, so they are consistent
  * everywhere and impossible to forget — see globals.css and
- * components/vhs-filter.tsx.
+ * components/vhs-filter.tsx. Photographs marked `busy` in
+ * content/photos.json take it at about half strength: a crowd cannot
+ * afford the split and the tear the way one large subject can.
  */
 
 /** Stable per-photo variation: same photo always gets the same cut. */
@@ -143,7 +145,7 @@ export function Photo({
     <figure className={`relative ${rotation} ${className}`}>
       <div className={`${bleed ? "panel-ground" : ""} ${mat}`}>
         <picture
-          className={`vhs ${cut} ${imageClassName}`}
+          className={`vhs ${photo.busy ? "vhs-light" : ""} ${cut} ${imageClassName}`}
           style={ratio ? { aspectRatio: ratio } : undefined}
         >
           <source type="image/webp" srcSet={srcSet(photo)} sizes={sizes} />

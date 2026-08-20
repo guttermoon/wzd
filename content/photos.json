@@ -4,7 +4,8 @@
     "source": "14. Chris Williams.jpeg",
     "credit": "Chris Williams",
     "alt": "A zombie with bloodied outstretched hands lunges towards the camera on Golden Jubilee Bridge, a crowd of costumed zombies and a hand-painted DIE! road sign behind him.",
-    "slot": "home hero"
+    "slot": "home hero",
+    "busy": true
   },
   {
     "slug": "the-horde",
@@ -12,28 +13,32 @@
     "credit": "Bartosz Chomiak",
     "creditNote": "Filename says \"photo by zero\"; the image carries a © ChomiakBartosz watermark. Credit shown follows the watermark, confirm with the photographer.",
     "alt": "Hundreds of costumed zombies packed into a London street, photographed from above, a bride with rabbit ears, a deep-sea diving helmet, top hats and hospital scrubs among them.",
-    "slot": "home scale / press"
+    "slot": "home scale / press",
+    "busy": true
   },
   {
     "slug": "leicester-square-banner",
     "source": "3_PHOTO_CREDIT_www.charterphotography.co.uk.jpg",
     "credit": "Chris Harvey",
     "alt": "A zombie in a bowler hat carries a megaphone and the World Zombie Day: London banner through Leicester Square, with the walk following behind.",
-    "slot": "home, what happens on the day"
+    "slot": "home, what happens on the day",
+    "busy": true
   },
   {
     "slug": "family-kerb",
     "source": "Photo Pierre Fr Docquir 58.jpg",
     "credit": "Pierre François Docquir",
     "alt": "Zombies of all ages wait at the kerb: a steward holding a Zombies Crossing sign, a parent in scrubs with a small child in costume, and a zombie holding a yellow “Danger: beware of zombies” sign.",
-    "slot": "home, everyone's welcome"
+    "slot": "home, everyone's welcome",
+    "busy": true
   },
   {
     "slug": "leake-street-crowd",
     "source": "2_PHOTO_CREDIT_ALEX_LANE.jpg",
     "credit": "Alex Lane Photography",
     "alt": "Several hundred zombies fill the graffiti-covered Leake Street tunnel, waiting for the walk to move off.",
-    "slot": "register"
+    "slot": "register",
+    "busy": true
   },
   {
     "slug": "steward-crossing",
@@ -68,7 +73,8 @@
     "source": "1_PHOTO_CREDIT_ALEX_LANE.jpg",
     "credit": "Alex Lane Photography",
     "alt": "Two zombies in heavy prosthetic make-up pose beneath the London Eye, backlit by the low sun.",
-    "slot": "gallery"
+    "slot": "gallery",
+    "busy": true
   },
   {
     "slug": "half-face-portrait",
@@ -124,6 +130,7 @@
     "source": "Photo Paul Carrano 22.jpg",
     "credit": "Paul Carrano",
     "alt": "A group of zombies advances towards the camera past a cluster of red balloons, one man caught mid-groan.",
-    "slot": "gallery"
+    "slot": "gallery",
+    "busy": true
   }
 ]

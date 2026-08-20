@@ -35,6 +35,18 @@
  * by zero and absolutely positioned out of flow, and carries no accessible
  * name because there is nothing to announce.
  */
+/**
+ * The same filter twice, at two strengths. Crowds get the weaker one: at
+ * full strength the split and the tear read as texture on a single large
+ * subject and as noise on two hundred small ones, where they cost the
+ * picture the only thing it has. Which photographs count as crowds is a
+ * `busy` flag in content/photos.json, not a guess made here.
+ */
+const STRENGTHS = [
+  { id: "vhs-tape", tear: 2.5, split: 2.5, drop: 0.5, smear: 0.4, grain: 0.1 },
+  { id: "vhs-tape-light", tear: 1.1, split: 1.2, drop: 0.25, smear: 0.25, grain: 0.06 },
+] as const
+
 export function VhsFilter() {
   return (
     <svg
@@ -45,8 +57,10 @@ export function VhsFilter() {
       className="pointer-events-none absolute"
     >
       <defs>
+        {STRENGTHS.map((s) => (
         <filter
-          id="vhs-tape"
+          key={s.id}
+          id={s.id}
           x="-8%"
           y="-8%"
           width="116%"
@@ -76,7 +90,7 @@ export function VhsFilter() {
           <feDisplacementMap
             in="SourceGraphic"
             in2="tracking"
-            scale="2.5"
+            scale={s.tear}
             xChannelSelector="R"
             yChannelSelector="A"
             result="torn"
@@ -92,8 +106,8 @@ export function VhsFilter() {
             values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"
             result="red"
           />
-          <feOffset in="red" dx="-2.5" dy="0" result="redShifted" />
-          <feGaussianBlur in="redShifted" stdDeviation="0.4 0" result="redSmeared" />
+          <feOffset in="red" dx={-s.split} dy="0" result="redShifted" />
+          <feGaussianBlur in="redShifted" stdDeviation={`${s.smear} 0`} result="redSmeared" />
 
           <feColorMatrix
             in="torn"
@@ -108,8 +122,8 @@ export function VhsFilter() {
             values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0"
             result="blue"
           />
-          <feOffset in="blue" dx="2.5" dy="0.5" result="blueShifted" />
-          <feGaussianBlur in="blueShifted" stdDeviation="0.4 0" result="blueSmeared" />
+          <feOffset in="blue" dx={s.split} dy={s.drop} result="blueShifted" />
+          <feGaussianBlur in="blueShifted" stdDeviation={`${s.smear} 0`} result="blueSmeared" />
 
           <feBlend in="redSmeared" in2="greenSharp" mode="screen" result="rg" />
           <feBlend in="rg" in2="blueSmeared" mode="screen" result="split" />
@@ -126,7 +140,7 @@ export function VhsFilter() {
           />
           <feColorMatrix in="noise" type="saturate" values="0" result="mono" />
           <feComponentTransfer in="mono" result="grain">
-            <feFuncA type="linear" slope="0.1" intercept="-0.03" />
+            <feFuncA type="linear" slope={s.grain} intercept="-0.03" />
           </feComponentTransfer>
           <feBlend in="split" in2="grain" mode="overlay" result="grained" />
 
@@ -134,6 +148,7 @@ export function VhsFilter() {
               tear and the grain cannot bleed outside the frame. */}
           <feComposite in="grained" in2="SourceGraphic" operator="in" />
         </filter>
+        ))}
       </defs>
     </svg>
   )
