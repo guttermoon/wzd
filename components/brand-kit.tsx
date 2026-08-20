@@ -16,20 +16,20 @@ const PALETTE = [
   {
     name: "Greige",
     hex: "#F7E7D8",
-    note: "Panels in light mode, and the ink in dark mode.",
+    note: "The type in dark mode, and the rules and borders on it.",
     swatch: "bg-[#F7E7D8]",
   },
   {
     name: "Dark Grey",
     hex: "#404040",
-    note: "Panels in dark mode.",
+    note: "Secondary marks and dividers.",
     swatch: "bg-[#404040]",
   },
   {
     name: "Black",
-    hex: "#333333",
-    note: "Type in light mode, and the ground in dark mode.",
-    swatch: "bg-[#333333]",
+    hex: "#1A1A1A",
+    note: "The ground in dark mode, and the slabs on the red.",
+    swatch: "bg-[#1A1A1A]",
   },
 ]
 
@@ -54,11 +54,15 @@ export function BrandKit() {
     <div className="mt-6 space-y-6">
       <div className="grid gap-4 sm:grid-cols-2">
         {/* The lock-up on both grounds, because it is one asset that has to
-            work on either. */}
-        <div className="cut-panel flex items-center justify-center bg-bg p-8 text-text">
+            work on either. Both grounds are written out rather than taken
+            from the theme tokens: --bg and --text follow the visitor's
+            theme, so in dark mode the two panels came out identical and
+            the whole point of showing a pair was lost. These are the two
+            PNGs offered below, in the two inks they are rendered in. */}
+        <div className="cut-panel flex items-center justify-center bg-[#FEFEFC] p-8 text-[#333333]">
           <Wordmark className="w-full max-w-[18rem]" label={false} />
         </div>
-        <div className="cut-panel flex items-center justify-center bg-ink p-8 text-[#f7e7d8]">
+        <div className="cut-panel flex items-center justify-center bg-[#1A1A1A] p-8 text-[#F7E7D8]">
           <Wordmark className="w-full max-w-[18rem]" label={false} />
         </div>
       </div>

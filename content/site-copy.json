@@ -208,5 +208,10 @@
   "donate.standfirst": "The walk is free to join. Everything beyond the cost of running it safely goes to The Dead Good Club, and you can give whatever you can, whether or not you are coming on the day.",
   "donate.how.title": "Where the money goes",
   "donate.other.title": "Other ways to help",
-  "donate.other.body": "Sponsor the event, offer a prize, or lend us a skill for the day. Sponsorship keeps the walk free to attend, which is the thing we protect above everything else."
+  "donate.other.body": "Sponsor the event, offer a prize, or lend us a skill for the day. Sponsorship keeps the walk free to attend, which is the thing we protect above everything else.",
+  "press.release.title": "Press release",
+  "press.release.body": "The current release, with the date, the route, the cause and quotes you can use.",
+  "press.release.cta": "Read the press release",
+  "press.release.url": "",
+  "press.release.pending": "This year's release is not out yet. Email info@worldzombieday.co.uk and we'll send it as soon as it is."
 }

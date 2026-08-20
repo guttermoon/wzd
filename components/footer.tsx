@@ -110,7 +110,10 @@ export function Footer({ copy }: { copy: SiteCopy }) {
               this is a sign-off, not a title card, and the masthead
               already carries the mark. The lettering takes `currentColor`,
               so the one file serves this field and both themes. */}
-          <Wordmark className="mx-auto mt-8 w-full max-w-[7rem] sm:max-w-[8rem]" />
+          {/* Exactly the width of the social row above it: four 44px
+              targets and three 8px gaps is 200px, so the two line up on
+              both edges. */}
+          <Wordmark className="mx-auto mt-8 w-full max-w-[200px]" />
 
           <nav aria-label="Footer" className="mt-6">
             <ul className="flex flex-wrap justify-center gap-x-5 gap-y-1">
