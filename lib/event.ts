@@ -26,6 +26,19 @@ export const EVENT = {
     donateUrl: "https://paa.ge/worldzombieday",
     donateLabel: "paa.ge/worldzombieday",
   },
+  /**
+   * The after-party, which is a separate venue with its own ticket. The
+   * words are in content/site-copy.json under `party.`; these are the
+   * facts that have to stay exact.
+   */
+  afterParty: {
+    venue: "BLOODSport by MEATliquor",
+    url: "https://bloodsports.co/",
+    address: "27-29 Endell St, London WC2H 9BA",
+    /** Machine-readable, for the structured data on /register. */
+    startsAt: "2026-10-10T19:30:00+01:00",
+    supporters: ["BLOODSport by MEATliquor", "Harbour Brewing Co"],
+  },
   hashtags: ["#WZD2026", "#WorldZombieDay"],
   /** Order is the order they appear in the footer. */
   social: [

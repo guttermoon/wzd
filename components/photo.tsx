@@ -181,3 +181,81 @@ export function Photo({
     </figure>
   )
 }
+
+/**
+ * A graphic, not a photograph: artwork we made rather than a picture
+ * somebody took.
+ *
+ * It lives in this file because this file is the only one allowed to emit
+ * an `<img>` — scripts/check-credits.mjs enforces that, so that no
+ * photograph can ever reach a page without its credit. A graphic has no
+ * photographer, so it carries no credit and is deliberately not a
+ * `<figure>`: the credit check counts figures against photo images, and a
+ * figure with nothing to caption would break that count as well as being
+ * a lie about what it is.
+ *
+ * It takes the mat and the cut so it sits in the page like everything else
+ * does, and none of the tape treatment: no `.vhs`, so no channel split, no
+ * tear, no red wash. Artwork that arrived the way the designer drew it
+ * should leave that way.
+ *
+ * `still` is for animated artwork. An animated GIF cannot be stopped by
+ * CSS — `prefers-reduced-motion` has no purchase on it — so the only way
+ * to honour that preference is to serve a different file, and a <picture>
+ * with a `media` source is the one mechanism that can. Everything else on
+ * this site stops for that preference; a poster hung on the page should
+ * not be the exception.
+ */
+export function Graphic({
+  src,
+  still,
+  alt,
+  width,
+  height,
+  sizes = "100vw",
+  className = "",
+  frame = true,
+}: {
+  src: string
+  /** A single frame, served instead when the visitor asks for less motion. */
+  still?: string
+  /** Empty when the graphic says nothing the surrounding copy does not. */
+  alt: string
+  width: number
+  height: number
+  sizes?: string
+  className?: string
+  frame?: boolean | "accent"
+}) {
+  const seed = hash(src)
+  const cut = CUTS[seed % CUTS.length]
+  const mat = frame
+    ? `photo-frame ${FRAMES[(seed + 2) % FRAMES.length]}${
+        frame === "accent" ? " frame-accent" : ""
+      }`
+    : ""
+
+  return (
+    <div className={className}>
+      <div className={mat}>
+        <span className={`block overflow-hidden ${cut}`}>
+          <picture>
+            {still ? (
+              <source media="(prefers-reduced-motion: reduce)" srcSet={still} />
+            ) : null}
+            <img
+              src={src}
+              alt={alt}
+              width={width}
+              height={height}
+              sizes={sizes}
+              loading="lazy"
+              decoding="async"
+              className="h-auto w-full"
+            />
+          </picture>
+        </span>
+      </div>
+    </div>
+  )
+}
