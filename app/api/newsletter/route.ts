@@ -12,8 +12,13 @@ import { NextResponse } from "next/server"
  * PAAGE_SIGNUP_URL is where the address goes. It is not committed because
  * it is paa.ge's endpoint and only they can say what it is: open the form
  * on paa.ge, submit it with the browser's network panel open, and copy the
- * request URL. If it wants named fields other than `email`, set
- * PAAGE_SIGNUP_FIELD to the name it uses.
+ * full URL of the `subscribe` request.
+ *
+ * Two more, if their endpoint disagrees with the defaults:
+ * PAAGE_SIGNUP_FIELD is the name of the field the address goes in
+ * (default `email`), and PAAGE_SIGNUP_FORMAT is `json` or `form`. JSON is
+ * the default because their own page sends a CORS preflight before the
+ * request, which a plain form post would not trigger.
  *
  * Unset, this returns 503 and the form falls back to a link to paa.ge, the
  * same way /api/revalidate refuses to run without its secret rather than
@@ -23,6 +28,7 @@ export const runtime = "nodejs"
 
 const ENDPOINT = process.env.PAAGE_SIGNUP_URL
 const FIELD = process.env.PAAGE_SIGNUP_FIELD ?? "email"
+const FORMAT = process.env.PAAGE_SIGNUP_FORMAT === "form" ? "form" : "json"
 
 /**
  * Deliberately loose. The only test that means anything is whether the
@@ -56,15 +62,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "bad-email" }, { status: 400 })
   }
 
-  // Form-encoded, which is what an ordinary form post looks like and what
-  // a page builder's endpoint is most likely to expect. If paa.ge wants
-  // JSON, this is the one line to change.
-  const body = new URLSearchParams({ [FIELD]: email })
+  const [contentType, body] =
+    FORMAT === "form"
+      ? [
+          "application/x-www-form-urlencoded",
+          new URLSearchParams({ [FIELD]: email }).toString(),
+        ]
+      : ["application/json", JSON.stringify({ [FIELD]: email })]
 
   try {
     const response = await fetch(ENDPOINT, {
       method: "POST",
-      headers: { "content-type": "application/x-www-form-urlencoded" },
+      headers: { "content-type": contentType, accept: "application/json" },
       body,
       // Their endpoint is not ours to wait on indefinitely.
       signal: AbortSignal.timeout(8000),
