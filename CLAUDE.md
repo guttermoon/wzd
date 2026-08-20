@@ -178,19 +178,22 @@ the whole `animation` shorthand and silently yields `animation-name: none`.
 
 ## Analytics and consent
 
-**Nothing that writes to a visitor's device loads until they have accepted
-the cookie bar.** UK PECR requires consent before the storage, not after
+**Nothing that writes to a visitor's device loads until they have answered
+the cookie dialog.** UK PECR requires consent before the storage, not after
 it, and analytics is not strictly necessary, so the scripts are never
 fetched rather than merely configured to behave once running. One answer
 covers all three: PostHog, GA4, and the Zeffy form, which sets its own
-cookies.
+cookies. The newsletter is **not** one of them any more; see below.
 
 - `lib/consent.ts` holds the answer in localStorage and broadcasts changes
   on a window event. Storing the answer itself needs no consent: it is the
   choice, and the alternative is asking on every page.
-- `components/consent-banner.tsx` is a bar at the foot, not a modal. Reject
-  is the same size and weight as Accept; a reject button that is harder to
-  find is not a free choice.
+- `components/consent-banner.tsx` is a modal dialog, at the owner's
+  instruction: it holds focus, locks the page behind it, and has to be
+  answered before the site can be used. Reject is the same size and weight
+  as Accept; a dialog that only offers yes is not consent. `check:a11y`
+  tests the trap, the lock and the close, and seeds an answer before the
+  page checks so they are not run against a dialog doing its job.
 - `components/consent-choice.tsx` on `/privacy` shows the current answer
   and lets it be withdrawn. Consent that cannot be withdrawn as easily as
   it was given is not consent.
@@ -220,9 +223,13 @@ is given.
   route, add a redirect — those links are in a decade of press coverage.
 - `POST /api/revalidate` requires `REVALIDATION_SECRET`; it returns 503 if
   unset. (The template's version skipped the check when no secret was sent.)
-- Mailing-list signup is an embedded paa.ge form
-  (`components/email-signup.tsx`), behind the same consent gate as
-  everything else third-party. There is no signup route of our own: nothing
-  on this site takes an email address itself.
+- The newsletter signup is **our own form** (`components/email-signup.tsx`)
+  posting to `POST /api/newsletter`, which hands the address to paa.ge
+  (backend `api.lama.co`) server-side. It was an iframe of paa.ge's page,
+  which could not be styled and put their cookie notice and their GA4 on
+  every page of ours. Because nothing of theirs runs in the browser, this
+  needs no consent. The endpoint is public and lives in the route;
+  `PAAGE_SIGNUP_URL`, `PAAGE_SIGNUP_FIELD` and `PAAGE_SIGNUP_FORMAT`
+  override it if paa.ge changes anything.
 - 301 photographs are still on the old WordPress site and could not be
   fetched from this environment. See `docs/IMAGES.md`.
