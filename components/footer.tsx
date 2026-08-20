@@ -2,6 +2,7 @@ import Link from "next/link"
 import { EVENT, NAV, FOOTER_NAV, LEGAL_NAV } from "@/lib/event"
 import { makeT, type SiteCopy } from "@/components/notion-text"
 import { Reveal } from "@/components/reveal"
+import { Wordmark } from "@/components/wordmark"
 
 /** Minimal glyphs, so no icon dependency is pulled in for four links. */
 const ICONS: Record<string, string> = {
@@ -22,7 +23,7 @@ export function Footer({ copy }: { copy: SiteCopy }) {
           so they carry no accessible name. */}
       <div className="bg-bg pt-12">
         <div className="mx-auto max-w-page px-4 text-center sm:px-6">
-          <p className="display text-2xl sm:text-3xl">World Zombie Day: London</p>
+          <Wordmark className="mx-auto w-full max-w-[22rem] sm:max-w-[28rem]" />
           <p className="mx-auto mt-3 max-w-[46ch] font-body text-muted">
             <T k="footer.tagline" />
           </p>

@@ -1,25 +1,5 @@
-import { readFileSync } from "node:fs"
-import { join } from "node:path"
 import { BrainMark } from "@/components/brain-mark"
-
-/**
- * The logos and the palette, shown rather than described, for the press
- * kit.
- *
- * The lock-up is inlined from the same file the download link serves, so
- * what a journalist sees here is exactly the asset they get. It takes
- * `currentColor`, which is what lets one file sit on both the light panel
- * and the dark one below it.
- *
- * The swatches are ordinary elements with a background colour, not
- * pictures of colours: they stay correct if a token ever moves, and they
- * are readable to anyone using a screen reader, which a flat image of a
- * palette is not.
- */
-const wordmark = readFileSync(
-  join(process.cwd(), "public/brand/wordmark.svg"),
-  "utf8",
-).replace(/<svg([^>]*)>/, '<svg$1 aria-hidden="true" focusable="false">')
+import { Wordmark } from "@/components/wordmark"
 
 /**
  * The style guide palette. Zombie Red carries a warning because it is the
@@ -53,6 +33,22 @@ const PALETTE = [
   },
 ]
 
+/**
+ * The logos and the palette, shown rather than described, for the press
+ * kit.
+ *
+ * The lock-up comes from components/wordmark.tsx, which inlines the same
+ * file the download link serves, so what a journalist sees here is exactly
+ * the asset they get. It takes `currentColor`, which is what lets one file
+ * sit on both the light panel and the dark one below it. Both copies are
+ * unlabelled: the section heading already names them, and three identical
+ * announcements in a row is noise.
+ *
+ * The swatches are ordinary elements with a background colour, not pictures
+ * of colours: they stay correct if a token ever moves, and they are
+ * readable to anyone using a screen reader, which a flat image of a palette
+ * is not.
+ */
 export function BrandKit() {
   return (
     <div className="mt-6 space-y-6">
@@ -60,16 +56,10 @@ export function BrandKit() {
         {/* The lock-up on both grounds, because it is one asset that has to
             work on either. */}
         <div className="cut-panel flex items-center justify-center bg-bg p-8 text-text">
-          <span
-            className="block w-full max-w-[18rem] [&>svg]:h-auto [&>svg]:w-full"
-            dangerouslySetInnerHTML={{ __html: wordmark }}
-          />
+          <Wordmark className="w-full max-w-[18rem]" label={false} />
         </div>
         <div className="cut-panel flex items-center justify-center bg-ink p-8 text-[#f7e7d8]">
-          <span
-            className="block w-full max-w-[18rem] [&>svg]:h-auto [&>svg]:w-full"
-            dangerouslySetInnerHTML={{ __html: wordmark }}
-          />
+          <Wordmark className="w-full max-w-[18rem]" label={false} />
         </div>
       </div>
 
