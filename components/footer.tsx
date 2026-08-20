@@ -3,6 +3,7 @@ import { EVENT, NAV, FOOTER_NAV, LEGAL_NAV } from "@/lib/event"
 import { makeT, type SiteCopy } from "@/components/notion-text"
 import { Reveal } from "@/components/reveal"
 import { Wordmark } from "@/components/wordmark"
+import { Divider } from "@/components/divider"
 import { EmailSignup } from "@/components/email-signup"
 
 /** Minimal glyphs, so no icon dependency is pulled in for four links. */
@@ -22,6 +23,12 @@ export function Footer({ copy }: { copy: SiteCopy }) {
 
   return (
     <footer className="mt-16">
+      {/* The page turns from left-set to centred here, so the break gets
+          marked the way every other section break on the site is: slabs,
+          not a rule. Without it the sign-off reads as a stray centred
+          paragraph at the end of a left-aligned page. */}
+      <Divider lead="left" />
+
       {/* The newsletter, on the page's own ground. Inside <footer>, so it
           sits in the contentinfo landmark rather than in the gap between
           landmarks, which is what axe failed on when this was a band of
