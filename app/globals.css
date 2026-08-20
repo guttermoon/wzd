@@ -231,7 +231,7 @@
        no hue-rotate — rotating the hue would drag every red on the site
        away from Zombie Red, which is the one colour that has to stay
        exactly #E74C3C. */
-    filter: url(#vhs-tape) saturate(0.72) contrast(1.08) brightness(0.86);
+    filter: url(#vhs-tape) saturate(0.85) contrast(1.04) brightness(0.94);
   }
 
   /* The magenta cast of a tape played once too often, and the bloom that
@@ -256,7 +256,7 @@
        survives: at 1 every photograph is a monochrome. */
     background-color: var(--zombie-red);
     mix-blend-mode: color;
-    opacity: 0.62;
+    opacity: 0.42;
   }
 
   /* Scanlines and the vignette of a CRT. Deliberately gentle: a 4px period
@@ -274,12 +274,12 @@
     background-image:
       repeating-linear-gradient(
         to bottom,
-        rgb(0 0 0 / 0.2) 0px,
-        rgb(0 0 0 / 0.2) 1px,
+        rgb(0 0 0 / 0.13) 0px,
+        rgb(0 0 0 / 0.13) 1px,
         transparent 1px,
         transparent 4px
       ),
-      radial-gradient(ellipse at center, transparent 60%, rgb(0 0 0 / 0.3) 100%);
+      radial-gradient(ellipse at center, transparent 64%, rgb(0 0 0 / 0.24) 100%);
   }
 
   /* Anyone who has asked for higher contrast or less visual noise gets the

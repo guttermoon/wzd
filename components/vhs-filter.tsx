@@ -16,15 +16,17 @@
  *    alone, and the red and blue are offset and blurred horizontally only.
  *    Blurring all three is what made the earlier version look merely out
  *    of focus.
- * 2. **The offsets are large enough to see.** Four pixels each way, not
- *    one: at the size these photographs run, a sub-pixel split just muddies
- *    the edges instead of registering as an effect. The smear that goes
- *    with them is kept short, because the ask was for a bigger effect, not
- *    a softer picture.
+ * 2. **The offsets are large enough to see.** Two and a half pixels each
+ *    way, not a fraction of one: at the size these photographs run, a
+ *    sub-pixel split just muddies the edges instead of registering as an
+ *    effect. Four was legible as an effect and illegible as a photograph,
+ *    which is the wrong trade: the picture has to survive the treatment.
  * 3. **The tracking tears.** A displacement map driven by turbulence that
  *    is stretched flat — a very low frequency across, a high one down —
  *    which produces horizontal bands that slide sideways by different
- *    amounts, the way a tape does when the tracking is off.
+ *    amounts, the way a tape does when the tracking is off. Kept small:
+ *    the tear should be something you notice about the picture, not the
+ *    thing standing between you and it.
  *
  * Everything is static. Nothing here animates, ever: a photograph that
  * flickers is a seizure risk and fails WCAG 2.3.1.
@@ -74,7 +76,7 @@ export function VhsFilter() {
           <feDisplacementMap
             in="SourceGraphic"
             in2="tracking"
-            scale="6"
+            scale="2.5"
             xChannelSelector="R"
             yChannelSelector="A"
             result="torn"
@@ -90,8 +92,8 @@ export function VhsFilter() {
             values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"
             result="red"
           />
-          <feOffset in="red" dx="-4" dy="0" result="redShifted" />
-          <feGaussianBlur in="redShifted" stdDeviation="0.6 0" result="redSmeared" />
+          <feOffset in="red" dx="-2.5" dy="0" result="redShifted" />
+          <feGaussianBlur in="redShifted" stdDeviation="0.4 0" result="redSmeared" />
 
           <feColorMatrix
             in="torn"
@@ -106,8 +108,8 @@ export function VhsFilter() {
             values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0"
             result="blue"
           />
-          <feOffset in="blue" dx="4" dy="1" result="blueShifted" />
-          <feGaussianBlur in="blueShifted" stdDeviation="0.6 0" result="blueSmeared" />
+          <feOffset in="blue" dx="2.5" dy="0.5" result="blueShifted" />
+          <feGaussianBlur in="blueShifted" stdDeviation="0.4 0" result="blueSmeared" />
 
           <feBlend in="redSmeared" in2="greenSharp" mode="screen" result="rg" />
           <feBlend in="rg" in2="blueSmeared" mode="screen" result="split" />
@@ -124,7 +126,7 @@ export function VhsFilter() {
           />
           <feColorMatrix in="noise" type="saturate" values="0" result="mono" />
           <feComponentTransfer in="mono" result="grain">
-            <feFuncA type="linear" slope="0.16" intercept="-0.04" />
+            <feFuncA type="linear" slope="0.1" intercept="-0.03" />
           </feComponentTransfer>
           <feBlend in="split" in2="grain" mode="overlay" result="grained" />
 
