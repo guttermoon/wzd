@@ -25,10 +25,12 @@ import { useConsent, writeConsent } from "@/lib/consent"
  * scrolling. Escape deliberately does nothing: the two buttons are the way
  * out, and both are one tab apart.
  *
- * It arrives the way everything else here does — a hard slide up with a
- * three-pixel overshoot, and the scrim cutting in behind it
- * (`.consent-dialog` / `.consent-scrim` in globals.css). Under
- * prefers-reduced-motion it is simply there.
+ * It hangs from a string and swings in, which is why there are two
+ * wrappers around the panel: transform is one property, so a drop and a
+ * swing on the same element would not compose, and the pivot has to be the
+ * top of the string rather than the middle of the panel. See
+ * `.consent-drop` / `.consent-swing` / `.consent-string` in globals.css.
+ * Under prefers-reduced-motion it is simply there, hanging still.
  */
 export function ConsentBanner() {
   const consent = useConsent()
@@ -87,44 +89,63 @@ export function ConsentBanner() {
           to. */}
       <div className="consent-scrim absolute inset-0 bg-black/70" aria-hidden="true" />
 
-      <div className="absolute inset-0 flex items-center justify-center p-4">
-        <div
-          ref={panel}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="consent-title"
-          className="consent-dialog relative w-full max-w-lg border-4 border-blood-text bg-blood p-6 text-blood-text sm:p-8"
-        >
-          <h2 id="consent-title" className="display text-[clamp(1.5rem,4vw,2rem)]">
-            Cookies
-          </h2>
-          <p className="mt-4 font-body">
-            This site needs your consent for third-party cookies: the
-            registration and donation form, and analytics. Neither loads until
-            you say yes.{" "}
-            <Link
-              href="/privacy"
-              className="underline decoration-2 underline-offset-4"
+      {/* Hung from the top rather than centred, because it is on a string.
+          The string takes whatever height is going: a tenth of the
+          viewport, floored so it is still a string on a short screen and
+          capped so it is not a rope on a tall one. */}
+      <div className="absolute inset-0 flex items-start justify-center overflow-y-auto p-4">
+        <div className="consent-drop w-full max-w-lg">
+          <div className="consent-swing">
+            <div
+              aria-hidden="true"
+              className="consent-string mx-auto h-[max(2rem,min(10vh,5rem))] w-[3px]"
+            />
+            <div
+              ref={panel}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="consent-title"
+              className="relative w-full border-4 border-blood-text bg-blood p-6 text-blood-text sm:p-8"
             >
-              What we collect
-            </Link>
-          </p>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <button
-              ref={first}
-              type="button"
-              onClick={() => writeConsent("granted")}
-              className="btn bg-blood-text text-blood"
-            >
-              Okay
-            </button>
-            <button
-              type="button"
-              onClick={() => writeConsent("denied")}
-              className="btn border-2 border-blood-text text-blood-text"
-            >
-              No thanks
-            </button>
+              <h2
+                id="consent-title"
+                className="display text-[clamp(1.5rem,4vw,2rem)]"
+              >
+                Cookies
+              </h2>
+              <p className="mt-4 font-body">
+                This site needs your consent for third-party cookies: the
+                registration and donation form, and analytics. Neither loads
+                until you say yes.{" "}
+                <Link
+                  href="/privacy"
+                  className="underline decoration-2 underline-offset-4"
+                >
+                  What we collect
+                </Link>
+              </p>
+              {/* Decline first, confirm on the right, which is where a
+                  dialog's affirmative action belongs. Focus still opens on
+                  Okay rather than on whatever happens to be first in the
+                  markup, and the two are the same size either way. */}
+              <div className="mt-7 flex flex-wrap gap-3 sm:justify-end">
+                <button
+                  type="button"
+                  onClick={() => writeConsent("denied")}
+                  className="btn border-2 border-blood-text text-blood-text"
+                >
+                  No thanks
+                </button>
+                <button
+                  ref={first}
+                  type="button"
+                  onClick={() => writeConsent("granted")}
+                  className="btn bg-blood-text text-blood"
+                >
+                  Okay
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

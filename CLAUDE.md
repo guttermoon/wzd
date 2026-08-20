@@ -154,7 +154,16 @@ arrive and stay still. Five components carry it:
   square by a degree or two. `divider.tsx` is three of them as a section
   break.
 - `hand.tsx` — a zombie hand reaches in from an edge, overshoots and
-  settles. The only thing on the site allowed to wobble.
+  settles.
+
+Two things are allowed to move after they arrive, both deliberately: the
+hand, and the cookie dialog, which hangs from a string and swings to a stop
+(`.consent-drop` / `.consent-swing` in `app/globals.css`). Everything else
+stops when it arrives. Note the shape of the dialog's markup: transform is
+a single property, so two animations on one element replace each other
+rather than composing. The drop and the swing are on nested elements, and
+the swing's `transform-origin` is the top of the string so it pivots from
+where it is tied.
 
 Every one of them is **opt-in**: the finished state renders, and the
 animation classes are added only after the component mounts and confirms
