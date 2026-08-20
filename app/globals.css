@@ -57,17 +57,27 @@
 }
 
 .dark {
-  /* Dark — Black ground, Dark Grey panels */
-  --bg: var(--near-black);
-  --surface: var(--dark-grey);
-  --text: var(--greige); /* 10.56:1 */
-  --muted: #bfb4a6; /* 6.19:1, and 5.55:1 on --surface */
-  --accent: var(--zombie-red);
-  --accent-text: #ff8a7a; /* 5.52:1 on the ground — links and small red */
+  /* Dark — ink ground, the guide's Black as the panel.
+
+     This mirrors light mode rather than departing from the guide: there
+     the ground is paper and Greige is the panel; here the ground is a step
+     below Black and Black #333333 is the panel. Everything gains, and the
+     panels separate from the ground better than they did when the two were
+     #333 and #404040, which was a 1.22:1 difference and barely visible.
+
+     Ratios below are measured against #1a1a1a. */
+  --ink: #1a1a1a;
+  --bg: var(--ink);
+  --surface: var(--near-black);
+  --text: var(--greige); /* 14.4:1 on the ground, 10.45:1 on a panel */
+  --muted: #bfb4a6; /* 8.53:1 on the ground, 6.19:1 on a panel */
+  --accent: var(--zombie-red); /* 4.56:1 here, but still display only:
+    light mode is 3.78:1 and the rule has to hold in both */
+  --accent-text: #ff8a7a; /* 7.6:1 on the ground — links and small red */
   --accent-strong: #b03a2e; /* interactive fills: white on it is 6.02:1 */
   --on-accent: #ffffff;
   --rule: var(--greige);
-  --border: #8f8f8f; /* 3.91:1 */
+  --border: #8f8f8f; /* 5.38:1 */
   --focus: #7fb2ff;
 }
 
@@ -79,6 +89,9 @@
   html {
     /* Nothing on this site justifies hijacking the scroll position. */
     scroll-behavior: smooth;
+    /* The header is sticky, so anything jumped to by anchor — the skip
+       link, most of all — would otherwise land underneath it. */
+    scroll-padding-top: 5rem;
   }
 
   body {

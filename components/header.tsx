@@ -13,10 +13,13 @@ import { MobileMenu } from "@/components/mobile-menu"
  * and not Zombie Red: white on Zombie Red is 3.82:1, short of what nav
  * links at this size need.
  *
- * No rule under it. A full-width hairline across the top of every page
- * read as a border on the content rather than a division between the two,
- * and the header does not scroll with the page, so nothing passes under it
- * that needs separating.
+ * Sticky, and opaque rather than translucent, so content scrolling beneath
+ * it is covered rather than showing through and fighting the nav links.
+ *
+ * No rule under it: the bar carries the same red as the block below, so
+ * where they meet there is nothing to divide, and everywhere else the
+ * change of colour is the division. z-40 sits under the cookie bar and the
+ * skip link, both of which have to be reachable over it.
  *
  * The small-screen menu lives in components/mobile-menu.tsx, which needs
  * to be a client component: app-router navigation does not reload the
@@ -24,7 +27,7 @@ import { MobileMenu } from "@/components/mobile-menu"
  */
 export function Header() {
   return (
-    <header className="on-blood bg-blood text-blood-text">
+    <header className="on-blood sticky top-0 z-40 bg-blood text-blood-text">
       <div className="mx-auto flex max-w-page items-center justify-between gap-4 px-4 py-3 sm:px-6">
         {/* The mark alone. It squares up with the theme toggle and the menu
             button at 44px, which is what keeps the bar tight. */}

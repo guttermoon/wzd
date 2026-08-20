@@ -94,9 +94,11 @@ everywhere at once.
 ## Design and accessibility
 
 - Palette comes from the style guide: Zombie Red `#E74C3C`, Dark Grey
-  `#404040`, Black `#333333`, Greige `#F7E7D8`. Light mode's ground is
-  paper `#FEFEFC` (owner's choice); Greige is the panel tint on it, and the
-  ink in dark mode.
+  `#404040`, Black `#333333`, Greige `#F7E7D8`. Neither ground is from the
+  guide, and both departures are deliberate: light is paper `#FEFEFC`
+  (owner's choice) and dark is ink `#1A1A1A`. In each theme the guide's own
+  colour is the *panel* on that ground — Greige in light, Black in dark —
+  and Greige is also the ink in dark mode.
 - **Zombie Red is a display colour, not a text colour.** It measures
   3.78:1 on paper and 3.16:1 on Greige — fine for large type (3:1), short
   of the 4.5:1 body text needs. So `--accent` is Zombie Red for fills,
