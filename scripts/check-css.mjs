@@ -26,7 +26,7 @@ const REQUIRED = [
   "cut-0", "cut-1", "cut-2", "cut-3", "cut-4", "cut-5",
   "cut-band-0", "cut-band-1", "cut-band-2", "cut-band-3", "cut-band-4",
   "frame-0", "frame-1", "frame-2", "frame-3", "frame-4",
-  "photo-frame", "frame-accent",
+  "photo-frame", "graphic-mat", "graphic-mat-accent", "frame-accent",
   "cut-inner-l", "cut-inner-r",
   "tilt-a", "tilt-b", "tilt-c",
   // Motion.

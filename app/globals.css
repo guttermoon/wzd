@@ -411,6 +411,35 @@
     background-color: var(--near-black);
   }
 
+  /* The mat for a graphic, drawn behind rather than around.
+     .photo-frame clips its own box, and a clip-path clips descendants too,
+     so a photograph can lose a corner without anyone minding and a poster
+     loses its credit line and half its logos. Here the shape is a
+     ::before sitting under the artwork: the same hand-cut card, the same
+     off-square angles, and nothing of the image is cropped. */
+  .graphic-mat {
+    position: relative;
+    padding: 1.1rem 1.6rem 1.9rem 1.2rem;
+  }
+
+  .graphic-mat::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-color: var(--near-black);
+    clip-path: polygon(1.5% 0%, 100% 2.5%, 98% 100%, 0% 97%);
+  }
+
+  .graphic-mat-accent::before {
+    background-color: var(--accent);
+  }
+
+  .graphic-mat > * {
+    position: relative;
+    z-index: 1;
+  }
+
   .frame-0 {
     padding: 0.9rem 1.9rem 2.1rem 1rem;
     clip-path: polygon(1.5% 0%, 100% 3.5%, 97.5% 100%, 0% 95.5%);
