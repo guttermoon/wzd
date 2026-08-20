@@ -460,6 +460,23 @@
     animation-fill-mode: both;
   }
 
+  /* The cookie bar arrives the same way everything else does: a
+     straight-line slide, a 3px overshoot, and a hard stop.
+
+     It waits for the title card to land rather than competing with it, and
+     the resting state is the arrived one, so if this rule is ever stripped
+     the bar is simply there. Consent is not decoration; it must never
+     depend on an animation to be visible. */
+  .consent-bar {
+    animation: consent-in 480ms var(--ease-cut) 700ms both;
+  }
+
+  @keyframes consent-in {
+    from { transform: translateY(100%); }
+    86% { transform: translateY(-3px); }
+    to { transform: translateY(0); }
+  }
+
   .in-view .bar-left { animation-name: bar-in-left; }
   .in-view .bar-right { animation-name: bar-in-right; }
   .in-view .bar-top { animation-name: bar-in-top; }
@@ -757,6 +774,12 @@
   .wipe::after,
   .swipe-word::after {
     display: none;
+  }
+  /* Not just a shorter animation: the global rule above leaves
+     animation-delay alone, which would hold the bar off-screen for its
+     full delay and then snap it in. */
+  .consent-bar {
+    animation: none;
   }
   .slide-up,
   .slide-left,

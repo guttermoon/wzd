@@ -20,6 +20,10 @@ import { useConsent, writeConsent } from "@/lib/consent"
  * `role="region"` with a name rather than `role="dialog"`, since it is not
  * modal and nothing behind it is inert. Placed last in the layout, so it is
  * last in the tab order and never comes between a visitor and the page.
+ *
+ * It slides up from the foot of the screen once the title card has landed
+ * (`.consent-bar` in globals.css), because everything on this site arrives
+ * rather than appearing.
  */
 export function ConsentBanner() {
   const consent = useConsent()
@@ -31,7 +35,7 @@ export function ConsentBanner() {
     <div
       role="region"
       aria-label="Cookies"
-      className="fixed inset-x-0 bottom-0 z-50 border-t-2 border-blood-text bg-blood text-blood-text"
+      className="consent-bar fixed inset-x-0 bottom-0 z-50 border-t-2 border-blood-text bg-blood text-blood-text"
     >
       <div className="mx-auto flex max-w-page flex-col gap-3 px-4 py-4 sm:px-6 md:flex-row md:items-center md:justify-between">
         <p className="font-body text-sm">
