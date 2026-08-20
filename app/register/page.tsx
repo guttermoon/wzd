@@ -46,28 +46,49 @@ export default async function RegisterPage() {
         </Section>
       </div>
 
-      <Section title={<T k="register.access.title" />}>
-        <p className="prose-wzd font-body"><T k="register.access.body" /></p>
-      </Section>
+      {/* Two panels side by side, the same treatment the sponsorship
+          options get: a pair of cut panels of equal weight rather than two
+          sections stacked, so who the walk is for and what it raises money
+          for are read as a pair. The headings stay h2, because there is no
+          umbrella heading over the pair for them to sit under: on the
+          sponsors page the two options are h3 beneath "Sponsorship
+          options", and here each panel is a topic of the page in its own
+          right.
 
-      <Section title={<T k="register.cause.title" />}>
-        <p className="prose-wzd font-body"><T k="register.cause.body" /></p>
-        <p className="prose-wzd mt-4 font-body"><T k="register.cause.donation" /></p>
-        <ul className="prose-wzd mt-4 list-disc space-y-2 pl-5 font-body">
-          {["1", "2", "3", "4", "5"].map((n) => (
-            <li key={n}><T k={`register.cause.work.${n}`} /></li>
-          ))}
-        </ul>
-        <p className="prose-wzd mt-4 font-body"><T k="register.cause.thanks" /></p>
-        <p className="mt-4 font-body">
-          <ExternalLink className="link" href={EVENT.cause.url}>
-            {EVENT.cause.name}
-          </ExternalLink>{" "}
-          &middot;{" "}
-          <ExternalLink className="link" href={EVENT.cause.donateUrl}>
-            {EVENT.cause.donateLabel}
-          </ExternalLink>
-        </p>
+          They are <article>s because each stands on its own, and the grid
+          stretches them to the same height however uneven the copy is. */}
+      <Section>
+        <div className="grid gap-8 lg:grid-cols-2">
+          <article className="cut-panel p-6">
+            <h2 className="display text-xl"><T k="register.access.title" /></h2>
+            <div className="prose-wzd mt-4 font-body">
+              <p><T k="register.access.body" /></p>
+            </div>
+          </article>
+
+          <article className="cut-panel p-6">
+            <h2 className="display text-xl"><T k="register.cause.title" /></h2>
+            <div className="prose-wzd mt-4 font-body">
+              <p><T k="register.cause.body" /></p>
+              <p><T k="register.cause.donation" /></p>
+            </div>
+            <ul className="mt-4 list-disc space-y-2 pl-5 font-body">
+              {["1", "2", "3", "4", "5"].map((n) => (
+                <li key={n}><T k={`register.cause.work.${n}`} /></li>
+              ))}
+            </ul>
+            <p className="prose-wzd mt-4 font-body"><T k="register.cause.thanks" /></p>
+            <p className="mt-4 font-body">
+              <ExternalLink className="link" href={EVENT.cause.url}>
+                {EVENT.cause.name}
+              </ExternalLink>{" "}
+              &middot;{" "}
+              <ExternalLink className="link" href={EVENT.cause.donateUrl}>
+                {EVENT.cause.donateLabel}
+              </ExternalLink>
+            </p>
+          </article>
+        </div>
       </Section>
 
       {/* The after-party is a separate venue with its own ticket, so it
