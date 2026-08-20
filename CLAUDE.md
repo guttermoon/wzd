@@ -218,7 +218,9 @@ is given.
   route, add a redirect — those links are in a decade of press coverage.
 - `POST /api/revalidate` requires `REVALIDATION_SECRET`; it returns 503 if
   unset. (The template's version skipped the check when no secret was sent.)
-- `app/api/newsletter/route.ts` is an unused stub returning 501 on purpose,
-  so it can't silently swallow email addresses.
+- Mailing-list signup is an embedded paa.ge form
+  (`components/email-signup.tsx`), behind the same consent gate as
+  everything else third-party. There is no signup route of our own: nothing
+  on this site takes an email address itself.
 - 301 photographs are still on the old WordPress site and could not be
   fetched from this environment. See `docs/IMAGES.md`.

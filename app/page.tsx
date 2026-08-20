@@ -306,6 +306,7 @@ export default async function HomePage() {
           <T k="home.cta.button" />
         </Link>
       </section>
+
     </>
   )
 }
