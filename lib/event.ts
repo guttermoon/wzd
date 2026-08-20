@@ -40,10 +40,11 @@ export const NAV = [
   { name: "Register", href: "/register" },
   { name: "Survival", href: "/survival" },
   { name: "FAQ", href: "/faq" },
-  { name: "Sponsors", href: "/sponsors" },
+  { name: "Sponsors", href: "/become-a-sponsor" },
 ] as const
 
 export const FOOTER_NAV = [
+  { name: "Donate", href: "/donate" },
   { name: "Press kit", href: "/press" },
   { name: "Photo policy", href: "/photo-policy" },
 ] as const

@@ -6,6 +6,7 @@ import "./globals.css"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { VhsFilter } from "@/components/vhs-filter"
+import { ConsentBanner } from "@/components/consent-banner"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Analytics } from "@/components/analytics"
 import { getSiteCopy } from "@/lib/site-copy"
@@ -132,6 +133,8 @@ export default async function RootLayout({
           <Footer copy={copy} />
           <Analytics />
           <VhsFilter />
+          {/* Last in the layout, so it is last in the tab order. */}
+          <ConsentBanner />
         </ThemeProvider>
       </body>
     </html>

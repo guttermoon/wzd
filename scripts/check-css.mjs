@@ -31,7 +31,7 @@ const REQUIRED = [
   "tilt-a", "tilt-b", "tilt-c",
   // Motion.
   "bar-left", "bar-right", "bar-top", "bar-bottom",
-  "hand-left", "hand-right",
+  "hand-left", "hand-right", "hand-tilt-left", "hand-tilt-right",
   "swipe-word", "wipe", "slide-up", "slide-left", "slide-right",
   "in-view",
   // Layout devices.

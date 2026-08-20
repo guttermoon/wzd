@@ -489,22 +489,48 @@
     to { transform: translateY(0) rotate(var(--tilt, 0deg)); }
   }
 
-  /* A hand reaching in from the edge. It travels its own full width, then
-     overshoots by a couple of degrees and settles — the one place on the
-     site where something is allowed to wobble, because a limb that stops
-     dead reads as a diagram rather than a reach. */
+  /* An arm reaching in from the corner, on the diagonal.
+
+     The resting angle is a static class rather than the end of a keyframe,
+     so the arm sits at the same angle before the animation is armed as it
+     does after it lands: no jump on hydration. The keyframes have to
+     restate that rotation, because an animated `transform` replaces the
+     base one outright rather than composing with it.
+
+     It pivots about the corner it comes from, which is what makes it swing
+     like a limb rather than slide like a card, and it overshoots by a few
+     degrees and settles — the one place on the site where something is
+     allowed to wobble, because a limb that stops dead reads as a diagram. */
+  /* Positive rotation about the bottom-left corner swings the fingers up
+     and inward, into the block. Negative swings them out of it, which
+     leaves a triangle of forearm at the edge and nothing else. */
+  .hand-tilt-left {
+    transform: rotate(32deg);
+    transform-origin: 0% 100%;
+  }
+
+  /* The mirror lives in this transform rather than in a Tailwind
+     `-scale-x-100`, because that utility sets `transform` too and, being
+     emitted after this layer, would replace the rotation outright and
+     leave the arm upright. With scaleX first, the right-hand keyframes can
+     reuse the left-hand offsets and mirror themselves. */
+  .hand-tilt-right {
+    transform: scaleX(-1) rotate(32deg);
+    transform-origin: 100% 100%;
+  }
+
   @keyframes hand-in-left {
-    from { transform: translateX(-100%) rotate(-12deg); }
-    72% { transform: translateX(3%) rotate(4deg); }
-    88% { transform: translateX(-1%) rotate(-2deg); }
-    to { transform: translateX(0) rotate(0deg); }
+    from { transform: translate(-55%, 50%) rotate(60deg); }
+    70% { transform: translate(2%, -3%) rotate(26deg); }
+    88% { transform: translate(-1%, 1%) rotate(35deg); }
+    to { transform: translate(0, 0) rotate(32deg); }
   }
 
   @keyframes hand-in-right {
-    from { transform: translateX(100%) rotate(12deg); }
-    72% { transform: translateX(-3%) rotate(-4deg); }
-    88% { transform: translateX(1%) rotate(2deg); }
-    to { transform: translateX(0) rotate(0deg); }
+    from { transform: scaleX(-1) translate(-55%, 50%) rotate(60deg); }
+    70% { transform: scaleX(-1) translate(2%, -3%) rotate(26deg); }
+    88% { transform: scaleX(-1) translate(-1%, 1%) rotate(35deg); }
+    to { transform: scaleX(-1) translate(0, 0) rotate(32deg); }
   }
 
   .in-view .hand-left {

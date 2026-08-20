@@ -174,32 +174,42 @@ animation not applying — check that any custom property it references is
 declared inside a selector. A `var()` that resolves to nothing invalidates
 the whole `animation` shorthand and silently yields `animation-name: none`.
 
-## Analytics
+## Analytics and consent
 
-**The site stores nothing on the visitor's device, and that is a deliberate
-legal position, not an oversight.** PostHog runs with
-`persistence: "memory"`, so there is no cookie, no localStorage entry and
-no identifier that outlives the tab. UK PECR requires consent before
-writing to a device unless it is strictly necessary, and analytics is not
-strictly necessary; storing nothing means there is nothing to consent to,
-which is why the site carries **no cookie banner**. Anonymised IP and Do
-Not Track do not substitute for this — PECR is about the storage, not what
-happens to the data afterwards. Google Analytics was removed rather than
-gated, because its identifiers are the product and keeping it would have
-meant a banner for everyone. The theme choice is the one thing kept
-locally, and it is exempt: the visitor asked for it by clicking the switch.
+**Nothing that writes to a visitor's device loads until they have accepted
+the cookie bar.** UK PECR requires consent before the storage, not after
+it, and analytics is not strictly necessary, so the scripts are never
+fetched rather than merely configured to behave once running. One answer
+covers all three: PostHog, GA4, and the Zeffy form, which sets its own
+cookies.
 
-If you ever add a tool that writes to the device, you must add a consent
-gate at the same time, and change `/privacy`.
+- `lib/consent.ts` holds the answer in localStorage and broadcasts changes
+  on a window event. Storing the answer itself needs no consent: it is the
+  choice, and the alternative is asking on every page.
+- `components/consent-banner.tsx` is a bar at the foot, not a modal. Reject
+  is the same size and weight as Accept; a reject button that is harder to
+  find is not a free choice.
+- `components/consent-choice.tsx` on `/privacy` shows the current answer
+  and lets it be withdrawn. Consent that cannot be withdrawn as easily as
+  it was given is not consent.
+- Declining is not a dead end: `components/zeffy-embed.tsx` offers the same
+  form on Zeffy's own site, where the visitor deals with Zeffy directly.
+  Blocking registration behind a cookie bar would be worse than the problem.
 
-PostHog in `components/analytics.tsx`, inert unless
-`NEXT_PUBLIC_POSTHOG_KEY` is set, so nothing is
-collected locally or on an unconfigured preview. Session recording off,
-autocapture off, DNT respected, IP anonymised. **`/privacy` describes
-exactly this** — change one and change the other.
+The theme choice is kept whatever the answer, on the same footing: the
+visitor asked for it by clicking the switch.
+
+PostHog and GA4 also need their keys (`NEXT_PUBLIC_POSTHOG_KEY`,
+`NEXT_PUBLIC_GA_ID`), so nothing is collected locally or on an
+unconfigured preview. Session recording off, autocapture off, DNT
+respected, IP anonymised. **`/privacy` describes exactly this** — change
+one and change the other. The test that matters is a network one: load a
+page fresh and confirm no third-party host is contacted before the answer
+is given.
+
 - Target is WCAG 2.2 AA and it currently passes clean:
-  `npx next start & npm run check:a11y` → 0 violations, 9 routes × 2 themes.
-  Keep it there.
+  `npx next start & npm run check:a11y` → 0 violations, 10 routes × 2
+  themes. Keep it there.
 
 ## Gotchas
 

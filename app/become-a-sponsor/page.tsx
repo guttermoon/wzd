@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "Become a sponsor",
   description:
     "Sponsorship options for World Zombie Day: London: on-site promotion and online prize giveaways, raising funds for a good cause.",
-  alternates: { canonical: "/sponsors" },
+  alternates: { canonical: "/become-a-sponsor" },
 }
 
 export default async function SponsorsPage() {

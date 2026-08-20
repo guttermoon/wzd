@@ -156,7 +156,7 @@ export default async function HomePage() {
         <Hand
           from="right"
           delay={120}
-          className="right-0 top-2 hidden h-[190px] w-[135px] opacity-[0.14] lg:block"
+          className="-right-16 -bottom-32 hidden h-[560px] w-[210px] opacity-[0.14] lg:block"
         />
         <div className="relative mx-auto w-full max-w-page px-4 sm:px-6">
           <Reveal variant="wipe-red">
@@ -270,7 +270,7 @@ export default async function HomePage() {
           from="left"
           tone="accent"
           delay={80}
-          className="-left-6 bottom-4 hidden h-[220px] w-[155px] opacity-[0.18] lg:block"
+          className="-left-16 -bottom-36 hidden h-[600px] w-[225px] opacity-[0.18] lg:block"
         />
         <div className="relative mx-auto w-full max-w-page px-4 sm:px-6">
         <div className="prose-wzd">

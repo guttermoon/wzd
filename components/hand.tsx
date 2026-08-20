@@ -18,6 +18,14 @@ import { useEffect, useRef, useState } from "react"
  * position until this has mounted and confirmed the browser can and should
  * animate, so nothing depends on the animation to be visible.
  */
+/**
+ * Written out in full, never interpolated: Tailwind deletes @layer
+ * components rules whose class name it cannot find literally in the
+ * source. See scripts/check-css.mjs.
+ */
+const TILT = { left: "hand-tilt-left", right: "hand-tilt-right" } as const
+const ENTER = { left: "hand-left", right: "hand-right" } as const
+
 export function Hand({
   from = "left",
   className = "",
@@ -63,22 +71,24 @@ export function Hand({
       aria-hidden="true"
       className={`pointer-events-none absolute block ${shown ? "in-view" : ""} ${className}`}
     >
+      {/* The forearm runs the full height of the viewBox and off the bottom
+          of it, so the arm carries on past whatever crops it: a hand that
+          stops at a wrist reads as a mitten someone has put down. */}
       <svg
-        viewBox="0 0 240 340"
+        viewBox="0 0 240 640"
+        preserveAspectRatio="xMidYMin meet"
         focusable="false"
-        className={`h-full w-full ${armed ? `hand hand-${from}` : ""} ${
-          from === "right" ? "-scale-x-100" : ""
-        }`}
+        className={`${TILT[from]} ${armed ? `hand ${ENTER[from]}` : ""} h-full w-full`}
         style={{ "--delay": `${delay}ms` } as React.CSSProperties}
       >
-        <g fill={fill} stroke={fill} strokeWidth="26" strokeLinecap="round">
-          <path d="M70 178 L172 172 L182 252 L58 258 Z" stroke="none" />
-          <path d="M70 250 L172 244 L188 340 L54 340 Z" stroke="none" />
-          <path d="M92 186 L76 62" fill="none" />
-          <path d="M118 183 L120 40" fill="none" />
-          <path d="M146 183 L158 58" fill="none" />
-          <path d="M168 188 L196 96" fill="none" />
-          <path d="M74 206 L22 152" fill="none" strokeWidth="30" />
+        <g fill={fill} stroke={fill} strokeWidth="30" strokeLinecap="round">
+          <path d="M62 196 L178 190 L192 302 L50 310 Z" stroke="none" />
+          <path d="M50 300 L192 292 L178 640 L70 640 Z" stroke="none" />
+          <path d="M86 204 L64 62" fill="none" />
+          <path d="M118 200 L120 34" fill="none" />
+          <path d="M150 202 L168 54" fill="none" />
+          <path d="M178 210 L210 100" fill="none" />
+          <path d="M58 234 L6 166" fill="none" strokeWidth="34" />
         </g>
       </svg>
     </span>
