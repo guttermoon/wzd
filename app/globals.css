@@ -234,14 +234,22 @@
     filter: url(#vhs-tape) saturate(0.85) contrast(1.04) brightness(0.94);
   }
 
-  /* Crowds take the whole treatment at about half strength: the weaker
-     filter, a lighter wash, finer scanlines, less vignette. On a single
-     large subject the split and the tear read as texture; on two hundred
-     small ones they read as noise, and the one thing the picture has to
-     say is that there are two hundred of them. Which photographs count is
-     the `busy` flag in content/photos.json. */
+  /* Crowds take the artefacts at about half strength: the weaker filter,
+     finer scanlines, less vignette. On a single large subject the split
+     and the tear read as texture; on two hundred small ones they read as
+     noise, and the one thing the picture has to say is that there are two
+     hundred of them. Which photographs count is the `busy` flag in
+     content/photos.json.
+
+     The grade is *not* halved with them. Saturation, contrast, brightness
+     and the red wash are identical to the full treatment, because the
+     colour is what makes eighteen photographs by thirteen photographers
+     look like one set; a crowd shot a stop warmer than the portrait beside
+     it reads as a mistake rather than as a lighter touch. Only the
+     artefacts vary. The whole filter chain is restated because `filter` is
+     a single property: overriding the url() alone would drop the rest. */
   .vhs-light img {
-    filter: url(#vhs-tape-light) saturate(0.9) contrast(1.02) brightness(0.97);
+    filter: url(#vhs-tape-light) saturate(0.85) contrast(1.04) brightness(0.94);
   }
 
   /* The magenta cast of a tape played once too often, and the bloom that
@@ -290,10 +298,6 @@
         transparent 4px
       ),
       radial-gradient(ellipse at center, transparent 64%, rgb(0 0 0 / 0.24) 100%);
-  }
-
-  .vhs-light::before {
-    opacity: 0.26;
   }
 
   .vhs-light::after {
