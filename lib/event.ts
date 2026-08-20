@@ -33,7 +33,6 @@ export const EVENT = {
     { name: "WhatsApp", url: "https://www.whatsapp.com/channel/0029Vb8N0wmInlqHa7MdYB1S" },
     { name: "Discord", url: "https://discord.com/invite/EFr4eCu5Mh" },
     { name: "Facebook", url: "https://www.facebook.com/worldzombiedaylondon/" },
-    { name: "Twitter", url: "https://twitter.com/WZDlondon" },
   ],
 } as const
 
