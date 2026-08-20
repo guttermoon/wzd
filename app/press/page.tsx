@@ -43,7 +43,7 @@ export default async function PressPage() {
           photo={photo("stop-sign-couple")}
           priority
           bleed="full"
-          ratio="32/9"
+          ratio="80/27"
           sizes="100vw"
         />
       }

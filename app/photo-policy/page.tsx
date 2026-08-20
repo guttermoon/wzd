@@ -33,7 +33,7 @@ export default async function PhotoPolicyPage() {
           photo={photo("selfie")}
           priority
           bleed="full"
-          ratio="32/9"
+          ratio="80/27"
           sizes="100vw"
         />
       }

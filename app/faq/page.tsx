@@ -41,7 +41,7 @@ export default async function FaqPage() {
           photo={photo("london-eye-pair")}
           priority
           bleed="full"
-          ratio="32/9"
+          ratio="80/27"
           sizes="100vw"
         />
       }

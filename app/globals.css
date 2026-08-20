@@ -476,10 +476,6 @@
     color: var(--blood-text);
   }
 
-  /* Credits sit back on the container line even when the panel does not,
-     so a photographer's name is never pushed off the screen. */
-  .credit-inset { padding-inline: 1rem; }
-
   /* Tucked into the corner of the frame rather than set underneath it. On
      its own chip of ink, not straight onto the photograph or the mat:
      Greige on ink is 14.4:1 whatever is behind it, where white on Zombie
@@ -491,6 +487,11 @@
      right on those. */
   .credit-tag {
     position: absolute;
+    /* Above the panel, which sets z-index 1 on itself (see .panel-ground),
+       and below the page title on a banner, which sets 10. Without this
+       the chip paints underneath the photograph on every bleeding panel
+       and simply is not there. */
+    z-index: 2;
     bottom: 0.6rem;
     left: 0.6rem;
     max-width: calc(100% - 1.2rem);
@@ -506,8 +507,12 @@
     right: 0.6rem;
   }
 
-  @media (min-width: 640px) {
-    .credit-inset { padding-inline: 1.5rem; }
+  /* On a full-width band the bottom edge is cut at an angle, so the chip
+     sits a little higher to stay on the photograph wherever that angle
+     happens to fall. It is on the right for a second reason too: the page
+     title sits on the band's bottom-left. */
+  .credit-tag-band {
+    bottom: 1.5rem;
   }
 
   /* The blood arrives once: both layers slide up, the darker one a beat

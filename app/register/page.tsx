@@ -31,7 +31,7 @@ export default async function RegisterPage() {
           photo={photo("leake-street-crowd")}
           priority
           bleed="full"
-          ratio="32/9"
+          ratio="80/27"
           sizes="100vw"
         />
       }

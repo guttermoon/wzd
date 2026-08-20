@@ -136,10 +136,17 @@ export function Photo({
     : ""
 
   // The credit is tucked into the corner of the frame rather than set
-  // underneath it, except on the full-width banners: those carry the page
-  // title over them, and a chip in the corner would be one more thing
-  // fighting for the same space. See `.credit-tag` in globals.css.
-  const tucked = bleed !== "full"
+  // underneath it, on every photograph including the full-width banners.
+  // It goes to whichever bottom corner is clear: a panel running off the
+  // left of the screen has its left corner off it too, and a banner has
+  // the page title sitting on its bottom-left. See `.credit-tag` in
+  // globals.css.
+  const corner =
+    bleed === "left"
+      ? "credit-tag-right"
+      : bleed === "full"
+        ? "credit-tag-right credit-tag-band"
+        : ""
 
   return (
     <figure className={`relative ${rotation} ${className}`}>
@@ -167,13 +174,7 @@ export function Photo({
           />
         </picture>
       </div>
-      <figcaption
-        className={
-          tucked
-            ? `credit-tag font-body ${bleed === "left" ? "credit-tag-right" : ""}`
-            : "credit-inset mt-3 font-body text-sm leading-snug text-muted"
-        }
-      >
+      <figcaption className={`credit-tag font-body ${corner}`}>
         {caption ? <span className="mb-1 block text-text">{caption}</span> : null}
         <span>Photo: {photo.credit}</span>
       </figcaption>
