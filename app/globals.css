@@ -251,15 +251,18 @@
     inset: 0;
     z-index: 2;
     pointer-events: none;
+    /* Scanlines you can actually see: 1px every 4px at twice the weight
+       they were. 0.09 read as a texture on a photograph rather than as a
+       raster; 2px every 6px at 0.28 buried the picture. */
     background-image:
       repeating-linear-gradient(
         to bottom,
-        rgb(0 0 0 / 0.09) 0px,
-        rgb(0 0 0 / 0.09) 1px,
+        rgb(0 0 0 / 0.2) 0px,
+        rgb(0 0 0 / 0.2) 1px,
         transparent 1px,
         transparent 4px
       ),
-      radial-gradient(ellipse at center, transparent 62%, rgb(0 0 0 / 0.26) 100%);
+      radial-gradient(ellipse at center, transparent 60%, rgb(0 0 0 / 0.3) 100%);
   }
 
   /* Anyone who has asked for higher contrast or less visual noise gets the
@@ -434,6 +437,32 @@
      so a photographer's name is never pushed off the screen. */
   .credit-inset { padding-inline: 1rem; }
 
+  /* Tucked into the corner of the frame rather than set underneath it. On
+     its own chip of ink, not straight onto the photograph or the mat:
+     Greige on ink is 14.4:1 whatever is behind it, where white on Zombie
+     Red would be 3.82:1 and a name over a photograph is legible or not
+     depending on the photograph.
+
+     Anchored to the on-screen corner. A panel that runs off the left of
+     the screen has its left corner off it too, so the credit moves to the
+     right on those. */
+  .credit-tag {
+    position: absolute;
+    bottom: 0.6rem;
+    left: 0.6rem;
+    max-width: calc(100% - 1.2rem);
+    padding: 0.2rem 0.45rem;
+    background-color: var(--ink);
+    color: var(--greige);
+    font-size: 0.6875rem;
+    line-height: 1.35;
+  }
+
+  .credit-tag-right {
+    left: auto;
+    right: 0.6rem;
+  }
+
   @media (min-width: 640px) {
     .credit-inset { padding-inline: 1.5rem; }
   }
@@ -452,6 +481,44 @@
 
   .in-view .drip-back {
     animation: drip-settle 640ms var(--ease-cut) 110ms both;
+  }
+
+  /* The swell. The two layers drift at different speeds and out of phase,
+     which is what reads as water rather than as one thing sliding: the
+     crests of the near layer pass the crests of the far one and the line
+     between them keeps changing shape.
+
+     They are on wrapping groups rather than on the paths themselves, so
+     this composes with the arrival above instead of replacing it — two
+     animations on one element would not, since both drive transform.
+
+     Wider than they need to be (scaleX 1.06) so the horizontal drift never
+     pulls an edge into view, and the vertical drift only ever goes down,
+     because up would open a gap above the crest.
+
+     This is a loop, which the rest of the site does not do, and it is the
+     owner's decision. It is decorative, marked aria-hidden, and under
+     prefers-reduced-motion it does not run at all. */
+  .drip-wave-front {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: drip-wave-front 11s ease-in-out infinite alternate;
+  }
+
+  .drip-wave-back {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: drip-wave-back 17s ease-in-out infinite alternate;
+  }
+
+  @keyframes drip-wave-front {
+    from { transform: scaleX(1.06) translate3d(-1.4%, 0, 0); }
+    to { transform: scaleX(1.06) translate3d(1.4%, 5px, 0); }
+  }
+
+  @keyframes drip-wave-back {
+    from { transform: scaleX(1.06) translate3d(1.1%, 4px, 0); }
+    to { transform: scaleX(1.06) translate3d(-1.1%, 0, 0); }
   }
 
   /* ── Bars ───────────────────────────────────────────────────────────
@@ -834,7 +901,9 @@
      full delay and then snap it in. */
   .consent-drop,
   .consent-swing,
-  .consent-scrim {
+  .consent-scrim,
+  .drip-wave-front,
+  .drip-wave-back {
     animation: none;
   }
   .slide-up,

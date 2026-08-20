@@ -33,11 +33,11 @@ const REQUIRED = [
   "bar-left", "bar-right", "bar-top", "bar-bottom",
   "hand-left", "hand-right", "hand-tilt-left", "hand-tilt-right",
   "swipe-word", "wipe", "slide-up", "slide-left", "slide-right",
-  "consent-drop", "consent-swing", "consent-string", "consent-scrim",
+  "drip-wave-front", "drip-wave-back", "consent-drop", "consent-swing", "consent-string", "consent-scrim",
   "in-view",
   // Layout devices.
   "edge-left", "edge-right", "breakout", "panel-ground",
-  "credit-inset", "on-blood", "vhs", "zeffy-embed",
+  "credit-inset", "credit-tag", "credit-tag-right", "on-blood", "vhs", "zeffy-embed",
 ]
 
 let files

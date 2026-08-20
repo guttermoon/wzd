@@ -3,6 +3,7 @@ import { EVENT, NAV, FOOTER_NAV, LEGAL_NAV } from "@/lib/event"
 import { makeT, type SiteCopy } from "@/components/notion-text"
 import { Reveal } from "@/components/reveal"
 import { Wordmark } from "@/components/wordmark"
+import { Divider } from "@/components/divider"
 import { EmailSignup } from "@/components/email-signup"
 
 /** Minimal glyphs, so no icon dependency is pulled in for four links. */
@@ -22,6 +23,12 @@ export function Footer({ copy }: { copy: SiteCopy }) {
 
   return (
     <footer className="mt-16">
+      {/* The page turns from left-set to centred here, so the break gets
+          marked the way every other section break on the site is: slabs,
+          not a rule. Without it the sign-off reads as a stray centred
+          paragraph at the end of a left-aligned page. */}
+      <Divider lead="left" />
+
       {/* The newsletter, on the page's own ground. Inside <footer>, so it
           sits in the contentinfo landmark rather than in the gap between
           landmarks, which is what axe failed on when this was a band of
@@ -47,9 +54,11 @@ export function Footer({ copy }: { copy: SiteCopy }) {
             the whole effect. No tall runs: a spike rising out of a pool is
             not what blood does, and it read as a skyline.
 
-            It arrives once — the layers slide up, the back one a beat
-            behind — and then stops. Nothing loops. A band that moved
-            forever would need a pause control under WCAG 2.2.2. */}
+            It arrives once, the layers sliding up a beat apart, and then
+            it swells: a slow drift, the two layers out of phase, which is
+            the one loop on the site. The owner asked for it twice. It is
+            decorative and aria-hidden, and reduced motion stops it dead.
+            See .drip-wave-front / .drip-wave-back in globals.css. */}
         <Reveal variant="slide-up" className="mt-10 block">
           <svg
             viewBox="0 0 1440 220"
@@ -58,8 +67,15 @@ export function Footer({ copy }: { copy: SiteCopy }) {
             focusable="false"
             className="drip block h-[70px] w-full sm:h-[110px]"
           >
-            <path className="drip-back" d="M0,132 L150,106 L272,124 L390,94 L508,118 L636,86 L760,122 L880,104 L1010,82 L1130,120 L1256,100 L1380,112 L1440,122 L1440,220 L0,220 Z" fill="var(--blood)" opacity="0.55" />
-            <path className="drip-front" d="M0,150 L96,132 L214,146 L338,106 L452,138 L560,120 L690,144 L812,98 L930,134 L1044,116 L1168,142 L1292,110 L1400,136 L1440,143 L1440,220 L0,220 Z" fill="var(--blood)" />
+            {/* Each layer is wrapped so the swell and the arrival can run
+                at once: both drive transform, and two animations on one
+                element replace each other rather than composing. */}
+            <g className="drip-wave-back">
+              <path className="drip-back" d="M0,132 L150,106 L272,124 L390,94 L508,118 L636,86 L760,122 L880,104 L1010,82 L1130,120 L1256,100 L1380,112 L1440,122 L1440,220 L0,220 Z" fill="var(--blood)" opacity="0.55" />
+            </g>
+            <g className="drip-wave-front">
+              <path className="drip-front" d="M0,150 L96,132 L214,146 L338,106 L452,138 L560,120 L690,144 L812,98 L930,134 L1044,116 L1168,142 L1292,110 L1400,136 L1440,143 L1440,220 L0,220 Z" fill="var(--blood)" />
+            </g>
           </svg>
         </Reveal>
       </div>
@@ -94,7 +110,10 @@ export function Footer({ copy }: { copy: SiteCopy }) {
               this is a sign-off, not a title card, and the masthead
               already carries the mark. The lettering takes `currentColor`,
               so the one file serves this field and both themes. */}
-          <Wordmark className="mx-auto mt-8 w-full max-w-[7rem] sm:max-w-[8rem]" />
+          {/* Exactly the width of the social row above it: four 44px
+              targets and three 8px gaps is 200px, so the two line up on
+              both edges. */}
+          <Wordmark className="mx-auto mt-8 w-full max-w-[200px]" />
 
           <nav aria-label="Footer" className="mt-6">
             <ul className="flex flex-wrap justify-center gap-x-5 gap-y-1">

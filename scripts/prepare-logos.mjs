@@ -8,6 +8,9 @@
  *   wordmark.svg   the full lock-up, lettering as currentColor
  *   brain.svg      the brain-globe on its own, full detail
  *   brain-512.png  raster fallback, and for anyone who needs a PNG
+ *   wordmark-light-bg.png / wordmark-dark-bg.png / brain.png
+ *                  the press kit's downloads, copied straight from
+ *                  public/logos as supplied. Renamed, never resized.
  * and app/icon.svg, the favicon.
  *
  * Two sources, because they are different kinds of thing:
@@ -24,7 +27,7 @@
  * here alters proportion or hue; the lettering is themed only between the
  * two inks the lock-up already ships in.
  */
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs"
+import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from "node:fs"
 import { execFileSync } from "node:child_process"
 import sharp from "sharp"
 const OUT = "public/brand"
@@ -82,7 +85,24 @@ if (letterPaths < 20) {
 writeFileSync("/tmp/wordmark-raw.svg", lockup.replace(LETTER_INK, "currentColor"))
 const wordmark = optimise("/tmp/wordmark-raw.svg", `${OUT}/wordmark.svg`, 1)
 
+// ── The PNGs the press kit hands out ────────────────────────────────
+// The owner's own files, copied rather than rendered. An earlier version
+// rasterised the vector and recoloured the ink, which produced bigger
+// files but not the artwork as drawn; these are what was supplied, byte
+// for byte, so what a journalist downloads is the real thing. They are
+// only renamed, never resized: upscaling a raster would be worse than
+// handing over the size that exists.
+const COPIES = [
+  ["public/logos/LOGOWZD light background .png", "wordmark-light-bg.png"],
+  ["public/logos/LOGOWZD dark background.png", "wordmark-dark-bg.png"],
+  ["public/logos/zombie brain no background.png", "brain.png"],
+]
+for (const [from, to] of COPIES) {
+  copyFileSync(from, `${OUT}/${to}`)
+}
+
 const kb = (s) => (Buffer.byteLength(s) / 1024).toFixed(1)
 console.log(`brain.svg    ${kb(brainFull)}KB   (full detail)`)
 console.log(`app/icon.svg ${kb(brainSmall)}KB   (favicon + masthead)`)
 console.log(`wordmark.svg ${kb(wordmark)}KB   (${letterPaths} lettering paths → currentColor)`)
+console.log(`PNGs         ${COPIES.map(([, to]) => to).join(", ")} (copied as supplied)`)
