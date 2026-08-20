@@ -4,7 +4,7 @@ import { getSiteCopy } from "@/lib/site-copy"
 import { makeT, makeS } from "@/components/notion-text"
 import { PageShell, Section } from "@/components/page-shell"
 import { Photo } from "@/components/photo"
-import { ZeffyEmbed, ZeffyThermometer } from "@/components/zeffy-embed"
+import { ZeffyEmbed } from "@/components/zeffy-embed"
 import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
 import { ExternalLink } from "@/components/external-link"
@@ -79,9 +79,6 @@ export default async function DonatePage() {
             className="lg:col-span-5 lg:sticky lg:top-24 lg:self-start"
           />
         </div>
-
-        {/* How far along the total is, above the form that moves it. */}
-        <ZeffyThermometer className="mt-8" />
 
         <div className="mt-8">
           <ZeffyEmbed form="donation" />
