@@ -11,7 +11,8 @@
     "check:credits": "node scripts/check-credits.mjs",
     "check:a11y": "node scripts/check-a11y.mjs",
     "seed:notion": "node scripts/seed-notion.mjs",
-    "logos": "node scripts/prepare-logos.mjs"
+    "logos": "node scripts/prepare-logos.mjs",
+    "check:css": "node scripts/check-css.mjs"
   },
   "dependencies": {
     "@notionhq/client": "^4.0.1",

@@ -94,11 +94,11 @@ everywhere at once.
 ## Design and accessibility
 
 - Palette comes from the style guide: Zombie Red `#E74C3C`, Dark Grey
-  `#404040`, Black `#333333`, Greige `#F5E9DA`. Light mode's ground is
+  `#404040`, Black `#333333`, Greige `#F7E7D8`. Light mode's ground is
   paper `#FEFEFC` (owner's choice); Greige is the panel tint on it, and the
   ink in dark mode.
 - **Zombie Red is a display colour, not a text colour.** It measures
-  3.78:1 on paper and 3.31:1 on Black — fine for large type (3:1), short
+  3.78:1 on paper and 3.16:1 on Greige — fine for large type (3:1), short
   of the 4.5:1 body text needs. So `--accent` is Zombie Red for fills,
   rules and large headings; `--accent-text` is a tuned red for links and
   small text; `--accent-strong` backs buttons because white on Zombie Red
@@ -176,8 +176,24 @@ the whole `animation` shorthand and silently yields `animation-name: none`.
 
 ## Analytics
 
-PostHog and GA4 in `components/analytics.tsx`, both inert unless
-`NEXT_PUBLIC_POSTHOG_KEY` / `NEXT_PUBLIC_GA_ID` are set, so nothing is
+**The site stores nothing on the visitor's device, and that is a deliberate
+legal position, not an oversight.** PostHog runs with
+`persistence: "memory"`, so there is no cookie, no localStorage entry and
+no identifier that outlives the tab. UK PECR requires consent before
+writing to a device unless it is strictly necessary, and analytics is not
+strictly necessary; storing nothing means there is nothing to consent to,
+which is why the site carries **no cookie banner**. Anonymised IP and Do
+Not Track do not substitute for this — PECR is about the storage, not what
+happens to the data afterwards. Google Analytics was removed rather than
+gated, because its identifiers are the product and keeping it would have
+meant a banner for everyone. The theme choice is the one thing kept
+locally, and it is exempt: the visitor asked for it by clicking the switch.
+
+If you ever add a tool that writes to the device, you must add a consent
+gate at the same time, and change `/privacy`.
+
+PostHog in `components/analytics.tsx`, inert unless
+`NEXT_PUBLIC_POSTHOG_KEY` is set, so nothing is
 collected locally or on an unconfigured preview. Session recording off,
 autocapture off, DNT respected, IP anonymised. **`/privacy` describes
 exactly this** — change one and change the other.

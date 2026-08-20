@@ -29,7 +29,10 @@ export function ThemeToggle() {
       onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label={label}
       title={label}
-      className="display inline-flex min-h-[44px] items-center gap-2 border-2 border-rule px-3 text-sm text-text hover:bg-text hover:text-bg"
+      // Inherits its colour from whatever it sits on, which is the blood
+      // field in the masthead. currentColor keeps the border and the icon
+      // together whatever that is.
+      className="display inline-flex min-h-[44px] items-center gap-2 border-2 border-current px-3 text-sm hover:bg-blood-text hover:text-blood"
     >
       {isDark ? (
         // Sun: switching to light.

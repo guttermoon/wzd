@@ -38,7 +38,7 @@ export const EVENT = {
 export const NAV = [
   { name: "Home", href: "/" },
   { name: "Register", href: "/register" },
-  { name: "Rules", href: "/rules" },
+  { name: "Survival", href: "/survival" },
   { name: "FAQ", href: "/faq" },
   { name: "Sponsors", href: "/sponsors" },
 ] as const

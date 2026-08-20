@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Rules of conduct",
   description:
     "The zombie rules of conduct for World Zombie Day: London: safety, costumes, crossings and behaviour on the day.",
-  alternates: { canonical: "/rules" },
+  alternates: { canonical: "/survival" },
 }
 
 const RULES = ["1", "2", "3", "4", "5", "6", "7", "8"]

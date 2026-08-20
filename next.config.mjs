@@ -14,7 +14,9 @@ const nextConfig = {
     // of press coverage, so none of them should 404.
     return [
       { source: "/about-2", destination: "/", permanent: true },
-      { source: "/survival", destination: "/rules", permanent: true },
+      // /survival is the live URL and stays that way; /rules was only
+      // ever ours, so it redirects rather than the other way round.
+      { source: "/rules", destination: "/survival", permanent: true },
       { source: "/become-a-sponsor", destination: "/sponsors", permanent: true },
       { source: "/privacy-policy", destination: "/privacy", permanent: true },
       { source: "/zombiedigest", destination: "/", permanent: true },

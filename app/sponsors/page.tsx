@@ -81,7 +81,6 @@ export default async function SponsorsPage() {
           ratio="3/1"
           sizes="100vw"
           className="breakout"
-          caption="A sponsor activation on the route, at Apocalypse Events' kissing booth."
         />
       </Section>
 

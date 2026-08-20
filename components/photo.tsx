@@ -31,7 +31,30 @@ function hash(slug: string): number {
   return Math.abs(h)
 }
 
-const TILTS = ["tilt-a", "tilt-b", "tilt-c"]
+/**
+ * Every class name below is written out in full, and none is built by
+ * interpolation.
+ *
+ * Tailwind scans the source for literal class names and drops anything in
+ * `@layer components` it cannot find. A name assembled at runtime — say
+ * `cut-${n}` — is invisible to that scan, so the rule is deleted from the
+ * stylesheet and the class silently does nothing. It looks fine in the
+ * source, in the DOM and in devtools; only the compiled CSS is missing.
+ * scripts/check-css.mjs fails the build if any of these disappear.
+ */
+const TILTS = ["tilt-a", "tilt-b", "tilt-c"] as const
+
+const CUTS = ["cut-0", "cut-1", "cut-2", "cut-3", "cut-4", "cut-5"] as const
+
+const BANDS = [
+  "cut-band-0",
+  "cut-band-1",
+  "cut-band-2",
+  "cut-band-3",
+  "cut-band-4",
+] as const
+
+const FRAMES = ["frame-0", "frame-1", "frame-2", "frame-3", "frame-4"] as const
 
 /** Which edge the panel runs off, and therefore where its angle falls. */
 const BLEED_CUT = {
@@ -49,6 +72,8 @@ export function Photo({
   tilt = false,
   bleed,
   ratio,
+  focus,
+  frame,
 }: {
   photo: PhotoData
   sizes?: string
@@ -71,6 +96,20 @@ export function Photo({
    * photographs keep their natural height and ignore this.
    */
   ratio?: string
+  /**
+   * Where the crop holds when `ratio` is doing the cropping, as a CSS
+   * object-position. A shallow band centred on the frame cuts heads off,
+   * because faces sit in the upper third of almost every photograph here,
+   * so bands hold high by default. Override per photograph when the
+   * subject is somewhere else.
+   */
+  focus?: string
+  /**
+   * Mount the photograph on a heavy mat: a thick, skewed card of near-black
+   * or Zombie Red, cut at a different angle from the photograph on it. See
+   * `.photo-frame` in globals.css.
+   */
+  frame?: boolean | "accent"
 }) {
   const width = widestWidth(photo)
   const height = Math.round(width / aspect(photo))
@@ -80,15 +119,23 @@ export function Photo({
   // from the next and a given page always gets the same one.
   const cut =
     bleed === "full"
-      ? `cut-band-${seed % 5}`
+      ? BANDS[seed % BANDS.length]
       : bleed
         ? BLEED_CUT[bleed]
-        : `cut-${seed % 6}`
+        : CUTS[seed % CUTS.length]
   const rotation = tilt && !bleed ? TILTS[seed % TILTS.length] : ""
+
+  // The mat is cut one step round from the photograph's own frame, so the
+  // two shapes disagree rather than tracing each other.
+  const mat = frame
+    ? `photo-frame ${FRAMES[(seed + 2) % FRAMES.length]}${
+        frame === "accent" ? " frame-accent" : ""
+      }`
+    : ""
 
   return (
     <figure className={`${rotation} ${className}`}>
-      <div className={bleed ? "panel-ground" : ""}>
+      <div className={`${bleed ? "panel-ground" : ""} ${mat}`}>
         <picture
           className={`vhs ${cut} ${imageClassName}`}
           style={ratio ? { aspectRatio: ratio } : undefined}
@@ -104,6 +151,11 @@ export function Photo({
             decoding={priority ? "sync" : "async"}
             fetchPriority={priority ? "high" : undefined}
             className={ratio ? "h-full w-full object-cover" : "h-auto w-full"}
+            style={
+              ratio
+                ? { objectPosition: focus ?? (bleed === "full" ? "50% 28%" : "50% 40%") }
+                : undefined
+            }
           />
         </picture>
       </div>
