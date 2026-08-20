@@ -1,71 +1,116 @@
 "use client"
 
-import { useConsent } from "@/lib/consent"
+import { useState } from "react"
 
 /**
- * The mailing-list signup, hosted by paa.ge.
+ * The newsletter signup, in the site's own type and colours.
  *
- * Third party, so it waits for the same answer the analytics and the
- * registration form wait for: nothing of theirs is fetched until consent
- * is "granted". Until then the band carries an ordinary button that opens
- * the same form on paa.ge's own site, where the visitor deals with paa.ge
- * directly. No panel of explanation: the cookie bar has already asked, and
- * a signup band should look like a signup band.
+ * It used to be paa.ge's page in an iframe. Nothing of ours could reach
+ * inside it, so it could never be made to match, and it brought paa.ge's
+ * own cookie notice onto our page. This posts to app/api/newsletter, which
+ * hands the address on to paa.ge from the server, so nothing third party
+ * runs in the visitor's browser and the form needs no consent at all.
  *
- * The iframe carries a real `title`. The embed code as supplied has an
- * empty one, which is a frame with no accessible name: a screen reader
- * announces "frame" and nothing else, and axe fails it.
+ * The states are: idle, sending, done, and two failures worth telling
+ * apart. `bad-email` is the visitor's to fix and the message says so;
+ * anything else is ours, and rather than leave someone stuck it offers the
+ * form on paa.ge, where they can sign up directly.
  *
- * Height is fixed rather than the `100%` the supplied code asks for. A
- * percentage height resolves against a parent that has no height of its
- * own, so it collapses to nothing; the frame scrolls internally if the
- * form is taller.
- *
- * It is lazy, because this band is on every page: a consenting visitor
- * should not fetch paa.ge on a page they never scroll to the foot of.
+ * The status line is a live region so the outcome is announced rather than
+ * only shown, and the input points at it so an error is read as part of
+ * the field.
  */
 const FORM_URL = "https://paa.ge/worldzombieday/email-signup"
 
-export function EmailSignup() {
-  const consent = useConsent()
+type State = "idle" | "sending" | "done" | "bad-email" | "failed"
 
-  // Before consent, a button and nothing else. The earlier version put a
-  // paragraph of cookie explanation where the form should be, which is not
-  // how anyone else does this and reads as an apology on every page. The
-  // button goes straight to the form on paa.ge, so someone who declined
-  // cookies is not shut out and never has to read about why.
-  if (consent !== "granted") {
+export function EmailSignup() {
+  const [state, setState] = useState<State>("idle")
+  const [email, setEmail] = useState("")
+
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setState("sending")
+    try {
+      const response = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+      if (response.ok) {
+        setState("done")
+        setEmail("")
+      } else {
+        setState(response.status === 400 ? "bad-email" : "failed")
+      }
+    } catch {
+      setState("failed")
+    }
+  }
+
+  if (state === "done") {
     return (
-      <a
-        href={FORM_URL}
-        rel="noopener noreferrer"
-        target="_blank"
-        className="btn btn-primary"
-      >
-        Join the newsletter
-        <span className="sr-only"> (opens in a new tab)</span>
-      </a>
+      <p className="font-body text-lg" role="status">
+        You are on the list. Watch your inbox.
+      </p>
     )
   }
 
-  // What is inside the frame is paa.ge's document on paa.ge's origin, so
-  // none of this site's CSS can reach it: the type, the fields and the
-  // button are theirs. What can be matched is everything around it, and
-  // whether the site's own ground shows through. `background: transparent`
-  // lets it through if their document does not paint its own; if it does,
-  // the frame keeps a hard border so it reads as a deliberate panel rather
-  // than a white rectangle that has fallen onto the page.
   return (
-    <div className="w-full max-w-xl border-2 border-rule bg-bg">
-      <iframe
-        title="Email signup form, hosted by paa.ge"
-        src={`${FORM_URL}?embedded=true`}
-        loading="lazy"
-        className="block h-[520px] w-full border-0 bg-transparent"
-        allow="autoplay; fullscreen; clipboard-write; encrypted-media; picture-in-picture; web-share"
-        allowFullScreen
-        referrerPolicy="strict-origin-when-cross-origin"
-      />
-    </div>
+    <form onSubmit={onSubmit} className="mx-auto w-full max-w-md">
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <label htmlFor="newsletter-email" className="sr-only">
+          Email address
+        </label>
+        <input
+          id="newsletter-email"
+          type="email"
+          name="email"
+          required
+          autoComplete="email"
+          placeholder="you@example.com"
+          value={email}
+          onChange={(event) => {
+            setEmail(event.target.value)
+            if (state !== "idle") setState("idle")
+          }}
+          aria-describedby={state === "idle" ? undefined : "newsletter-status"}
+          aria-invalid={state === "bad-email" ? true : undefined}
+          className="min-h-[44px] w-full border-2 border-rule bg-bg px-4 py-3 font-body text-text placeholder:text-muted"
+        />
+        <button
+          type="submit"
+          disabled={state === "sending"}
+          className="btn btn-primary shrink-0 disabled:opacity-70"
+        >
+          {state === "sending" ? "Signing up" : "Sign up"}
+        </button>
+      </div>
+
+      {/* Always in the DOM, so the live region exists before it has
+          anything to say: one inserted at the moment of the message is
+          often not announced at all. */}
+      <p
+        id="newsletter-status"
+        role="status"
+        className="mt-3 min-h-[1.5rem] font-body text-sm"
+      >
+        {state === "bad-email" ? "That does not look like an email address." : null}
+        {state === "failed" ? (
+          <>
+            That did not go through.{" "}
+            <a
+              className="link"
+              href={FORM_URL}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Sign up on paa.ge instead
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </>
+        ) : null}
+      </p>
+    </form>
   )
 }

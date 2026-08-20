@@ -19,11 +19,11 @@ export const revalidate = 60
  * on the type.
  */
 const HERO_BARS: Bar[] = [
-  { from: "left", top: "14%", left: "0", width: "26%", height: "18px", tilt: -1.4, tone: "ink", delay: 0 },
-  { from: "right", top: "38%", right: "0", width: "34%", height: "12px", tilt: 0.9, tone: "ink", delay: 100 },
-  { from: "top", top: "0", left: "62%", width: "14px", height: "30%", tilt: 1.8, tone: "ink", delay: 200 },
-  { from: "bottom", bottom: "0", left: "22%", width: "10px", height: "26%", tilt: -2.2, tone: "ink", delay: 290 },
-  { from: "left", bottom: "18%", left: "0", width: "16%", height: "10px", tilt: 1.2, tone: "ink", delay: 380 },
+  { from: "left", top: "4%", left: "0", width: "22%", height: "16px", tilt: -1.4, tone: "ink", delay: 0 },
+  { from: "right", top: "34%", right: "0", width: "26%", height: "12px", tilt: 0.9, tone: "ink", delay: 100 },
+  { from: "top", top: "0", left: "82%", width: "14px", height: "30%", tilt: 1.8, tone: "ink", delay: 200 },
+  { from: "bottom", bottom: "0", left: "74%", width: "10px", height: "26%", tilt: -2.2, tone: "ink", delay: 290 },
+  { from: "left", bottom: "4%", left: "0", width: "14%", height: "10px", tilt: 1.2, tone: "ink", delay: 380 },
 ]
 
 export default async function HomePage() {
@@ -54,7 +54,11 @@ export default async function HomePage() {
         <Bars bars={HERO_BARS} />
 
         <div className="relative mx-auto w-full max-w-page px-4 py-16 sm:px-6 lg:py-24">
-          <div className="max-w-[46rem]">
+          {/* Centred in the container, set from the left inside it. The
+              slabs are pushed clear: everything above 74% of the width, or
+              hard against the top and bottom edges, so nothing drives
+              through the type or the buttons. */}
+          <div className="mx-auto max-w-[46rem]">
             <Reveal variant="cut" as="p" className="display text-sm sm:text-base">
               <T k="home.hero.eyebrow" />
             </Reveal>

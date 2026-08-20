@@ -1,66 +1,131 @@
 "use client"
 
+import { useEffect, useRef } from "react"
 import Link from "next/link"
 import { useConsent, writeConsent } from "@/lib/consent"
 
 /**
- * The cookie bar.
+ * The cookie dialog.
  *
- * A bar at the foot of the page rather than a modal over the content: it
- * does not block anything, it does not trap focus, and it can be ignored
- * while someone reads. Rejecting is the same size and weight as accepting,
- * because a reject button that is harder to find than the accept button is
- * not a free choice and the ICO says so.
+ * A real modal, at the owner's instruction: it sits over the page, on a
+ * scrim, and the question has to be answered before the site can be used.
+ * What is left of the third party on this site — the registration and
+ * donation form, and the analytics — sets its own cookies, so the page
+ * cannot honestly load them without an answer. The newsletter is no longer
+ * one of them: it is the site's own form now.
  *
- * It only appears when the question has not been answered. Until then
- * nothing that writes to the device has loaded, so there is no race to
- * lose: components/analytics.tsx and components/zeffy-embed.tsx both wait
- * on the same answer.
+ * Rejecting is still there, the same size and the same weight as
+ * accepting. A dialog that only offers "yes" is not consent, and nothing
+ * on the site is a dead end without it: every embed falls back to the
+ * same form on the provider's own site, where the visitor deals with them
+ * directly.
  *
- * `role="region"` with a name rather than `role="dialog"`, since it is not
- * modal and nothing behind it is inert. Placed last in the layout, so it is
- * last in the tab order and never comes between a visitor and the page.
+ * `role="dialog"` with `aria-modal` and a name, focus moved into it on
+ * open and held there while it is up, and the page behind it locked from
+ * scrolling. Escape deliberately does nothing: the two buttons are the way
+ * out, and both are one tab apart.
  *
- * It slides up from the foot of the screen once the title card has landed
- * (`.consent-bar` in globals.css), because everything on this site arrives
- * rather than appearing.
+ * It arrives the way everything else here does — a hard slide up with a
+ * three-pixel overshoot, and the scrim cutting in behind it
+ * (`.consent-dialog` / `.consent-scrim` in globals.css). Under
+ * prefers-reduced-motion it is simply there.
  */
 export function ConsentBanner() {
   const consent = useConsent()
+  const open = consent === null
+  const panel = useRef<HTMLDivElement>(null)
+  const first = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+
+    first.current?.focus()
+
+    // Hold focus inside the dialog. Tab from the last control wraps to the
+    // first, and anything focused outside is pulled back in.
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key !== "Tab" || !panel.current) return
+      const focusable = panel.current.querySelectorAll<HTMLElement>(
+        "a[href], button",
+      )
+      if (focusable.length === 0) return
+      const start = focusable[0]
+      const end = focusable[focusable.length - 1]
+      if (event.shiftKey && document.activeElement === start) {
+        event.preventDefault()
+        end.focus()
+      } else if (!event.shiftKey && document.activeElement === end) {
+        event.preventDefault()
+        start.focus()
+      }
+    }
+
+    function onFocusIn(event: FocusEvent) {
+      if (panel.current && !panel.current.contains(event.target as Node)) {
+        first.current?.focus()
+      }
+    }
+
+    const { overflow } = document.body.style
+    document.body.style.overflow = "hidden"
+    document.addEventListener("keydown", onKeyDown)
+    document.addEventListener("focusin", onFocusIn)
+    return () => {
+      document.body.style.overflow = overflow
+      document.removeEventListener("keydown", onKeyDown)
+      document.removeEventListener("focusin", onFocusIn)
+    }
+  }, [open])
 
   // undefined: not mounted. null: not answered. Anything else: answered.
-  if (consent !== null) return null
+  if (!open) return null
 
   return (
-    <div
-      role="region"
-      aria-label="Cookies"
-      className="consent-bar fixed inset-x-0 bottom-0 z-50 border-t-2 border-blood-text bg-blood text-blood-text"
-    >
-      <div className="mx-auto flex max-w-page flex-col gap-3 px-4 py-4 sm:px-6 md:flex-row md:items-center md:justify-between">
-        <p className="font-body text-sm">
-          This site needs your consent for third-party cookies: the
-          registration and donation form, the newsletter form, and analytics.
-          None of them load until you say yes.{" "}
-          <Link href="/privacy" className="underline decoration-2 underline-offset-4">
-            What we collect
-          </Link>
-        </p>
-        <div className="flex shrink-0 gap-3">
-          <button
-            type="button"
-            onClick={() => writeConsent("granted")}
-            className="btn bg-blood-text text-blood"
-          >
-            Okay
-          </button>
-          <button
-            type="button"
-            onClick={() => writeConsent("denied")}
-            className="btn border-2 border-blood-text text-blood-text"
-          >
-            No thanks
-          </button>
+    <div className="fixed inset-0 z-50">
+      {/* The scrim is the modal part: it covers the page and swallows the
+          clicks. No dismiss on click, because there is nothing to dismiss
+          to. */}
+      <div className="consent-scrim absolute inset-0 bg-black/70" aria-hidden="true" />
+
+      <div className="absolute inset-0 flex items-center justify-center p-4">
+        <div
+          ref={panel}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="consent-title"
+          className="consent-dialog relative w-full max-w-lg border-4 border-blood-text bg-blood p-6 text-blood-text sm:p-8"
+        >
+          <h2 id="consent-title" className="display text-[clamp(1.5rem,4vw,2rem)]">
+            Cookies
+          </h2>
+          <p className="mt-4 font-body">
+            This site needs your consent for third-party cookies: the
+            registration and donation form, and analytics. Neither loads until
+            you say yes.{" "}
+            <Link
+              href="/privacy"
+              className="underline decoration-2 underline-offset-4"
+            >
+              What we collect
+            </Link>
+          </p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <button
+              ref={first}
+              type="button"
+              onClick={() => writeConsent("granted")}
+              className="btn bg-blood-text text-blood"
+            >
+              Okay
+            </button>
+            <button
+              type="button"
+              onClick={() => writeConsent("denied")}
+              className="btn border-2 border-blood-text text-blood-text"
+            >
+              No thanks
+            </button>
+          </div>
         </div>
       </div>
     </div>
