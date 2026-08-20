@@ -239,6 +239,19 @@ is given.
   `npx next start & npm run check:a11y` → 0 violations, 10 routes × 2
   themes. Keep it there.
 
+## Links
+
+Every link that leaves the site opens in a new tab, announces that it
+does, and carries `rel="noopener noreferrer"`. Every link that stays on it
+does none of those things and goes through `next/link`.
+
+`components/external-link.tsx` is the only way to write the first kind, so
+the three things that have to travel together cannot be separated by
+whoever writes the next one. `npm run check:links` reads the rendered
+pages and fails if an outbound link is missing any of them, or if an
+internal one opens a tab. `mailto:` and `tel:` are exempt: they hand off
+to another application rather than opening a page.
+
 ## Gotchas
 
 - Commit identity must be `Claude <noreply@anthropic.com>`.

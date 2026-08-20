@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Script from "next/script"
+import { ExternalLink } from "@/components/external-link"
 
 /**
  * The Zeffy ticketing and donation form, embedded.
@@ -87,10 +88,9 @@ export function ZeffyEmbed({
           in anyone's way when the form is there. */}
       <p className="mt-4 font-body text-sm text-muted">
         Trouble with the form?{" "}
-        <a className="link" href={FORM_URL} rel="noopener noreferrer" target="_blank">
+        <ExternalLink className="link" href={FORM_URL}>
           Open it on Zeffy
-          <span className="sr-only"> (opens in a new tab)</span>
-        </a>
+        </ExternalLink>
       </p>
     </div>
   )
@@ -113,8 +113,21 @@ const THERMOMETER_URL =
   "https://www.zeffy.com/embed/thermometer/world-zombie-day-london"
 
 export function ZeffyThermometer({ className = "" }: { className?: string }) {
+  // What is inside the frame is Zeffy's document on Zeffy's origin, and it
+  // paints its own white: no rule of ours can reach it, and no amount of
+  // allowTransparency helps once a page has a background of its own. What
+  // can be done is everything around it, so it is held to the same width
+  // as the form below, given a rounded corner and a hard border, and sat
+  // on the page ground. That makes it read as a panel we meant to put
+  // there rather than a white rectangle that has fallen onto the page.
+  //
+  // The radius is a deliberate exception: --radius is 0 everywhere else on
+  // this site, and square corners on a white box read as a mistake here
+  // rather than as the house style.
   return (
-    <div className={`zeffy-embed relative h-[120px] w-full overflow-hidden ${className}`}>
+    <div
+      className={`zeffy-embed relative h-[120px] w-full max-w-[46rem] overflow-hidden rounded-lg border-2 border-rule bg-bg ${className}`}
+    >
       <iframe
         title="How much has been raised so far, from Zeffy"
         src={THERMOMETER_URL}

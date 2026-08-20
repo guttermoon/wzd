@@ -12,7 +12,8 @@
     "check:a11y": "node scripts/check-a11y.mjs",
     "seed:notion": "node scripts/seed-notion.mjs",
     "logos": "node scripts/prepare-logos.mjs",
-    "check:css": "node scripts/check-css.mjs"
+    "check:css": "node scripts/check-css.mjs",
+    "check:links": "node scripts/check-links.mjs"
   },
   "dependencies": {
     "@notionhq/client": "^4.0.1",
@@ -36,5 +37,5 @@
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
   },
-  "description": "World Zombie Day: London — a free Community Fundraising zombie walk, with copy managed in Notion."
+  "description": "World Zombie Day: London \u2014 a free Community Fundraising zombie walk, with copy managed in Notion."
 }

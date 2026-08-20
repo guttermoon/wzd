@@ -4,6 +4,7 @@ import { makeT, type SiteCopy } from "@/components/notion-text"
 import { Reveal } from "@/components/reveal"
 import { Wordmark } from "@/components/wordmark"
 import { Divider } from "@/components/divider"
+import { ExternalLink } from "@/components/external-link"
 import { EmailSignup } from "@/components/email-signup"
 
 /** Minimal glyphs, so no icon dependency is pulled in for four links. */
@@ -94,20 +95,15 @@ export function Footer({ copy }: { copy: SiteCopy }) {
           <ul className="flex flex-wrap justify-center gap-2">
             {EVENT.social.map((item) => (
               <li key={item.url}>
-                <a
+                <ExternalLink
                   href={item.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="inline-flex h-11 w-11 items-center justify-center hover:opacity-70"
                 >
                   <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
                     <path d={ICONS[item.name]} fill="currentColor" />
                   </svg>
-                  {/* The new tab is part of the name: a link that moves you
-                      somewhere else without saying so is disorienting for
-                      anyone who cannot see it happen. */}
-                  <span className="sr-only">{item.name} (opens in a new tab)</span>
-                </a>
+                  <span className="sr-only">{item.name}</span>
+                </ExternalLink>
               </li>
             ))}
           </ul>
@@ -138,21 +134,19 @@ export function Footer({ copy }: { copy: SiteCopy }) {
 
           <p className="mt-4 font-body">
             <T k="footer.cause" />{" "}
-            <a
+            <ExternalLink
               className="underline decoration-2 underline-offset-4 hover:no-underline"
               href={EVENT.cause.url}
-              rel="noopener noreferrer"
             >
               {EVENT.cause.name}
-            </a>{" "}
+            </ExternalLink>{" "}
             &middot;{" "}
-            <a
+            <ExternalLink
               className="underline decoration-2 underline-offset-4 hover:no-underline"
               href={EVENT.cause.donateUrl}
-              rel="noopener noreferrer"
             >
               {EVENT.cause.donateLabel}
-            </a>
+            </ExternalLink>
           </p>
           <p className="mt-1 font-body">
             <a

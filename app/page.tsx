@@ -9,6 +9,7 @@ import { Divider } from "@/components/divider"
 import { Hand } from "@/components/hand"
 import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
+import { ExternalLink } from "@/components/external-link"
 
 export const revalidate = 60
 
@@ -88,13 +89,12 @@ export default async function HomePage() {
                 </Link>
               </Reveal>
               <Reveal variant="slide-left" delay={520}>
-                <a
+                <ExternalLink
                   href={EVENT.cause.donateUrl}
-                  rel="noopener noreferrer"
                   className="btn border-2 border-blood-text text-blood-text"
                 >
                   <T k="home.hero.cta.secondary" />
-                </a>
+                </ExternalLink>
               </Reveal>
             </div>
           </div>
@@ -239,12 +239,12 @@ export default async function HomePage() {
           <p><T k="home.cause.body3" /></p>
         </div>
         <div className="mt-6 flex flex-wrap gap-3">
-          <a href={EVENT.cause.donateUrl} rel="noopener noreferrer" className="btn btn-primary">
+          <ExternalLink href={EVENT.cause.donateUrl} className="btn btn-primary">
             <T k="home.cause.cta" />
-          </a>
-          <a href={EVENT.cause.url} rel="noopener noreferrer" className="btn btn-secondary">
+          </ExternalLink>
+          <ExternalLink href={EVENT.cause.url} className="btn btn-secondary">
             Visit {EVENT.cause.name}
-          </a>
+          </ExternalLink>
         </div>
         </div>
       </section>
