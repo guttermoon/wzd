@@ -55,10 +55,16 @@ export function Footer({ copy }: { copy: SiteCopy }) {
             not what blood does, and it read as a skyline.
 
             It arrives once, the layers sliding up a beat apart, and then
-            it swells: a slow drift, the two layers out of phase, which is
-            the one loop on the site. The owner asked for it twice. It is
-            decorative and aria-hidden, and reduced motion stops it dead.
-            See .drip-wave-front / .drip-wave-back in globals.css. */}
+            it travels: the near layer to the right, the far one to the
+            left, forever. Both paths are three periods of the same crest
+            sequence, drawn from -1440 to 2880, so a shift of exactly one
+            period lands the wave back on itself and the loop has no seam.
+            That is also why the first and last point of a period share a
+            y: any difference between them is a visible step.
+
+            This is the one loop on the site. It is decorative and
+            aria-hidden, and reduced motion stops it dead. See
+            .drip-wave-front / .drip-wave-back in globals.css. */}
         <Reveal variant="slide-up" className="mt-10 block">
           <svg
             viewBox="0 0 1440 220"
@@ -71,10 +77,10 @@ export function Footer({ copy }: { copy: SiteCopy }) {
                 at once: both drive transform, and two animations on one
                 element replace each other rather than composing. */}
             <g className="drip-wave-back">
-              <path className="drip-back" d="M0,132 L150,106 L272,124 L390,94 L508,118 L636,86 L760,122 L880,104 L1010,82 L1130,120 L1256,100 L1380,112 L1440,122 L1440,220 L0,220 Z" fill="var(--blood)" opacity="0.55" />
+              <path className="drip-back" d="M-1440,132 L-1290,106 L-1168,124 L-1050,94 L-932,118 L-804,86 L-680,122 L-560,104 L-430,82 L-310,120 L-184,100 L-60,112 L0,132 L150,106 L272,124 L390,94 L508,118 L636,86 L760,122 L880,104 L1010,82 L1130,120 L1256,100 L1380,112 L1440,132 L1590,106 L1712,124 L1830,94 L1948,118 L2076,86 L2200,122 L2320,104 L2450,82 L2570,120 L2696,100 L2820,112 L2880,132 L2880,220 L-1440,220 Z" fill="var(--blood)" opacity="0.55" />
             </g>
             <g className="drip-wave-front">
-              <path className="drip-front" d="M0,150 L96,132 L214,146 L338,106 L452,138 L560,120 L690,144 L812,98 L930,134 L1044,116 L1168,142 L1292,110 L1400,136 L1440,143 L1440,220 L0,220 Z" fill="var(--blood)" />
+              <path className="drip-front" d="M-1440,150 L-1344,132 L-1226,146 L-1102,106 L-988,138 L-880,120 L-750,144 L-628,98 L-510,134 L-396,116 L-272,142 L-148,110 L-40,136 L0,150 L96,132 L214,146 L338,106 L452,138 L560,120 L690,144 L812,98 L930,134 L1044,116 L1168,142 L1292,110 L1400,136 L1440,150 L1536,132 L1654,146 L1778,106 L1892,138 L2000,120 L2130,144 L2252,98 L2370,134 L2484,116 L2608,142 L2732,110 L2840,136 L2880,150 L2880,220 L-1440,220 Z" fill="var(--blood)" />
             </g>
           </svg>
         </Reveal>
