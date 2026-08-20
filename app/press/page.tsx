@@ -6,7 +6,6 @@ import { photo } from "@/lib/photos"
 import { makeT, makeS } from "@/components/notion-text"
 import { PageShell, Section } from "@/components/page-shell"
 import { BrandKit } from "@/components/brand-kit"
-import { EVENT } from "@/lib/event"
 
 export const revalidate = 60
 export const metadata: Metadata = {
@@ -48,16 +47,7 @@ export default async function PressPage() {
         />
       }
     >
-      <div className="cut-panel mt-10 p-6">
-        <h2 className="display text-xl"><T k="press.contact.title" /></h2>
-        <p className="mt-2 font-body">
-          <a className="link" href={`mailto:${EVENT.email}`}>
-            <T k="press.contact.body" />
-          </a>
-        </p>
-      </div>
-
-      <Section title={<T k="press.facts.title" />}>
+      <Section title={<T k="press.facts.title" />} className="mt-10">
         <dl className="grid gap-6 sm:grid-cols-2">
           {FACTS.map((fact) => (
             <div key={fact} className="border-l-4 border-accent pl-4">
@@ -135,6 +125,12 @@ export default async function PressPage() {
         <p className="prose-wzd font-body">
           <T k="press.release.body" />
         </p>
+        {/* The button is here either way. Until `press.release.url` has a
+            value in Notion it is a real disabled <button>, not a link
+            dressed as one: a button that goes nowhere is worse than one
+            that says it cannot yet, and `disabled` is what a screen reader
+            announces as unavailable. The line underneath says why and how
+            to get the release in the meantime. */}
         {pressRelease ? (
           <a
             href={pressRelease}
@@ -146,9 +142,22 @@ export default async function PressPage() {
             <span className="sr-only"> (opens in a new tab)</span>
           </a>
         ) : (
-          <p className="prose-wzd mt-4 font-body text-muted">
-            <T k="press.release.pending" />
-          </p>
+          <>
+            <button
+              type="button"
+              disabled
+              aria-describedby="press-release-pending"
+              className="btn btn-secondary mt-6 opacity-60"
+            >
+              <T k="press.release.cta" />
+            </button>
+            <p
+              id="press-release-pending"
+              className="prose-wzd mt-4 font-body text-muted"
+            >
+              <T k="press.release.pending" />
+            </p>
+          </>
         )}
       </Section>
 

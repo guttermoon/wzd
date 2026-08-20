@@ -1,5 +1,4 @@
-import { BrainMark } from "@/components/brain-mark"
-import { Wordmark } from "@/components/wordmark"
+import { Graphic } from "@/components/photo"
 
 /**
  * The style guide palette. Zombie Red carries a warning because it is the
@@ -53,24 +52,51 @@ export function BrandKit() {
   return (
     <div className="mt-6 space-y-6">
       <div className="grid gap-4 sm:grid-cols-2">
-        {/* The lock-up on both grounds, because it is one asset that has to
-            work on either. Both grounds are written out rather than taken
-            from the theme tokens: --bg and --text follow the visitor's
-            theme, so in dark mode the two panels came out identical and
-            the whole point of showing a pair was lost. These are the two
-            PNGs offered below, in the two inks they are rendered in. */}
-        <div className="cut-panel flex items-center justify-center bg-[#FEFEFC] p-8 text-[#333333]">
-          <Wordmark className="w-full max-w-[18rem]" label={false} />
+        {/* The supplied files themselves, not the site's own rendering of
+            them. components/wordmark.tsx swaps the lettering to
+            currentColor so one file can serve both themes, which is right
+            for the masthead and wrong here: a press kit has to show the
+            logo in the colours it was drawn in. These are the exact PNGs
+            the buttons below hand out, so what a journalist sees is what
+            they get, and they can save either straight off the page.
+
+            Each sits on the ground it was drawn for, written out rather
+            than taken from --bg, which follows the visitor's theme and
+            would make the pair identical in dark mode. */}
+        <div className="cut-panel flex items-center justify-center bg-[#FEFEFC] p-8">
+          <Graphic
+            src="/brand/wordmark-light-bg.png"
+            alt="The World Zombie Day: London lock-up, for light backgrounds."
+            width={590}
+            height={500}
+            sizes="(min-width: 40rem) 18rem, 100vw"
+            frame={false}
+            className="w-full max-w-[18rem]"
+          />
         </div>
-        <div className="cut-panel flex items-center justify-center bg-[#1A1A1A] p-8 text-[#F7E7D8]">
-          <Wordmark className="w-full max-w-[18rem]" label={false} />
+        <div className="cut-panel flex items-center justify-center bg-[#1A1A1A] p-8">
+          <Graphic
+            src="/brand/wordmark-dark-bg.png"
+            alt="The World Zombie Day: London lock-up, for dark backgrounds."
+            width={590}
+            height={500}
+            sizes="(min-width: 40rem) 18rem, 100vw"
+            frame={false}
+            className="w-full max-w-[18rem]"
+          />
         </div>
       </div>
 
       <div className="cut-panel flex items-center gap-6 p-8">
-        <span className="block h-24 w-24 shrink-0">
-          <BrainMark />
-        </span>
+        <Graphic
+          src="/brand/brain.png"
+          alt="The brain mark on its own."
+          width={2179}
+          height={2378}
+          sizes="6rem"
+          frame={false}
+          className="w-24 shrink-0"
+        />
         <p className="font-body text-muted">
           The brain mark on its own, for avatars, favicons and anywhere the
           full lock-up will not fit.

@@ -72,19 +72,20 @@ Layout: `public/photos/` (responsive renditions) and `public/press/`
 Animal Sanctuary; it is out of date and the owner has confirmed it. Do not
 "correct" the site to match it.
 
-**The Dead Good Club is a Community Interest Company.** The site must
-never call this a charity — in the UK that word is regulated, and the
-owner's instruction is to state what it *is*, never what it is not.
+**The Dead Good Club is a Community Interest Company.** The banned word is
+**charity**, and only that word: in the UK it is regulated and the club is
+not one. Everything else that is true of a CIC is fair game.
 
-Approved wording:
+- **not-for-profit** is fine and the owner uses it. A Community Interest
+  Company *is* a not-for-profit; do not "correct" their copy to say CIC
+  where they wrote not-for-profit. This has been done to them twice.
+- **Community Interest Company** when the legal form itself matters.
+- **Community Fundraising** / a community fundraising event, for the event.
+- "fundraising for", "the cause", "good causes", in running copy.
 
-- **Community Interest Company** — when the legal form matters.
-- **Community Fundraising** / a community fundraising event — for the
-  event itself.
-- "fundraising for", "the cause", "good causes" — in running copy.
-
-Do not introduce a negative construction to explain the difference. The
-copy keys use `cause`, not `charity`, for the same reason.
+Do not introduce a negative construction to explain the difference: state
+what it is, never what it is not. The copy keys use `cause`, not
+`charity`, for the same reason.
 
 `EVENT.cause` in `lib/event.ts` holds the name and the donation link. The
 name and link also appear in the credit text people are asked to paste when
