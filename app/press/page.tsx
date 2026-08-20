@@ -85,19 +85,18 @@ export default async function PressPage() {
       <Section title={<T k="press.logo.title" />}>
         <p className="prose-wzd font-body"><T k="press.logo.body" /></p>
         <BrandKit />
-        {/* PNG, at 2400px on transparent. The lock-up comes twice because
-            a raster cannot carry currentColor: the first is dark ink for
-            white pages, the second greige for black ones. All three are
-            rendered from the same vectors by `npm run logos`, so they
-            cannot drift from what is drawn above. */}
+        {/* The supplied artwork itself, copied into public/brand by
+            `npm run logos` and never resized or recoloured. The lock-up
+            comes twice because it was drawn twice: one version for light
+            grounds and one for dark. */}
         <p className="mt-6 flex flex-wrap gap-3">
-          <a href="/brand/wordmark-2400.png" download className="btn btn-secondary">
+          <a href="/brand/wordmark-light-bg.png" download className="btn btn-secondary">
             Wordmark (PNG)
           </a>
-          <a href="/brand/wordmark-reversed-2400.png" download className="btn btn-secondary">
-            Wordmark, reversed (PNG)
+          <a href="/brand/wordmark-dark-bg.png" download className="btn btn-secondary">
+            Wordmark for dark backgrounds (PNG)
           </a>
-          <a href="/brand/brain-2400.png" download className="btn btn-secondary">
+          <a href="/brand/brain.png" download className="btn btn-secondary">
             Brain mark (PNG)
           </a>
         </p>

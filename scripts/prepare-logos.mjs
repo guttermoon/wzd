@@ -8,10 +8,9 @@
  *   wordmark.svg   the full lock-up, lettering as currentColor
  *   brain.svg      the brain-globe on its own, full detail
  *   brain-512.png  raster fallback, and for anyone who needs a PNG
- *   brain-2400.png / wordmark-2400.png / wordmark-reversed-2400.png
- *                  the press kit's downloads. A raster cannot carry
- *                  currentColor, so the lock-up is rendered twice: dark
- *                  ink for light grounds, greige for dark ones.
+ *   wordmark-light-bg.png / wordmark-dark-bg.png / brain.png
+ *                  the press kit's downloads, copied straight from
+ *                  public/logos as supplied. Renamed, never resized.
  * and app/icon.svg, the favicon.
  *
  * Two sources, because they are different kinds of thing:
@@ -28,7 +27,7 @@
  * here alters proportion or hue; the lettering is themed only between the
  * two inks the lock-up already ships in.
  */
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs"
+import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from "node:fs"
 import { execFileSync } from "node:child_process"
 import sharp from "sharp"
 const OUT = "public/brand"
@@ -65,8 +64,6 @@ writeFileSync("app/icon.svg", brainSmall)
 writeFileSync(`${OUT}/brain-mark.svg`, brainSmall)
 
 await sharp(Buffer.from(brainFull)).resize({ width: 512 }).png().toFile(`${OUT}/brain-512.png`)
-// Press size, on transparent, for anyone laying it out at scale.
-await sharp(Buffer.from(brainFull)).resize({ width: 2400 }).png().toFile(`${OUT}/brain-2400.png`)
 
 // ── The full lock-up, from the supplied vector ───────────────────────
 // The owner supplied both variants. The dark-background one is the better
@@ -88,25 +85,24 @@ if (letterPaths < 20) {
 writeFileSync("/tmp/wordmark-raw.svg", lockup.replace(LETTER_INK, "currentColor"))
 const wordmark = optimise("/tmp/wordmark-raw.svg", `${OUT}/wordmark.svg`, 1)
 
-// ── The lock-up as PNG, both ways round ─────────────────────────────
-// A raster cannot carry currentColor, so the ink has to be chosen at
-// render time and there is no single file that works on both grounds.
-// Two, then: the dark-ink one for white pages, the greige one for black.
-// Both on transparent, at press width, from the same vector the SVG comes
-// from, so they can never drift apart.
-const INKS = [
-  ["wordmark-2400.png", "#333333"],
-  ["wordmark-reversed-2400.png", "#F7E7D8"],
+// ── The PNGs the press kit hands out ────────────────────────────────
+// The owner's own files, copied rather than rendered. An earlier version
+// rasterised the vector and recoloured the ink, which produced bigger
+// files but not the artwork as drawn; these are what was supplied, byte
+// for byte, so what a journalist downloads is the real thing. They are
+// only renamed, never resized: upscaling a raster would be worse than
+// handing over the size that exists.
+const COPIES = [
+  ["public/logos/LOGOWZD light background .png", "wordmark-light-bg.png"],
+  ["public/logos/LOGOWZD dark background.png", "wordmark-dark-bg.png"],
+  ["public/logos/zombie brain no background.png", "brain.png"],
 ]
-for (const [name, ink] of INKS) {
-  await sharp(Buffer.from(wordmark.replaceAll("currentColor", ink)))
-    .resize({ width: 2400 })
-    .png()
-    .toFile(`${OUT}/${name}`)
+for (const [from, to] of COPIES) {
+  copyFileSync(from, `${OUT}/${to}`)
 }
 
 const kb = (s) => (Buffer.byteLength(s) / 1024).toFixed(1)
 console.log(`brain.svg    ${kb(brainFull)}KB   (full detail)`)
 console.log(`app/icon.svg ${kb(brainSmall)}KB   (favicon + masthead)`)
 console.log(`wordmark.svg ${kb(wordmark)}KB   (${letterPaths} lettering paths → currentColor)`)
-console.log(`PNGs         brain-512, brain-2400, wordmark-2400, wordmark-reversed-2400`)
+console.log(`PNGs         ${COPIES.map(([, to]) => to).join(", ")} (copied as supplied)`)

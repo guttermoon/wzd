@@ -251,15 +251,18 @@
     inset: 0;
     z-index: 2;
     pointer-events: none;
+    /* Scanlines you can actually see: 1px every 4px at twice the weight
+       they were. 0.09 read as a texture on a photograph rather than as a
+       raster; 2px every 6px at 0.28 buried the picture. */
     background-image:
       repeating-linear-gradient(
         to bottom,
-        rgb(0 0 0 / 0.09) 0px,
-        rgb(0 0 0 / 0.09) 1px,
+        rgb(0 0 0 / 0.2) 0px,
+        rgb(0 0 0 / 0.2) 1px,
         transparent 1px,
         transparent 4px
       ),
-      radial-gradient(ellipse at center, transparent 62%, rgb(0 0 0 / 0.26) 100%);
+      radial-gradient(ellipse at center, transparent 60%, rgb(0 0 0 / 0.3) 100%);
   }
 
   /* Anyone who has asked for higher contrast or less visual noise gets the
