@@ -26,8 +26,11 @@ export function Wordmark({
   label?: boolean
 }) {
   return (
-    <span className={`block [&>svg]:h-auto [&>svg]:w-full ${className}`}>
-      <span dangerouslySetInnerHTML={{ __html: svg }} />
+    // The size rules reach the <svg> by descendant, not child: the markup
+    // is wrapped in a span of its own, so `[&>svg]` matched nothing and the
+    // drawing kept its intrinsic width whatever the caller asked for.
+    <span className={`block [&_svg]:h-auto [&_svg]:w-full ${className}`}>
+      <span className="block" dangerouslySetInnerHTML={{ __html: svg }} />
       {label ? <span className="sr-only">World Zombie Day: London</span> : null}
     </span>
   )

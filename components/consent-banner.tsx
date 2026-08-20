@@ -39,9 +39,9 @@ export function ConsentBanner() {
     >
       <div className="mx-auto flex max-w-page flex-col gap-3 px-4 py-4 sm:px-6 md:flex-row md:items-center md:justify-between">
         <p className="font-body text-sm">
-          We would like to store a few things on your device: analytics, so we
-          know which pages are read, and the registration form, which is run by
-          Zeffy. Neither loads unless you say yes.{" "}
+          This site needs your consent for third-party cookies: the
+          registration and donation form, the newsletter form, and analytics.
+          None of them load until you say yes.{" "}
           <Link href="/privacy" className="underline decoration-2 underline-offset-4">
             What we collect
           </Link>
@@ -52,14 +52,14 @@ export function ConsentBanner() {
             onClick={() => writeConsent("granted")}
             className="btn bg-blood-text text-blood"
           >
-            Accept
+            Okay
           </button>
           <button
             type="button"
             onClick={() => writeConsent("denied")}
             className="btn border-2 border-blood-text text-blood-text"
           >
-            Reject
+            No thanks
           </button>
         </div>
       </div>

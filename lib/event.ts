@@ -42,11 +42,11 @@ export const NAV = [
   { name: "Register", href: "/register" },
   { name: "Survival", href: "/survival" },
   { name: "FAQ", href: "/faq" },
-  { name: "Sponsors", href: "/become-a-sponsor" },
+  { name: "Donate", href: "/donate" },
 ] as const
 
 export const FOOTER_NAV = [
-  { name: "Donate", href: "/donate" },
+  { name: "Become a sponsor", href: "/become-a-sponsor" },
   { name: "Press kit", href: "/press" },
   { name: "Photo policy", href: "/photo-policy" },
 ] as const

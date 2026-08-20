@@ -3,6 +3,7 @@ import { EVENT, NAV, FOOTER_NAV, LEGAL_NAV } from "@/lib/event"
 import { makeT, type SiteCopy } from "@/components/notion-text"
 import { Reveal } from "@/components/reveal"
 import { Wordmark } from "@/components/wordmark"
+import { EmailSignup } from "@/components/email-signup"
 
 /** Minimal glyphs, so no icon dependency is pulled in for four links. */
 const ICONS: Record<string, string> = {
@@ -21,14 +22,15 @@ export function Footer({ copy }: { copy: SiteCopy }) {
 
   return (
     <footer className="mt-16">
-      {/* Black shoulder, then the tide of blood. The waves are decorative,
-          so they carry no accessible name. */}
-      <div className="bg-bg pt-12">
-        <div className="mx-auto max-w-page px-4 text-center sm:px-6">
-          <Wordmark className="mx-auto w-full max-w-[22rem] sm:max-w-[28rem]" />
-          <p className="mx-auto mt-3 max-w-[46ch] font-body text-muted">
-            <T k="footer.tagline" />
-          </p>
+      {/* The newsletter, on the page's own ground. Inside <footer>, so it
+          sits in the contentinfo landmark rather than in the gap between
+          landmarks, which is what axe failed on when this was a band of
+          its own between <main> and here. No heading of ours above it: the
+          form carries its own, and two titles in a row said the same thing
+          twice. */}
+      <div className="bg-bg pt-16">
+        <div className="mx-auto max-w-page px-4 sm:px-6">
+          <EmailSignup />
         </div>
 
         {/* The blood pooled at the foot of the page. Two layers with hard
@@ -55,18 +57,18 @@ export function Footer({ copy }: { copy: SiteCopy }) {
       </div>
 
       <div className="bg-blood text-blood-text">
-        <div className="mx-auto max-w-page px-4 pb-10 pt-2 text-center sm:px-6">
+        <div className="mx-auto max-w-page px-4 pb-10 pt-2 sm:px-6">
           <h2 className="sr-only">
             <T k="footer.follow.title" />
           </h2>
-          <ul className="flex flex-wrap justify-center gap-2">
+          <ul className="flex flex-wrap gap-2">
             {EVENT.social.map((item) => (
               <li key={item.url}>
                 <a
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-11 w-11 items-center justify-center hover:opacity-70"
+                  className="inline-flex h-11 w-11 items-center justify-center hover:opacity-70 -ml-2 first:ml-0"
                 >
                   <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
                     <path d={ICONS[item.name]} fill="currentColor" />
@@ -80,8 +82,19 @@ export function Footer({ copy }: { copy: SiteCopy }) {
             ))}
           </ul>
 
-          <nav aria-label="Footer" className="mt-4">
-            <ul className="flex flex-wrap justify-center gap-x-5 gap-y-1">
+          {/* The lock-up, under the social row, on the blood field. Small:
+              this is a sign-off, not a title card, and the masthead
+              already carries the mark. The lettering takes `currentColor`,
+              so the one file serves this field and both themes. */}
+          <Wordmark className="mt-8 w-full max-w-[14rem] sm:max-w-[16rem]" />
+          {/* Not `text-muted`: that grey is tuned for the page ground and
+              drops below 4.5:1 on the blood. */}
+          <p className="mt-3 max-w-[46ch] font-body text-blood-text">
+            <T k="footer.tagline" />
+          </p>
+
+          <nav aria-label="Footer" className="mt-6">
+            <ul className="flex flex-wrap gap-x-5 gap-y-1">
               {[...NAV, ...FOOTER_NAV].map((item) => (
                 <li key={item.href}>
                   <Link

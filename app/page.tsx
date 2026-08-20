@@ -6,7 +6,6 @@ import { Reveal } from "@/components/reveal"
 import { Swipe } from "@/components/swipe"
 import { Bars, type Bar } from "@/components/bars"
 import { Divider } from "@/components/divider"
-import { TornEdge } from "@/components/torn-edge"
 import { Hand } from "@/components/hand"
 import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
@@ -44,10 +43,9 @@ export default async function HomePage() {
     <>
       {/* ── Hero ───────────────────────────────────────────────────────
           The Saul Bass composition: a flat field of colour carrying the
-          type, with small photographic panels tucked into the corners of
-          it. The photographs are accents, not the subject — none of them
-          is more than a couple of columns wide, and none sits in the
-          middle. Black slabs drive in from the edges behind the type.
+          type, with black slabs driving in from the edges behind it. No
+          photographs — the owner's instruction. The title card is type and
+          shape, and the photographs start below it.
 
           The field is --blood rather than Zombie Red because everything on
           it is text: white on Zombie Red measures 3.82:1, which is short of
@@ -55,25 +53,8 @@ export default async function HomePage() {
       <section className="on-blood relative w-full overflow-hidden bg-blood text-blood-text">
         <Bars bars={HERO_BARS} />
 
-        {/* Full width, not the page container: the frames in columns 1 and
-            11-12 run off the left and right edges of the screen, the way
-            the panels in the reference do. Only the type is held to the
-            container line. */}
-        <div className="relative grid w-full grid-cols-2 gap-4 py-12 lg:grid-cols-12 lg:gap-5 lg:py-20">
-          <Photo
-            photo={photo("half-face-portrait")}
-            priority
-            frame
-            ratio="3/4"
-            focus="50% 35%"
-            sizes="(min-width: 64rem) 15rem, 50vw"
-            className="photo-mini tilt-a -ml-4 lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:ml-0"
-          />
-
-          {/* Type first on a phone: the panels are accents, and nobody
-              should meet a photograph before they meet the name of the
-              event. On lg the grid puts it back in the middle. */}
-          <div className="order-first col-span-2 px-4 sm:px-6 lg:order-none lg:col-span-6 lg:col-start-4 lg:row-span-3 lg:row-start-1 lg:self-center lg:px-4">
+        <div className="relative mx-auto w-full max-w-page px-4 py-16 sm:px-6 lg:py-24">
+          <div className="max-w-[46rem]">
             <Reveal variant="cut" as="p" className="display text-sm sm:text-base">
               <T k="home.hero.eyebrow" />
             </Reveal>
@@ -113,35 +94,6 @@ export default async function HomePage() {
               </Reveal>
             </div>
           </div>
-
-          <Photo
-            photo={photo("zombies-crossing")}
-            priority
-            frame="accent"
-            ratio="2/3"
-            focus="50% 30%"
-            sizes="(min-width: 64rem) 15rem, 50vw"
-            className="photo-mini tilt-c -mr-4 lg:col-span-2 lg:col-start-11 lg:row-span-2 lg:row-start-1 lg:mr-0"
-          />
-
-          <Photo
-            photo={photo("piccadilly-rain")}
-            priority
-            frame
-            ratio="4/3"
-            sizes="(min-width: 64rem) 22rem, 50vw"
-            className="photo-mini tilt-b -ml-4 lg:col-span-3 lg:col-start-1 lg:row-start-3 lg:ml-0"
-          />
-
-          <Photo
-            photo={photo("teddy-bear")}
-            priority
-            frame
-            ratio="1/1"
-            focus="50% 35%"
-            sizes="(min-width: 64rem) 15rem, 50vw"
-            className="photo-mini tilt-a -mr-4 lg:col-span-2 lg:col-start-11 lg:row-start-3 lg:mr-0"
-          />
         </div>
       </section>
 
@@ -149,7 +101,6 @@ export default async function HomePage() {
 
       {/* ── The essentials ─────────────────────────────────────────────
           Everything someone needs before they read anything else. */}
-      <TornEdge />
       <section className="relative overflow-hidden bg-surface py-12">
         {/* Reaching in over the corner of the block. Behind everything,
             inert, and gone below lg where there is no room for it. */}
@@ -189,7 +140,8 @@ export default async function HomePage() {
           their text side back to the container line, so each photograph
           reaches the edge. The splits are deliberately uneven — 7/5 then
           5/7 — so no two rows scan the same way. */}
-      <TornEdge />
+
+      <Divider lead="right" />
 
       <section className="w-full py-14">
         <div className="edge-right items-center gap-8 lg:gap-0">
@@ -225,19 +177,19 @@ export default async function HomePage() {
             </h2>
             <p><T k="home.day.body1" /></p>
             <p><T k="home.day.body2" /></p>
-            <p>
-              <Link href="/survival" className="link">
-                <T k="home.day.cta" />
-              </Link>
-            </p>
+            {/* A button, not an underlined line of prose: this is the way
+                on to the next page, and it should look like something you
+                press. Still a link, because it navigates. */}
+            <Link href="/survival" className="btn btn-secondary mt-6">
+              <T k="home.day.cta" />
+            </Link>
           </div>
         </div>
       </section>
 
-      <Divider lead="right" />
+      <Divider lead="left" />
 
       {/* ── Everyone's welcome ─────────────────────────────────────────── */}
-      <TornEdge />
       <section className="w-full bg-surface py-14">
         <div className="edge-right items-center gap-8 lg:gap-0">
           <div className="prose-wzd px-4 sm:px-6 lg:col-start-2 lg:px-0 lg:pe-12">
@@ -245,11 +197,9 @@ export default async function HomePage() {
               <T k="register.access.title" />
             </h2>
             <p><T k="register.access.body" /></p>
-            <p>
-              <Link href="/faq" className="link">
-                More about access, dogs and children
-              </Link>
-            </p>
+            <Link href="/faq" className="btn btn-secondary mt-6">
+              More about access, dogs and children
+            </Link>
           </div>
           <Photo
             photo={photo("family-kerb")}
@@ -262,9 +212,10 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <TornEdge />
 
       {/* ── The cause ────────────────────────────────────────────────────── */}
+      <Divider lead="right" />
+
       <section className="relative w-full overflow-hidden py-14">
         <Hand
           from="left"
@@ -295,6 +246,8 @@ export default async function HomePage() {
       </section>
 
       {/* ── Final call to action ───────────────────────────────────────── */}
+      <Divider lead="left" />
+
       <section className="mx-auto w-full max-w-page px-4 py-16 text-center sm:px-6">
         <h2 className="display text-[clamp(2rem,6vw,4rem)]">
           <T k="home.cta.title" />
