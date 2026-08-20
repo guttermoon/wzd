@@ -187,12 +187,22 @@ the whole `animation` shorthand and silently yields `animation-name: none`.
 
 ## Analytics and consent
 
-**Nothing that writes to a visitor's device loads until they have answered
-the cookie dialog.** UK PECR requires consent before the storage, not after
-it, and analytics is not strictly necessary, so the scripts are never
-fetched rather than merely configured to behave once running. One answer
-covers all three: PostHog, GA4, and the Zeffy form, which sets its own
-cookies. The newsletter is **not** one of them any more; see below.
+**The analytics do not load until the visitor has answered the cookie
+dialog.** UK PECR requires consent before the storage, not after it, and
+analytics is not strictly necessary, so PostHog and GA4 are never fetched
+rather than merely configured to behave once running.
+
+Two things that were once behind the same gate no longer are, both at the
+owner's instruction:
+
+- The **newsletter** is the site's own form now, posting server-side. There
+  is nothing third party in the page to gate.
+- The **Zeffy ticketing form loads on sight** on `/register` and `/donate`,
+  and sets its own cookies as soon as either page opens. The case that it
+  is strictly necessary to the service the visitor came for is a strong one
+  for a ticketing form and a weak one for analytics, which is why they are
+  treated differently. `/privacy` says this in as many words: **change one
+  and change the other.**
 
 - `lib/consent.ts` holds the answer in localStorage and broadcasts changes
   on a window event. Storing the answer itself needs no consent: it is the
@@ -206,9 +216,9 @@ cookies. The newsletter is **not** one of them any more; see below.
 - `components/consent-choice.tsx` on `/privacy` shows the current answer
   and lets it be withdrawn. Consent that cannot be withdrawn as easily as
   it was given is not consent.
-- Declining is not a dead end: `components/zeffy-embed.tsx` offers the same
-  form on Zeffy's own site, where the visitor deals with Zeffy directly.
-  Blocking registration behind a cookie bar would be worse than the problem.
+- `components/zeffy-embed.tsx` always links to the same form on Zeffy's own
+  site underneath the embed, so an ad blocker or a bad deploy at their end
+  is never a dead end.
 
 The theme choice is kept whatever the answer, on the same footing: the
 visitor asked for it by clicking the switch.

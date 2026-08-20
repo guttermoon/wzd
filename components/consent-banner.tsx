@@ -9,16 +9,16 @@ import { useConsent, writeConsent } from "@/lib/consent"
  *
  * A real modal, at the owner's instruction: it sits over the page, on a
  * scrim, and the question has to be answered before the site can be used.
- * What is left of the third party on this site — the registration and
- * donation form, and the analytics — sets its own cookies, so the page
- * cannot honestly load them without an answer. The newsletter is no longer
- * one of them: it is the site's own form now.
+ *
+ * It covers the analytics and nothing else now. The newsletter is the
+ * site's own form, and the Zeffy ticketing form loads on sight because it
+ * is what the register and donate pages are for; see
+ * components/zeffy-embed.tsx and the wording on /privacy, which has to
+ * match it.
  *
  * Rejecting is still there, the same size and the same weight as
- * accepting. A dialog that only offers "yes" is not consent, and nothing
- * on the site is a dead end without it: every embed falls back to the
- * same form on the provider's own site, where the visitor deals with them
- * directly.
+ * accepting. A dialog that only offers "yes" is not consent, and declining
+ * costs the visitor nothing: the analytics simply never load.
  *
  * `role="dialog"` with `aria-modal` and a name, focus moved into it on
  * open and held there while it is up, and the page behind it locked from
@@ -114,9 +114,9 @@ export function ConsentBanner() {
                 Cookies
               </h2>
               <p className="mt-4 font-body">
-                This site needs your consent for third-party cookies: the
-                registration and donation form, and analytics. Neither loads
-                until you say yes.{" "}
+                This site needs your consent for third-party cookies:
+                PostHog and Google Analytics, which tell us which pages get
+                read. Neither loads until you say yes.{" "}
                 <Link
                   href="/privacy"
                   className="underline decoration-2 underline-offset-4"

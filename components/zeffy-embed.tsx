@@ -2,19 +2,21 @@
 
 import { useState } from "react"
 import Script from "next/script"
-import { useConsent, writeConsent } from "@/lib/consent"
 
 /**
- * The Zeffy registration and donation form, embedded.
+ * The Zeffy ticketing and donation form, embedded.
  *
- * Zeffy sets its own cookies, so like the analytics it waits for consent
- * and nothing of theirs is fetched before the answer is "granted".
+ * It loads on sight, not behind the cookie dialog. That is the owner's
+ * decision, taken after the gated version put a button where the form
+ * should be: the form is the reason anyone is on these two pages, and the
+ * argument that it is strictly necessary to the service the visitor came
+ * for is a far stronger one for a ticketing form than it would ever be for
+ * analytics. The analytics are still gated; this is not.
  *
- * Until the answer is yes, the page carries an ordinary button to the same
- * form on Zeffy's own site, where the visitor deals with Zeffy directly and
- * our consent question does not apply. Blocking registration behind a
- * cookie banner would be a worse outcome than the banner exists to
- * prevent, and so would explaining the banner where the form should be.
+ * What that means in practice: Zeffy sets its own cookies as soon as
+ * /register or /donate is opened, whatever the visitor answered in the
+ * dialog. /privacy says so in as many words, and the two have to be
+ * changed together.
  *
  * Zeffy's own snippet is a div their script fills in, plus a hidden iframe
  * revealed by an inline `onerror` handler if the script fails. The markup
@@ -29,35 +31,6 @@ const FORM_URL = `https://www.zeffy.com${FORM_PATH}`
 
 export function ZeffyEmbed() {
   const [failed, setFailed] = useState(false)
-  const consent = useConsent()
-
-  // This only shows to someone who answered "No thanks" in the cookie
-  // dialog: Zeffy sets its own cookies, so their form cannot load after a
-  // refusal. Two ways on rather than one, because a refusal should not
-  // cost anyone their place on the walk: change your mind and the embed
-  // appears in place, or go to Zeffy and deal with them directly.
-  if (consent !== "granted") {
-    return (
-      <div className="flex flex-wrap gap-3">
-        <button
-          type="button"
-          onClick={() => writeConsent("granted")}
-          className="btn btn-primary"
-        >
-          Load the form here
-        </button>
-        <a
-          href={FORM_URL}
-          rel="noopener noreferrer"
-          target="_blank"
-          className="btn btn-secondary"
-        >
-          Register on Zeffy
-          <span className="sr-only"> (opens in a new tab)</span>
-        </a>
-      </div>
-    )
-  }
 
   // `zeffy-embed` (globals.css) pins whatever their script injects to the
   // width of this block and to its left edge. Left, not centred: the rest
@@ -70,7 +43,7 @@ export function ZeffyEmbed() {
       {failed ? (
         <div className="relative h-[450px] w-full overflow-hidden">
           <iframe
-            title="Donation form powered by Zeffy"
+            title="Ticketing and donation form powered by Zeffy"
             src={FORM_URL}
             allow="payment"
             allowTransparency
@@ -84,6 +57,17 @@ export function ZeffyEmbed() {
         strategy="afterInteractive"
         onError={() => setFailed(true)}
       />
+
+      {/* If their script loads but paints nothing — an ad blocker, a bad
+          deploy at their end — there is still a way through, and it is not
+          in anyone's way when the form is there. */}
+      <p className="mt-4 font-body text-sm text-muted">
+        Trouble with the form?{" "}
+        <a className="link" href={FORM_URL} rel="noopener noreferrer" target="_blank">
+          Open it on Zeffy
+          <span className="sr-only"> (opens in a new tab)</span>
+        </a>
+      </p>
     </div>
   )
 }
