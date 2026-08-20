@@ -27,10 +27,12 @@ export const EVENT = {
     donateLabel: "paa.ge/worldzombieday",
   },
   hashtags: ["#WZD2026", "#WorldZombieDay"],
+  /** Order is the order they appear in the footer. */
   social: [
-    { name: "Facebook", url: "https://www.facebook.com/worldzombiedaylondon/" },
     { name: "Instagram", url: "https://www.instagram.com/worldzombieday/" },
-    { name: "Twitter", url: "https://twitter.com/WZDlondon" },
+    { name: "WhatsApp", url: "https://www.whatsapp.com/channel/0029Vb8N0wmInlqHa7MdYB1S" },
+    { name: "Discord", url: "https://discord.com/invite/EFr4eCu5Mh" },
+    { name: "Facebook", url: "https://www.facebook.com/worldzombiedaylondon/" },
   ],
 } as const
 
@@ -38,12 +40,13 @@ export const EVENT = {
 export const NAV = [
   { name: "Home", href: "/" },
   { name: "Register", href: "/register" },
-  { name: "Rules", href: "/rules" },
+  { name: "Survival", href: "/survival" },
   { name: "FAQ", href: "/faq" },
-  { name: "Sponsors", href: "/sponsors" },
+  { name: "Sponsors", href: "/become-a-sponsor" },
 ] as const
 
 export const FOOTER_NAV = [
+  { name: "Donate", href: "/donate" },
   { name: "Press kit", href: "/press" },
   { name: "Photo policy", href: "/photo-policy" },
 ] as const

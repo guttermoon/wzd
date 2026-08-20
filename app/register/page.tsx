@@ -4,6 +4,7 @@ import { getSiteCopy } from "@/lib/site-copy"
 import { makeT, makeS } from "@/components/notion-text"
 import { PageShell, Section } from "@/components/page-shell"
 import { Photo } from "@/components/photo"
+import { ZeffyEmbed } from "@/components/zeffy-embed"
 import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
 
@@ -35,18 +36,11 @@ export default async function RegisterPage() {
         />
       }
     >
-      {/* Registration status is the thing people came for, so it goes first. */}
-      <div className="cut-panel mt-10 p-6">
-        <h2 className="display text-2xl">
-          <T k="register.status.title" />
-        </h2>
-        <p className="prose-wzd mt-3 font-body">
-          <T k="register.status.body" />
-        </p>
-        <p className="display mt-5 inline-block border-2 border-accent px-4 py-3 text-accent-text">
-          <T k="register.status.cta" />
-        </p>
-      </div>
+      {/* Registration is the thing people came for, so the form goes
+          straight under the description rather than behind a button. */}
+      <Section title={<T k="register.status.title" />} className="mt-10">
+        <ZeffyEmbed />
+      </Section>
 
       <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-14">
         <Section title={<T k="register.why.title" />} className="mt-0">
@@ -55,33 +49,39 @@ export default async function RegisterPage() {
         <Section title={<T k="register.cost.title" />} className="mt-0">
           <p className="prose-wzd font-body"><T k="register.cost.body" /></p>
         </Section>
-        <Section title={<T k="register.access.title" />} className="mt-0">
-          <p className="prose-wzd font-body"><T k="register.access.body" /></p>
-        </Section>
-        <Section title={<T k="register.cause.title" />} className="mt-0">
-          <p className="prose-wzd font-body"><T k="register.cause.body" /></p>
-          <p className="mt-4 font-body">
-            <a className="link" href={EVENT.cause.url} rel="noopener noreferrer">
-              {EVENT.cause.name}
-            </a>{" "}
-            &middot;{" "}
-            <a className="link" href={EVENT.cause.donateUrl} rel="noopener noreferrer">
-              {EVENT.cause.donateLabel}
-            </a>
-          </p>
-        </Section>
       </div>
+
+      <Section title={<T k="register.access.title" />}>
+        <p className="prose-wzd font-body"><T k="register.access.body" /></p>
+      </Section>
+
+      <Section title={<T k="register.cause.title" />}>
+        <p className="prose-wzd font-body"><T k="register.cause.body" /></p>
+        <p className="prose-wzd mt-4 font-body"><T k="register.cause.donation" /></p>
+        <ul className="prose-wzd mt-4 list-disc space-y-2 pl-5 font-body">
+          {["1", "2", "3", "4", "5"].map((n) => (
+            <li key={n}><T k={`register.cause.work.${n}`} /></li>
+          ))}
+        </ul>
+        <p className="prose-wzd mt-4 font-body"><T k="register.cause.thanks" /></p>
+        <p className="mt-4 font-body">
+          <a className="link" href={EVENT.cause.url} rel="noopener noreferrer">
+            {EVENT.cause.name}
+          </a>{" "}
+          &middot;{" "}
+          <a className="link" href={EVENT.cause.donateUrl} rel="noopener noreferrer">
+            {EVENT.cause.donateLabel}
+          </a>
+        </p>
+      </Section>
 
       <Section title={<T k="register.involved.title" />}>
         <p className="prose-wzd font-body"><T k="register.involved.body" /></p>
-        <a href={`mailto:${EVENT.email}`} className="btn btn-primary mt-6">
-          <T k="register.involved.cta" />
-        </a>
       </Section>
 
       <Section>
         <p className="font-body">
-          <Link href="/rules" className="link">Read the rules of conduct</Link>{" "}
+          <Link href="/survival" className="link">Read the rules of conduct</Link>{" "}
           before you come.
         </p>
       </Section>

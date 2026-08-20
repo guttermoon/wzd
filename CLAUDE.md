@@ -94,11 +94,13 @@ everywhere at once.
 ## Design and accessibility
 
 - Palette comes from the style guide: Zombie Red `#E74C3C`, Dark Grey
-  `#404040`, Black `#333333`, Greige `#F5E9DA`. Light mode's ground is
-  paper `#FEFEFC` (owner's choice); Greige is the panel tint on it, and the
-  ink in dark mode.
+  `#404040`, Black `#333333`, Greige `#F7E7D8`. Neither ground is from the
+  guide, and both departures are deliberate: light is paper `#FEFEFC`
+  (owner's choice) and dark is ink `#1A1A1A`. In each theme the guide's own
+  colour is the *panel* on that ground — Greige in light, Black in dark —
+  and Greige is also the ink in dark mode.
 - **Zombie Red is a display colour, not a text colour.** It measures
-  3.78:1 on paper and 3.31:1 on Black — fine for large type (3:1), short
+  3.78:1 on paper and 3.16:1 on Greige — fine for large type (3:1), short
   of the 4.5:1 body text needs. So `--accent` is Zombie Red for fills,
   rules and large headings; `--accent-text` is a tuned red for links and
   small text; `--accent-strong` backs buttons because white on Zombie Red
@@ -174,16 +176,42 @@ animation not applying — check that any custom property it references is
 declared inside a selector. A `var()` that resolves to nothing invalidates
 the whole `animation` shorthand and silently yields `animation-name: none`.
 
-## Analytics
+## Analytics and consent
 
-PostHog and GA4 in `components/analytics.tsx`, both inert unless
-`NEXT_PUBLIC_POSTHOG_KEY` / `NEXT_PUBLIC_GA_ID` are set, so nothing is
-collected locally or on an unconfigured preview. Session recording off,
-autocapture off, DNT respected, IP anonymised. **`/privacy` describes
-exactly this** — change one and change the other.
+**Nothing that writes to a visitor's device loads until they have accepted
+the cookie bar.** UK PECR requires consent before the storage, not after
+it, and analytics is not strictly necessary, so the scripts are never
+fetched rather than merely configured to behave once running. One answer
+covers all three: PostHog, GA4, and the Zeffy form, which sets its own
+cookies.
+
+- `lib/consent.ts` holds the answer in localStorage and broadcasts changes
+  on a window event. Storing the answer itself needs no consent: it is the
+  choice, and the alternative is asking on every page.
+- `components/consent-banner.tsx` is a bar at the foot, not a modal. Reject
+  is the same size and weight as Accept; a reject button that is harder to
+  find is not a free choice.
+- `components/consent-choice.tsx` on `/privacy` shows the current answer
+  and lets it be withdrawn. Consent that cannot be withdrawn as easily as
+  it was given is not consent.
+- Declining is not a dead end: `components/zeffy-embed.tsx` offers the same
+  form on Zeffy's own site, where the visitor deals with Zeffy directly.
+  Blocking registration behind a cookie bar would be worse than the problem.
+
+The theme choice is kept whatever the answer, on the same footing: the
+visitor asked for it by clicking the switch.
+
+PostHog and GA4 also need their keys (`NEXT_PUBLIC_POSTHOG_KEY`,
+`NEXT_PUBLIC_GA_ID`), so nothing is collected locally or on an
+unconfigured preview. Session recording off, autocapture off, DNT
+respected, IP anonymised. **`/privacy` describes exactly this** — change
+one and change the other. The test that matters is a network one: load a
+page fresh and confirm no third-party host is contacted before the answer
+is given.
+
 - Target is WCAG 2.2 AA and it currently passes clean:
-  `npx next start & npm run check:a11y` → 0 violations, 9 routes × 2 themes.
-  Keep it there.
+  `npx next start & npm run check:a11y` → 0 violations, 10 routes × 2
+  themes. Keep it there.
 
 ## Gotchas
 
@@ -192,7 +220,9 @@ exactly this** — change one and change the other.
   route, add a redirect — those links are in a decade of press coverage.
 - `POST /api/revalidate` requires `REVALIDATION_SECRET`; it returns 503 if
   unset. (The template's version skipped the check when no secret was sent.)
-- `app/api/newsletter/route.ts` is an unused stub returning 501 on purpose,
-  so it can't silently swallow email addresses.
+- Mailing-list signup is an embedded paa.ge form
+  (`components/email-signup.tsx`), behind the same consent gate as
+  everything else third-party. There is no signup route of our own: nothing
+  on this site takes an email address itself.
 - 301 photographs are still on the old WordPress site and could not be
   fetched from this environment. See `docs/IMAGES.md`.

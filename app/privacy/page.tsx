@@ -5,6 +5,7 @@ import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
 import { makeT, makeS } from "@/components/notion-text"
 import { PageShell, Section } from "@/components/page-shell"
+import { ConsentChoice } from "@/components/consent-choice"
 import { EVENT } from "@/lib/event"
 
 export const revalidate = 60
@@ -64,6 +65,7 @@ export default async function PrivacyPage() {
 
       <Section title={<T k="privacy.cookies.title" />}>
         <p className="prose-wzd font-body"><T k="privacy.cookies.body" /></p>
+        <ConsentChoice />
       </Section>
 
       <Section title={<T k="privacy.sharing.title" />}>

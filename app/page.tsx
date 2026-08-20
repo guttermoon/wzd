@@ -37,7 +37,7 @@ export default async function HomePage() {
     { k: "where", href: "/faq" },
     { k: "cost", href: "/register" },
     { k: "who", href: "/faq" },
-    { k: "wear", href: "/rules" },
+    { k: "wear", href: "/survival" },
   ]
 
   return (
@@ -55,19 +55,25 @@ export default async function HomePage() {
       <section className="on-blood relative w-full overflow-hidden bg-blood text-blood-text">
         <Bars bars={HERO_BARS} />
 
-        <div className="relative mx-auto grid w-full max-w-page grid-cols-2 gap-4 px-4 py-12 sm:px-6 lg:grid-cols-12 lg:gap-5 lg:py-20">
+        {/* Full width, not the page container: the frames in columns 1 and
+            11-12 run off the left and right edges of the screen, the way
+            the panels in the reference do. Only the type is held to the
+            container line. */}
+        <div className="relative grid w-full grid-cols-2 gap-4 py-12 lg:grid-cols-12 lg:gap-5 lg:py-20">
           <Photo
             photo={photo("half-face-portrait")}
             priority
+            frame
             ratio="3/4"
-            sizes="(min-width: 64rem) 11rem, 45vw"
-            className="photo-mini tilt-a lg:col-span-2 lg:col-start-1 lg:row-start-1"
+            focus="50% 35%"
+            sizes="(min-width: 64rem) 15rem, 50vw"
+            className="photo-mini tilt-a -ml-4 lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:ml-0"
           />
 
           {/* Type first on a phone: the panels are accents, and nobody
               should meet a photograph before they meet the name of the
               event. On lg the grid puts it back in the middle. */}
-          <div className="order-first col-span-2 lg:order-none lg:col-span-6 lg:col-start-4 lg:row-span-3 lg:row-start-1 lg:self-center">
+          <div className="order-first col-span-2 px-4 sm:px-6 lg:order-none lg:col-span-6 lg:col-start-4 lg:row-span-3 lg:row-start-1 lg:self-center lg:px-4">
             <Reveal variant="cut" as="p" className="display text-sm sm:text-base">
               <T k="home.hero.eyebrow" />
             </Reveal>
@@ -111,25 +117,30 @@ export default async function HomePage() {
           <Photo
             photo={photo("zombies-crossing")}
             priority
+            frame="accent"
             ratio="2/3"
-            sizes="(min-width: 64rem) 11rem, 45vw"
-            className="photo-mini tilt-c lg:col-span-2 lg:col-start-11 lg:row-span-2 lg:row-start-1"
+            focus="50% 30%"
+            sizes="(min-width: 64rem) 15rem, 50vw"
+            className="photo-mini tilt-c -mr-4 lg:col-span-2 lg:col-start-11 lg:row-span-2 lg:row-start-1 lg:mr-0"
           />
 
           <Photo
             photo={photo("piccadilly-rain")}
             priority
+            frame
             ratio="4/3"
-            sizes="(min-width: 64rem) 16rem, 45vw"
-            className="photo-mini tilt-b lg:col-span-3 lg:col-start-1 lg:row-start-3"
+            sizes="(min-width: 64rem) 22rem, 50vw"
+            className="photo-mini tilt-b -ml-4 lg:col-span-3 lg:col-start-1 lg:row-start-3 lg:ml-0"
           />
 
           <Photo
             photo={photo("teddy-bear")}
             priority
+            frame
             ratio="1/1"
-            sizes="(min-width: 64rem) 11rem, 45vw"
-            className="photo-mini tilt-a lg:col-span-2 lg:col-start-11 lg:row-start-3"
+            focus="50% 35%"
+            sizes="(min-width: 64rem) 15rem, 50vw"
+            className="photo-mini tilt-a -mr-4 lg:col-span-2 lg:col-start-11 lg:row-start-3 lg:mr-0"
           />
         </div>
       </section>
@@ -145,7 +156,7 @@ export default async function HomePage() {
         <Hand
           from="right"
           delay={120}
-          className="right-0 top-2 hidden h-[190px] w-[135px] opacity-[0.14] lg:block"
+          className="-right-16 -bottom-32 hidden h-[560px] w-[210px] opacity-[0.14] lg:block"
         />
         <div className="relative mx-auto w-full max-w-page px-4 sm:px-6">
           <Reveal variant="wipe-red">
@@ -191,6 +202,7 @@ export default async function HomePage() {
           </div>
           <Photo
             photo={photo("leicester-square-banner")}
+            frame
             bleed="right"
             ratio="4/3"
             sizes="(min-width: 64rem) 26rem, 100vw"
@@ -201,6 +213,7 @@ export default async function HomePage() {
         <div className="edge-left mt-20 items-center gap-8 lg:gap-0">
           <Photo
             photo={photo("the-horde")}
+            frame="accent"
             bleed="left"
             ratio="3/2"
             sizes="(min-width: 64rem) 26rem, 100vw"
@@ -213,7 +226,7 @@ export default async function HomePage() {
             <p><T k="home.day.body1" /></p>
             <p><T k="home.day.body2" /></p>
             <p>
-              <Link href="/rules" className="link">
+              <Link href="/survival" className="link">
                 <T k="home.day.cta" />
               </Link>
             </p>
@@ -240,6 +253,7 @@ export default async function HomePage() {
           </div>
           <Photo
             photo={photo("family-kerb")}
+            frame
             bleed="right"
             ratio="5/4"
             sizes="(min-width: 64rem) 26rem, 100vw"
@@ -256,7 +270,7 @@ export default async function HomePage() {
           from="left"
           tone="accent"
           delay={80}
-          className="-left-6 bottom-4 hidden h-[220px] w-[155px] opacity-[0.18] lg:block"
+          className="-left-16 -bottom-36 hidden h-[600px] w-[225px] opacity-[0.18] lg:block"
         />
         <div className="relative mx-auto w-full max-w-page px-4 sm:px-6">
         <div className="prose-wzd">
@@ -292,6 +306,7 @@ export default async function HomePage() {
           <T k="home.cta.button" />
         </Link>
       </section>
+
     </>
   )
 }

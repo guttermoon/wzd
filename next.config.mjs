@@ -14,15 +14,16 @@ const nextConfig = {
     // of press coverage, so none of them should 404.
     return [
       { source: "/about-2", destination: "/", permanent: true },
-      { source: "/survival", destination: "/rules", permanent: true },
-      { source: "/become-a-sponsor", destination: "/sponsors", permanent: true },
+      // /survival is the live URL and stays that way; /rules was only
+      // ever ours, so it redirects rather than the other way round.
+      { source: "/rules", destination: "/survival", permanent: true },
+      { source: "/sponsors", destination: "/become-a-sponsor", permanent: true },
       { source: "/privacy-policy", destination: "/privacy", permanent: true },
       { source: "/zombiedigest", destination: "/", permanent: true },
       { source: "/gallery", destination: "/press", permanent: true },
       { source: "/win", destination: "/", permanent: true },
       { source: "/map", destination: "/faq", permanent: true },
       { source: "/t-shirts", destination: "/", permanent: true },
-      { source: "/donate", destination: "/", permanent: true },
       // The blog that used to live here is gone; send readers to the news
       // they can actually use.
       { source: "/blog", destination: "/", permanent: true },
