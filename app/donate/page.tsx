@@ -63,11 +63,17 @@ export default async function DonatePage() {
             <p className="prose-wzd mt-4 font-body"><T k="register.cause.thanks" /></p>
           </div>
 
+          {/* 5/6 with the crop held to the top takes exactly the bottom
+              fifth off and nothing off the head. The photograph is 2:3, so
+              at this panel's width it stands 1.5 boxes tall; a box 1.2 of
+              those high shows the top 80% of it and no more. The old 3/4
+              was both taller and centred, which cropped a little off the
+              top and left a stretch of skirt at the bottom. */}
           <Photo
             photo={photo("wolf-puppet")}
             bleed="right"
-            ratio="3/4"
-            focus="50% 32%"
+            ratio="5/6"
+            focus="50% 0%"
             sizes="(min-width: 64rem) 22rem, 100vw"
             className="lg:col-span-5 lg:sticky lg:top-24 lg:self-start"
           />
