@@ -213,5 +213,17 @@
   "press.release.body": "The current release, with the date, the route, the cause and quotes you can use.",
   "press.release.cta": "Read the press release",
   "press.release.url": "",
-  "press.release.pending": "This year's release is not out yet. Email info@worldzombieday.co.uk and we'll send it as soon as it is."
+  "press.release.pending": "This year's release is not out yet. Email info@worldzombieday.co.uk and we'll send it as soon as it is.",
+  "party.title": "After Party",
+  "party.body1": "When the walk is done on Saturday 10 October, we carry on at BLOODSport, raising funds for The Dead Good Club, a Community Interest Company helping people reclaim their attention and resist brain rot in the AI era.",
+  "party.body2": "A killer undead playlist, drinks, photos, and a limited-capacity VIP hideout with its own bar.",
+  "party.doors": "From 7:30pm. Everyone is welcome, space permitting. If you want guaranteed entry and somewhere to lay your hat, take a place in the VIP Lounge.",
+  "party.vip.title": "VIP Lounge, £10",
+  "party.vip.1": "One free drink: a pint, a soft drink or a glass of wine",
+  "party.vip.2": "Finger food to feast on",
+  "party.vip.3": "A reserved area at the back",
+  "party.vip.4": "Exclusive bar access",
+  "party.vip.limit": "Strictly limited to 75 undead.",
+  "party.proceeds": "Proceeds from VIP sales help fund The Dead Good Club in their mission to help people reclaim their brain and stop the rot.",
+  "party.thanks": "Made possible with the support of BLOODSport by MEATliquor and Harbour Brewing Co."
 }

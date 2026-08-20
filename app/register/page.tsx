@@ -69,6 +69,43 @@ export default async function RegisterPage() {
         </p>
       </Section>
 
+      {/* The after-party is a separate venue with its own ticket, so it
+          sits under the cause it raises money for rather than up with the
+          walk. The address and the venue link are facts and live in
+          lib/event.ts; the words around them are editable in Notion. */}
+      <Section title={<T k="party.title" />}>
+        <p className="prose-wzd font-body"><T k="party.body1" /></p>
+        <p className="prose-wzd mt-4 font-body"><T k="party.body2" /></p>
+        <p className="prose-wzd mt-4 font-body"><T k="party.doors" /></p>
+
+        <h3 className="display mt-8 text-lg">
+          <T k="party.vip.title" />
+        </h3>
+        <ul className="prose-wzd mt-4 list-disc space-y-2 pl-5 font-body">
+          {["1", "2", "3", "4"].map((n) => (
+            <li key={n}><T k={`party.vip.${n}`} /></li>
+          ))}
+        </ul>
+        <p className="prose-wzd mt-4 font-body"><T k="party.vip.limit" /></p>
+        <p className="prose-wzd mt-4 font-body"><T k="party.proceeds" /></p>
+
+        <p className="mt-6 font-body">
+          <a
+            className="link"
+            href={EVENT.afterParty.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {EVENT.afterParty.venue}
+            <span className="sr-only"> (opens in a new tab)</span>
+          </a>{" "}
+          &middot; {EVENT.afterParty.address}
+        </p>
+        <p className="prose-wzd mt-4 font-body text-muted">
+          <T k="party.thanks" />
+        </p>
+      </Section>
+
       {/* The form sits at the end, after everything someone needs to know
           before they fill it in. */}
       <Section title={<T k="register.status.title" />}>
