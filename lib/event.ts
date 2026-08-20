@@ -23,8 +23,13 @@ export const EVENT = {
     name: "The Dead Good Club",
     legalForm: "Community Interest Company",
     url: "https://deadgoodclub.com/",
-    donateUrl: "https://paa.ge/worldzombieday",
-    donateLabel: "paa.ge/worldzombieday",
+    /**
+     * The peer-to-peer fundraising page on Zeffy, which is where every
+     * Donate on the site points. paa.ge is still the club's own page and
+     * the newsletter list; it is not the donation destination.
+     */
+    donateUrl: "https://www.zeffy.com/en-GB/peer-to-peer/world-zombie-day-london",
+    donateLabel: "Donate on Zeffy",
   },
   /**
    * The after-party, which is a separate venue with its own ticket. The
