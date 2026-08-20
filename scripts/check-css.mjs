@@ -36,8 +36,8 @@ const REQUIRED = [
   "consent-bar",
   "in-view",
   // Layout devices.
-  "edge-left", "edge-right", "breakout", "panel-ground", "torn-bar",
-  "credit-inset", "photo-mini", "on-blood", "vhs",
+  "edge-left", "edge-right", "breakout", "panel-ground",
+  "credit-inset", "on-blood", "vhs", "zeffy-embed",
 ]
 
 let files

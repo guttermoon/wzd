@@ -1,129 +1,129 @@
 [
-  {
-    "slug": "bridge-horde",
-    "source": "14. Chris Williams.jpeg",
-    "credit": "Chris Williams",
-    "alt": "A zombie with bloodied outstretched hands lunges towards the camera on Golden Jubilee Bridge, a crowd of costumed zombies and a hand-painted DIE! road sign behind him.",
-    "slot": "home hero"
-  },
-  {
-    "slug": "the-horde",
-    "source": "photo by zero.jpg",
-    "credit": "Bartosz Chomiak",
-    "creditNote": "Filename says \"photo by zero\"; the image carries a © ChomiakBartosz watermark. Credit shown follows the watermark — confirm with the photographer.",
-    "alt": "Hundreds of costumed zombies packed into a London street, photographed from above — a bride with rabbit ears, a deep-sea diving helmet, top hats and hospital scrubs among them.",
-    "slot": "home scale / press"
-  },
-  {
-    "slug": "leicester-square-banner",
-    "source": "3_PHOTO_CREDIT_www.charterphotography.co.uk.jpg",
-    "credit": "charterphotography.co.uk",
-    "alt": "A zombie in a bowler hat carries a megaphone and the World Zombie Day: London banner through Leicester Square, with the walk following behind.",
-    "slot": "home — what happens on the day"
-  },
-  {
-    "slug": "family-kerb",
-    "source": "Photo Pierre Fr Docquir 58.jpg",
-    "credit": "Pierre François Docquir",
-    "alt": "Zombies of all ages wait at the kerb — a steward holding a Zombies Crossing sign, a parent in scrubs with a small child in costume, and a zombie holding a yellow “Danger: beware of zombies” sign.",
-    "slot": "home — everyone's welcome"
-  },
-  {
-    "slug": "leake-street-crowd",
-    "source": "2_PHOTO_CREDIT_ALEX_LANE.jpg",
-    "credit": "Alex Lane Photography",
-    "alt": "Several hundred zombies fill the graffiti-covered Leake Street tunnel, waiting for the walk to move off.",
-    "slot": "register"
-  },
-  {
-    "slug": "steward-crossing",
-    "source": "5_ANDY HALLIDAY.jpg",
-    "credit": "Andy Halliday",
-    "alt": "A steward in a blood-spattered high-vis vest holds a hand-painted “Zombies Crossing” lollipop sign while the walk waits behind him.",
-    "slot": "rules of conduct"
-  },
-  {
-    "slug": "zombie-dog",
-    "source": "Photo Katerina Iacovides 111.jpg",
-    "credit": "Katerina Iacovides",
-    "alt": "A French bulldog wearing a brain-print cap and a rib-cage harness stands on a paved street.",
-    "slot": "faq — dogs"
-  },
-  {
-    "slug": "kissing-booth",
-    "source": "PHOTO CREDIT RAYMOND CHARTER 2016.jpg",
-    "credit": "Raymond Charter",
-    "alt": "Zombies shamble past a sponsor’s red kissing-booth tent, one of them carrying a small dog and another holding a bunch of flowers.",
-    "slot": "sponsors"
-  },
-  {
-    "slug": "selfie",
-    "source": "Photo Frazer Fenton 108.jpg",
-    "credit": "Frazer Fenton",
-    "alt": "Two zombies with lollipops in their mouths take a selfie against a brightly painted graffiti wall.",
-    "slot": "photo policy"
-  },
-  {
-    "slug": "london-eye-pair",
-    "source": "1_PHOTO_CREDIT_ALEX_LANE.jpg",
-    "credit": "Alex Lane Photography",
-    "alt": "Two zombies in heavy prosthetic make-up pose beneath the London Eye, backlit by the low sun.",
-    "slot": "gallery"
-  },
-  {
-    "slug": "half-face-portrait",
-    "source": "PHOTO CREDIT CHRIS WILLIAMS 2017.jpg",
-    "credit": "Chris Williams",
-    "alt": "A zombie in glasses, half her face made up as raw flesh, reaches towards the camera with more zombies out of focus behind her.",
-    "slot": "gallery"
-  },
-  {
-    "slug": "stop-sign-couple",
-    "source": "MARCUS CHARTER WZD London 2016-60.jpg",
-    "credit": "Marcus Charter",
-    "alt": "Two zombies pose cheek to cheek in the street, one wearing a prop road sign speared through the head.",
-    "slot": "gallery"
-  },
-  {
-    "slug": "makeup-blood",
-    "source": "MARCUS CHARTER WZD London 2016-71.jpg",
-    "credit": "Marcus Charter",
-    "alt": "A zombie tilts his head back while a friend with purple hair drips fake blood onto his face from a bottle.",
-    "slot": "gallery — getting ready"
-  },
-  {
-    "slug": "teddy-bear",
-    "source": "Mark Williams Photography London.jpg",
-    "credit": "Mark Williams Photography London",
-    "alt": "A zombie in a gingham dress clutches a blood-stained teddy bear and reaches towards the camera.",
-    "slot": "gallery"
-  },
-  {
-    "slug": "wolf-puppet",
-    "source": "Mark Williams Photography London (2).jpg",
-    "credit": "Mark Williams Photography London",
-    "alt": "A zombie bride in a pink lace dress holds a snarling wolf puppet, another participant standing behind her.",
-    "slot": "gallery"
-  },
-  {
-    "slug": "piccadilly-rain",
-    "source": "Photo-Katerina-Iacovides.jpg",
-    "credit": "Katerina Iacovides",
-    "alt": "Two zombies shelter under a pink umbrella in the rain at Piccadilly Circus at night, beside a London Underground sign.",
-    "slot": "gallery"
-  },
-  {
-    "slug": "zombies-crossing",
-    "source": "Photo Mark Ridgwell 63.jpg",
-    "credit": "Mark Ridgwell",
-    "alt": "Two zombies grimace beneath a hand-painted “Zombies” crossing sign held above them.",
-    "slot": "gallery"
-  },
-  {
-    "slug": "groaning-group",
-    "source": "Photo Paul Carrano 22.jpg",
-    "credit": "Paul Carrano",
-    "alt": "A group of zombies advances towards the camera past a cluster of red balloons, one man caught mid-groan.",
-    "slot": "gallery"
-  }
+ {
+  "slug": "bridge-horde",
+  "source": "14. Chris Williams.jpeg",
+  "credit": "Chris Williams",
+  "alt": "A zombie with bloodied outstretched hands lunges towards the camera on Golden Jubilee Bridge, a crowd of costumed zombies and a hand-painted DIE! road sign behind him.",
+  "slot": "home hero"
+ },
+ {
+  "slug": "the-horde",
+  "source": "photo by zero.jpg",
+  "credit": "Bartosz Chomiak",
+  "creditNote": "Filename says \"photo by zero\"; the image carries a © ChomiakBartosz watermark. Credit shown follows the watermark, confirm with the photographer.",
+  "alt": "Hundreds of costumed zombies packed into a London street, photographed from above, a bride with rabbit ears, a deep-sea diving helmet, top hats and hospital scrubs among them.",
+  "slot": "home scale / press"
+ },
+ {
+  "slug": "leicester-square-banner",
+  "source": "3_PHOTO_CREDIT_www.charterphotography.co.uk.jpg",
+  "credit": "charterphotography.co.uk",
+  "alt": "A zombie in a bowler hat carries a megaphone and the World Zombie Day: London banner through Leicester Square, with the walk following behind.",
+  "slot": "home, what happens on the day"
+ },
+ {
+  "slug": "family-kerb",
+  "source": "Photo Pierre Fr Docquir 58.jpg",
+  "credit": "Pierre François Docquir",
+  "alt": "Zombies of all ages wait at the kerb: a steward holding a Zombies Crossing sign, a parent in scrubs with a small child in costume, and a zombie holding a yellow “Danger: beware of zombies” sign.",
+  "slot": "home, everyone's welcome"
+ },
+ {
+  "slug": "leake-street-crowd",
+  "source": "2_PHOTO_CREDIT_ALEX_LANE.jpg",
+  "credit": "Alex Lane Photography",
+  "alt": "Several hundred zombies fill the graffiti-covered Leake Street tunnel, waiting for the walk to move off.",
+  "slot": "register"
+ },
+ {
+  "slug": "steward-crossing",
+  "source": "5_ANDY HALLIDAY.jpg",
+  "credit": "Andy Halliday",
+  "alt": "A steward in a blood-spattered high-vis vest holds a hand-painted “Zombies Crossing” lollipop sign while the walk waits behind him.",
+  "slot": "rules of conduct"
+ },
+ {
+  "slug": "zombie-dog",
+  "source": "Photo Katerina Iacovides 111.jpg",
+  "credit": "Katerina Iacovides",
+  "alt": "A French bulldog wearing a brain-print cap and a rib-cage harness stands on a paved street.",
+  "slot": "faq, dogs"
+ },
+ {
+  "slug": "kissing-booth",
+  "source": "PHOTO CREDIT RAYMOND CHARTER 2016.jpg",
+  "credit": "Raymond Charter",
+  "alt": "Zombies shamble past a sponsor’s red kissing-booth tent, one of them carrying a small dog and another holding a bunch of flowers.",
+  "slot": "sponsors"
+ },
+ {
+  "slug": "selfie",
+  "source": "Photo Frazer Fenton 108.jpg",
+  "credit": "Frazer Fenton",
+  "alt": "Two zombies with lollipops in their mouths take a selfie against a brightly painted graffiti wall.",
+  "slot": "photo policy"
+ },
+ {
+  "slug": "london-eye-pair",
+  "source": "1_PHOTO_CREDIT_ALEX_LANE.jpg",
+  "credit": "Alex Lane Photography",
+  "alt": "Two zombies in heavy prosthetic make-up pose beneath the London Eye, backlit by the low sun.",
+  "slot": "gallery"
+ },
+ {
+  "slug": "half-face-portrait",
+  "source": "PHOTO CREDIT CHRIS WILLIAMS 2017.jpg",
+  "credit": "Chris Williams",
+  "alt": "A zombie in glasses, half her face made up as raw flesh, reaches towards the camera with more zombies out of focus behind her.",
+  "slot": "gallery"
+ },
+ {
+  "slug": "stop-sign-couple",
+  "source": "MARCUS CHARTER WZD London 2016-60.jpg",
+  "credit": "Marcus Charter",
+  "alt": "Two zombies pose cheek to cheek in the street, one wearing a prop road sign speared through the head.",
+  "slot": "gallery"
+ },
+ {
+  "slug": "makeup-blood",
+  "source": "MARCUS CHARTER WZD London 2016-71.jpg",
+  "credit": "Marcus Charter",
+  "alt": "A zombie tilts his head back while a friend with purple hair drips fake blood onto his face from a bottle.",
+  "slot": "gallery, getting ready"
+ },
+ {
+  "slug": "teddy-bear",
+  "source": "Mark Williams Photography London.jpg",
+  "credit": "Mark Williams Photography London",
+  "alt": "A zombie in a gingham dress clutches a blood-stained teddy bear and reaches towards the camera.",
+  "slot": "gallery"
+ },
+ {
+  "slug": "wolf-puppet",
+  "source": "Mark Williams Photography London (2).jpg",
+  "credit": "Mark Williams Photography London",
+  "alt": "A zombie bride in a pink lace dress holds a snarling wolf puppet, another participant standing behind her.",
+  "slot": "gallery"
+ },
+ {
+  "slug": "piccadilly-rain",
+  "source": "Photo-Katerina-Iacovides.jpg",
+  "credit": "Katerina Iacovides",
+  "alt": "Two zombies shelter under a pink umbrella in the rain at Piccadilly Circus at night, beside a London Underground sign.",
+  "slot": "gallery"
+ },
+ {
+  "slug": "zombies-crossing",
+  "source": "Photo Mark Ridgwell 63.jpg",
+  "credit": "Mark Ridgwell",
+  "alt": "Two zombies grimace beneath a hand-painted “Zombies” crossing sign held above them.",
+  "slot": "gallery"
+ },
+ {
+  "slug": "groaning-group",
+  "source": "Photo Paul Carrano 22.jpg",
+  "credit": "Paul Carrano",
+  "alt": "A group of zombies advances towards the camera past a cluster of red balloons, one man caught mid-groan.",
+  "slot": "gallery"
+ }
 ]

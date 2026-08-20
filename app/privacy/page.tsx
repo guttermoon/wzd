@@ -86,11 +86,9 @@ export default async function PrivacyPage() {
 
       <Section title={<T k="privacy.photos.title" />}>
         <p className="prose-wzd font-body"><T k="privacy.photos.body" /></p>
-        <p className="mt-4 font-body">
-          <Link href="/photo-policy" className="link">
-            <T k="privacy.photos.cta" />
-          </Link>
-        </p>
+        <Link href="/photo-policy" className="btn btn-secondary mt-6">
+          <T k="privacy.photos.cta" />
+        </Link>
       </Section>
 
       <Section title={<T k="privacy.changes.title" />}>

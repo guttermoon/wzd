@@ -1,14 +1,16 @@
 "use client"
 
-import { useConsent, writeConsent } from "@/lib/consent"
+import { useConsent } from "@/lib/consent"
 
 /**
  * The mailing-list signup, hosted by paa.ge.
  *
  * Third party, so it waits for the same answer the analytics and the
  * registration form wait for: nothing of theirs is fetched until consent
- * is "granted". Someone who has declined gets a link to the same form on
- * paa.ge's own site, where they are dealing with paa.ge directly.
+ * is "granted". Until then the band carries an ordinary button that opens
+ * the same form on paa.ge's own site, where the visitor deals with paa.ge
+ * directly. No panel of explanation: the cookie bar has already asked, and
+ * a signup band should look like a signup band.
  *
  * The iframe carries a real `title`. The embed code as supplied has an
  * empty one, which is a frame with no accessible name: a screen reader
@@ -27,32 +29,22 @@ const FORM_URL = "https://paa.ge/worldzombieday/email-signup"
 export function EmailSignup() {
   const consent = useConsent()
 
+  // Before consent, a button and nothing else. The earlier version put a
+  // paragraph of cookie explanation where the form should be, which is not
+  // how anyone else does this and reads as an apology on every page. The
+  // button goes straight to the form on paa.ge, so someone who declined
+  // cookies is not shut out and never has to read about why.
   if (consent !== "granted") {
     return (
-      <div className="cut-panel mx-auto max-w-xl p-6 text-left">
-        <p className="prose-wzd font-body">
-          The signup form is hosted by paa.ge, who set their own cookies, so it
-          only loads if you agree to that. You can also open it on their site
-          instead.
-        </p>
-        <div className="mt-5 flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={() => writeConsent("granted")}
-            className="btn btn-primary"
-          >
-            Load the form here
-          </button>
-          <a
-            href={FORM_URL}
-            rel="noopener noreferrer"
-            target="_blank"
-            className="btn btn-secondary"
-          >
-            Open it on paa.ge
-          </a>
-        </div>
-      </div>
+      <a
+        href={FORM_URL}
+        rel="noopener noreferrer"
+        target="_blank"
+        className="btn btn-primary"
+      >
+        Join the newsletter
+        <span className="sr-only"> (opens in a new tab)</span>
+      </a>
     )
   }
 
@@ -64,13 +56,14 @@ export function EmailSignup() {
   // the frame keeps a hard border so it reads as a deliberate panel rather
   // than a white rectangle that has fallen onto the page.
   return (
-    <div className="mx-auto w-full max-w-xl border-2 border-rule bg-bg">
+    <div className="w-full max-w-xl border-2 border-rule bg-bg">
       <iframe
         title="Email signup form, hosted by paa.ge"
         src={`${FORM_URL}?embedded=true`}
         loading="lazy"
         className="block h-[520px] w-full border-0 bg-transparent"
-        allow="clipboard-write; encrypted-media; web-share"
+        allow="autoplay; fullscreen; clipboard-write; encrypted-media; picture-in-picture; web-share"
+        allowFullScreen
         referrerPolicy="strict-origin-when-cross-origin"
       />
     </div>
