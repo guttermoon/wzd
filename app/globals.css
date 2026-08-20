@@ -474,26 +474,56 @@
     animation-fill-mode: both;
   }
 
-  /* The cookie dialog arrives the same way everything else does: a
-     straight-line slide, a 3px overshoot, and a hard stop, with the scrim
-     cutting in behind it.
+  /* The cookie dialog hangs from a string and swings, at the owner's
+     request. It is the second thing on the site allowed to move after it
+     arrives, and like the hand it is deliberate rather than an oversight
+     of the title-card rules.
+
+     Two nested elements because two animations on one element do not
+     compose: transform is a single property, and the later animation would
+     simply replace the earlier one. So the outer element drops and the
+     inner one swings, with its origin at the top of the string so the
+     whole thing pivots from where it is tied rather than from its middle.
 
      The resting state is the arrived one, so if these rules are ever
-     stripped the dialog is simply there. Consent is not decoration; it
-     must never depend on an animation to be visible. */
-  .consent-dialog {
-    animation: consent-in 480ms var(--ease-cut) 120ms both;
+     stripped the dialog is simply there, hanging still. Consent is not
+     decoration; it must never depend on an animation to be visible. */
+  .consent-drop {
+    animation: consent-drop 460ms var(--ease-cut) 120ms both;
+  }
+
+  .consent-swing {
+    transform-origin: top center;
+    animation: consent-swing 1200ms ease-in-out 320ms both;
+  }
+
+  .consent-string {
+    /* Tapered: a touch heavier where it takes the weight. */
+    background-image: linear-gradient(
+      to bottom,
+      var(--blood-text) 0%,
+      color-mix(in srgb, var(--blood-text) 85%, transparent) 100%
+    );
   }
 
   .consent-scrim {
     animation: consent-scrim-in 240ms linear both;
   }
 
-  @keyframes consent-in {
-    from { transform: translateY(28vh); opacity: 0; }
-    70% { opacity: 1; }
-    86% { transform: translateY(-3px); }
+  @keyframes consent-drop {
+    from { transform: translateY(-112%); opacity: 0; }
+    60% { opacity: 1; }
     to { transform: translateY(0); opacity: 1; }
+  }
+
+  /* A damped pendulum: each pass smaller than the last, and it stops. */
+  @keyframes consent-swing {
+    0% { transform: rotate(-4.5deg); }
+    22% { transform: rotate(3.2deg); }
+    44% { transform: rotate(-1.9deg); }
+    64% { transform: rotate(1deg); }
+    82% { transform: rotate(-0.4deg); }
+    100% { transform: rotate(0deg); }
   }
 
   @keyframes consent-scrim-in {
@@ -802,7 +832,8 @@
   /* Not just a shorter animation: the global rule above leaves
      animation-delay alone, which would hold the bar off-screen for its
      full delay and then snap it in. */
-  .consent-dialog,
+  .consent-drop,
+  .consent-swing,
   .consent-scrim {
     animation: none;
   }

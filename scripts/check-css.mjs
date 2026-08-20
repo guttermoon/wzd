@@ -33,7 +33,7 @@ const REQUIRED = [
   "bar-left", "bar-right", "bar-top", "bar-bottom",
   "hand-left", "hand-right", "hand-tilt-left", "hand-tilt-right",
   "swipe-word", "wipe", "slide-up", "slide-left", "slide-right",
-  "consent-dialog", "consent-scrim",
+  "consent-drop", "consent-swing", "consent-string", "consent-scrim",
   "in-view",
   // Layout devices.
   "edge-left", "edge-right", "breakout", "panel-ground",
