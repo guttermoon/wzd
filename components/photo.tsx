@@ -194,10 +194,12 @@ export function Photo({
  * figure with nothing to caption would break that count as well as being
  * a lie about what it is.
  *
- * It takes the mat and the cut so it sits in the page like everything else
- * does, and none of the tape treatment: no `.vhs`, so no channel split, no
- * tear, no red wash. Artwork that arrived the way the designer drew it
- * should leave that way.
+ * It takes a mat so it sits in the page like everything else does, and
+ * none of the tape treatment: no `.vhs`, so no channel split, no tear, no
+ * red wash. Nor is it cropped. Artwork that arrived the way the designer
+ * drew it should leave that way, entire: a poster has its own type on it,
+ * and an asymmetric cut across the corners takes the credit line and the
+ * logos with it. The hand-cut shape is drawn under the artwork instead.
  *
  * `still` is for animated artwork. An animated GIF cannot be stopped by
  * CSS — `prefers-reduced-motion` has no purchase on it — so the only way
@@ -227,18 +229,18 @@ export function Graphic({
   className?: string
   frame?: boolean | "accent"
 }) {
-  const seed = hash(src)
-  const cut = CUTS[seed % CUTS.length]
+  // No cut on the artwork itself, and `graphic-mat` rather than
+  // `photo-frame`: a clip-path clips descendants, so the frames the
+  // photographs wear were taking the poster's credit line off the top and
+  // half its logos off the bottom. The mat here is drawn behind instead.
   const mat = frame
-    ? `photo-frame ${FRAMES[(seed + 2) % FRAMES.length]}${
-        frame === "accent" ? " frame-accent" : ""
-      }`
+    ? `graphic-mat${frame === "accent" ? " graphic-mat-accent" : ""}`
     : ""
 
   return (
     <div className={className}>
       <div className={mat}>
-        <span className={`block overflow-hidden ${cut}`}>
+        <span className="block">
           <picture>
             {still ? (
               <source media="(prefers-reduced-motion: reduce)" srcSet={still} />

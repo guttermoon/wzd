@@ -42,14 +42,36 @@ export default async function DonatePage() {
           registration, so someone who cannot come on the day can still
           give. */}
       <Section title={<T k="donate.how.title" />} className="mt-10">
-        <p className="prose-wzd font-body"><T k="register.cause.body" /></p>
-        <p className="prose-wzd mt-4 font-body"><T k="register.cause.donation" /></p>
-        <ul className="prose-wzd mt-4 list-disc space-y-2 pl-5 font-body">
-          {WORK.map((n) => (
-            <li key={n}><T k={`register.cause.work.${n}`} /></li>
-          ))}
-        </ul>
-        <p className="prose-wzd mt-4 font-body"><T k="register.cause.thanks" /></p>
+        {/* A panel cut into the right edge beside the list, the way the dog
+            sits on /faq, sticky so it stays with the copy as it scrolls.
+            The wolf puppet, because the list it sits beside is about
+            celebrating horror and outsider creativity and that is a
+            photograph of exactly that.
+
+            The form is below the grid rather than in it: squeezed into
+            seven of twelve columns it would be a worse form, and it is
+            what the page is for. */}
+        <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
+          <div className="lg:col-span-7">
+            <p className="prose-wzd font-body"><T k="register.cause.body" /></p>
+            <p className="prose-wzd mt-4 font-body"><T k="register.cause.donation" /></p>
+            <ul className="prose-wzd mt-4 list-disc space-y-2 pl-5 font-body">
+              {WORK.map((n) => (
+                <li key={n}><T k={`register.cause.work.${n}`} /></li>
+              ))}
+            </ul>
+            <p className="prose-wzd mt-4 font-body"><T k="register.cause.thanks" /></p>
+          </div>
+
+          <Photo
+            photo={photo("wolf-puppet")}
+            bleed="right"
+            ratio="3/4"
+            focus="50% 32%"
+            sizes="(min-width: 64rem) 22rem, 100vw"
+            className="lg:col-span-5 lg:sticky lg:top-24 lg:self-start"
+          />
+        </div>
 
         <div className="mt-8">
           <ZeffyEmbed />
