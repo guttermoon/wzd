@@ -24,6 +24,12 @@ import { SITE_URL } from "@/lib/site"
  * which a plain form post would not trigger.
  */
 export const runtime = "nodejs"
+/**
+ * London, so that when paa.ge geolocates a subscriber from the address the
+ * request arrives on, an unforwarded one at least lands in the right
+ * country rather than in whichever data centre happened to serve it.
+ */
+export const preferredRegion = "lhr1"
 
 const DEFAULT_ENDPOINT =
   "https://api.lama.co/store/page-collections/page_collection_01M038F7C22B8QVP0N9ZQMQ2NH/subscribe"
@@ -68,6 +74,18 @@ export async function POST(request: Request) {
         ]
       : ["application/json", JSON.stringify({ [FIELD]: email })]
 
+  // The visitor's address, forwarded. paa.ge geolocates a subscriber from
+  // the address the request arrives on, and posting from the server means
+  // that address is the server's: every signup was landing in Ashburn,
+  // Virginia. This is the standard header for saying who a proxied request
+  // is really from. Whether they act on it is theirs to decide, and
+  // preferredRegion above is the fallback if they do not.
+  //
+  // x-forwarded-for accumulates a list, client first, so take the head and
+  // pass on only that: the rest is our own infrastructure and no business
+  // of theirs.
+  const clientIp = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+
   try {
     const response = await fetch(ENDPOINT, {
       method: "POST",
@@ -78,6 +96,7 @@ export async function POST(request: Request) {
         // browser may still check where the request says it came from.
         origin: SITE_URL,
         referer: PAGE_URL,
+        ...(clientIp ? { "x-forwarded-for": clientIp, "x-real-ip": clientIp } : {}),
       },
       body,
       // Their endpoint is not ours to wait on indefinitely.
