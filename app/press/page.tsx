@@ -5,6 +5,7 @@ import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
 import { makeT, makeS } from "@/components/notion-text"
 import { PageShell, Section } from "@/components/page-shell"
+import { BrandKit } from "@/components/brand-kit"
 import { EVENT } from "@/lib/event"
 
 export const revalidate = 60
@@ -79,7 +80,8 @@ export default async function PressPage() {
 
       <Section title={<T k="press.logo.title" />}>
         <p className="prose-wzd font-body"><T k="press.logo.body" /></p>
-        <p className="mt-4 flex flex-wrap gap-3">
+        <BrandKit />
+        <p className="mt-6 flex flex-wrap gap-3">
           <a href="/brand/wordmark.svg" download className="btn btn-secondary">
             Download the wordmark (SVG)
           </a>
