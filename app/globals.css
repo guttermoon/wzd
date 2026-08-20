@@ -437,6 +437,32 @@
      so a photographer's name is never pushed off the screen. */
   .credit-inset { padding-inline: 1rem; }
 
+  /* Tucked into the corner of the frame rather than set underneath it. On
+     its own chip of ink, not straight onto the photograph or the mat:
+     Greige on ink is 14.4:1 whatever is behind it, where white on Zombie
+     Red would be 3.82:1 and a name over a photograph is legible or not
+     depending on the photograph.
+
+     Anchored to the on-screen corner. A panel that runs off the left of
+     the screen has its left corner off it too, so the credit moves to the
+     right on those. */
+  .credit-tag {
+    position: absolute;
+    bottom: 0.6rem;
+    left: 0.6rem;
+    max-width: calc(100% - 1.2rem);
+    padding: 0.2rem 0.45rem;
+    background-color: var(--ink);
+    color: var(--greige);
+    font-size: 0.6875rem;
+    line-height: 1.35;
+  }
+
+  .credit-tag-right {
+    left: auto;
+    right: 0.6rem;
+  }
+
   @media (min-width: 640px) {
     .credit-inset { padding-inline: 1.5rem; }
   }

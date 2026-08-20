@@ -133,8 +133,14 @@ export function Photo({
       }`
     : ""
 
+  // The credit is tucked into the corner of the frame rather than set
+  // underneath it, except on the full-width banners: those carry the page
+  // title over them, and a chip in the corner would be one more thing
+  // fighting for the same space. See `.credit-tag` in globals.css.
+  const tucked = bleed !== "full"
+
   return (
-    <figure className={`${rotation} ${className}`}>
+    <figure className={`relative ${rotation} ${className}`}>
       <div className={`${bleed ? "panel-ground" : ""} ${mat}`}>
         <picture
           className={`vhs ${cut} ${imageClassName}`}
@@ -160,9 +166,11 @@ export function Photo({
         </picture>
       </div>
       <figcaption
-        className={`mt-3 font-body text-sm leading-snug text-muted ${
-          bleed ? "credit-inset" : ""
-        }`}
+        className={
+          tucked
+            ? `credit-tag font-body ${bleed === "left" ? "credit-tag-right" : ""}`
+            : "credit-inset mt-3 font-body text-sm leading-snug text-muted"
+        }
       >
         {caption ? <span className="mb-1 block text-text">{caption}</span> : null}
         <span>Photo: {photo.credit}</span>
