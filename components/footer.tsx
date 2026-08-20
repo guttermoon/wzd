@@ -54,9 +54,11 @@ export function Footer({ copy }: { copy: SiteCopy }) {
             the whole effect. No tall runs: a spike rising out of a pool is
             not what blood does, and it read as a skyline.
 
-            It arrives once — the layers slide up, the back one a beat
-            behind — and then stops. Nothing loops. A band that moved
-            forever would need a pause control under WCAG 2.2.2. */}
+            It arrives once, the layers sliding up a beat apart, and then
+            it swells: a slow drift, the two layers out of phase, which is
+            the one loop on the site. The owner asked for it twice. It is
+            decorative and aria-hidden, and reduced motion stops it dead.
+            See .drip-wave-front / .drip-wave-back in globals.css. */}
         <Reveal variant="slide-up" className="mt-10 block">
           <svg
             viewBox="0 0 1440 220"
@@ -65,8 +67,15 @@ export function Footer({ copy }: { copy: SiteCopy }) {
             focusable="false"
             className="drip block h-[70px] w-full sm:h-[110px]"
           >
-            <path className="drip-back" d="M0,132 L150,106 L272,124 L390,94 L508,118 L636,86 L760,122 L880,104 L1010,82 L1130,120 L1256,100 L1380,112 L1440,122 L1440,220 L0,220 Z" fill="var(--blood)" opacity="0.55" />
-            <path className="drip-front" d="M0,150 L96,132 L214,146 L338,106 L452,138 L560,120 L690,144 L812,98 L930,134 L1044,116 L1168,142 L1292,110 L1400,136 L1440,143 L1440,220 L0,220 Z" fill="var(--blood)" />
+            {/* Each layer is wrapped so the swell and the arrival can run
+                at once: both drive transform, and two animations on one
+                element replace each other rather than composing. */}
+            <g className="drip-wave-back">
+              <path className="drip-back" d="M0,132 L150,106 L272,124 L390,94 L508,118 L636,86 L760,122 L880,104 L1010,82 L1130,120 L1256,100 L1380,112 L1440,122 L1440,220 L0,220 Z" fill="var(--blood)" opacity="0.55" />
+            </g>
+            <g className="drip-wave-front">
+              <path className="drip-front" d="M0,150 L96,132 L214,146 L338,106 L452,138 L560,120 L690,144 L812,98 L930,134 L1044,116 L1168,142 L1292,110 L1400,136 L1440,143 L1440,220 L0,220 Z" fill="var(--blood)" />
+            </g>
           </svg>
         </Reveal>
       </div>

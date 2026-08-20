@@ -156,10 +156,13 @@ arrive and stay still. Five components carry it:
 - `hand.tsx` — a zombie hand reaches in from an edge, overshoots and
   settles.
 
-Two things are allowed to move after they arrive, both deliberately: the
-hand, and the cookie dialog, which hangs from a string and swings to a stop
-(`.consent-drop` / `.consent-swing` in `app/globals.css`). Everything else
-stops when it arrives. Note the shape of the dialog's markup: transform is
+Three things are allowed to move after they arrive, all deliberately: the
+hand; the cookie dialog, which hangs from a string and swings to a stop
+(`.consent-drop` / `.consent-swing` in `app/globals.css`); and the blood
+band at the foot of the page, which swells continuously once it has landed
+(`.drip-wave-front` / `.drip-wave-back`). The band is the only loop on the
+site, and it is the owner's decision: it is decorative, `aria-hidden`, and
+reduced motion stops it dead. Everything else stops when it arrives. Note the shape of the dialog's markup: transform is
 a single property, so two animations on one element replace each other
 rather than composing. The drop and the swing are on nested elements, and
 the swing's `transform-origin` is the top of the string so it pivots from
