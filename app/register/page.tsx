@@ -36,13 +36,7 @@ export default async function RegisterPage() {
         />
       }
     >
-      {/* Registration is the thing people came for, so the form goes
-          straight under the description rather than behind a button. */}
-      <Section title={<T k="register.status.title" />} className="mt-10">
-        <ZeffyEmbed />
-      </Section>
-
-      <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-14">
+      <div className="mt-10 grid gap-10 lg:grid-cols-2 lg:gap-14">
         <Section title={<T k="register.why.title" />} className="mt-0">
           <p className="prose-wzd font-body"><T k="register.why.body" /></p>
         </Section>
@@ -75,15 +69,16 @@ export default async function RegisterPage() {
         </p>
       </Section>
 
-      <Section title={<T k="register.involved.title" />}>
-        <p className="prose-wzd font-body"><T k="register.involved.body" /></p>
+      {/* The form sits at the end, after everything someone needs to know
+          before they fill it in. */}
+      <Section title={<T k="register.status.title" />}>
+        <ZeffyEmbed />
       </Section>
 
       <Section>
-        <p className="font-body">
-          <Link href="/survival" className="link">Read the rules of conduct</Link>{" "}
-          before you come.
-        </p>
+        <Link href="/survival" className="btn btn-secondary">
+          Read the rules of conduct
+        </Link>
       </Section>
     </PageShell>
   )

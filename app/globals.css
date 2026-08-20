@@ -26,6 +26,9 @@
   --zombie-red: #e74c3c; /* display only: ≥24px, or ≥18.66px bold */
   --greige: #f7e7d8; /* the panel tint in light, and the ink in dark */
   --paper: #fefefc;
+  /* Dark mode's ground. Declared here, not only under .dark, so no colour
+     has its only definition inside one theme. */
+  --ink: #1a1a1a;
   --dark-grey: #404040;
   --near-black: #333333;
 
@@ -66,7 +69,6 @@
      alternating bands of tone.
 
      Ratios below are measured against #1a1a1a. */
-  --ink: #1a1a1a;
   --bg: var(--ink);
   --surface: var(--ink);
   --text: var(--greige); /* 14.4:1 */
@@ -472,21 +474,31 @@
     animation-fill-mode: both;
   }
 
-  /* The cookie bar arrives the same way everything else does: a
-     straight-line slide, a 3px overshoot, and a hard stop.
+  /* The cookie dialog arrives the same way everything else does: a
+     straight-line slide, a 3px overshoot, and a hard stop, with the scrim
+     cutting in behind it.
 
-     It waits for the title card to land rather than competing with it, and
-     the resting state is the arrived one, so if this rule is ever stripped
-     the bar is simply there. Consent is not decoration; it must never
-     depend on an animation to be visible. */
-  .consent-bar {
-    animation: consent-in 480ms var(--ease-cut) 700ms both;
+     The resting state is the arrived one, so if these rules are ever
+     stripped the dialog is simply there. Consent is not decoration; it
+     must never depend on an animation to be visible. */
+  .consent-dialog {
+    animation: consent-in 480ms var(--ease-cut) 120ms both;
+  }
+
+  .consent-scrim {
+    animation: consent-scrim-in 240ms linear both;
   }
 
   @keyframes consent-in {
-    from { transform: translateY(100%); }
+    from { transform: translateY(28vh); opacity: 0; }
+    70% { opacity: 1; }
     86% { transform: translateY(-3px); }
-    to { transform: translateY(0); }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes consent-scrim-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   .in-view .bar-left { animation-name: bar-in-left; }
@@ -790,7 +802,8 @@
   /* Not just a shorter animation: the global rule above leaves
      animation-delay alone, which would hold the bar off-screen for its
      full delay and then snap it in. */
-  .consent-bar {
+  .consent-dialog,
+  .consent-scrim {
     animation: none;
   }
   .slide-up,

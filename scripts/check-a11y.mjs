@@ -48,8 +48,51 @@ for (const theme of ["dark", "light"]) {
   await ctx.close()
 }
 
+// ── The consent dialog ───────────────────────────────────────────────
+// It is modal and it comes up before anything else, so it is checked on
+// its own terms and then answered: every check below is about the page
+// behind it, which nobody reaches until the question is settled.
+{
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } })
+  const page = await ctx.newPage()
+  console.log(`\n── consent dialog ──────────────────────`)
+  await page.goto(base + "/", { waitUntil: "networkidle" })
+  await page.waitForSelector('[role="dialog"]')
+
+  const focused = await page.evaluate(() => document.activeElement?.textContent?.trim())
+  if (focused !== "Okay") {
+    console.error(`FAIL  focus opens on "${focused}", expected the first button`)
+    failures++
+  } else console.log("  ✓ focus moves into the dialog")
+
+  // Tab past the last control and it has to come back to the first.
+  await page.keyboard.press("Tab")
+  await page.keyboard.press("Tab")
+  await page.keyboard.press("Tab")
+  const wrapped = await page.evaluate(() => document.activeElement?.textContent?.trim())
+  if (wrapped !== "Okay") {
+    console.error(`FAIL  focus escaped the dialog to "${wrapped}"`)
+    failures++
+  } else console.log("  ✓ focus stays inside it")
+
+  if (await page.evaluate(() => document.body.style.overflow) !== "hidden") {
+    console.error("FAIL  the page behind the dialog still scrolls")
+    failures++
+  } else console.log("  ✓ the page behind it is locked")
+
+  await page.getByRole("button", { name: "No thanks" }).click()
+  if (await page.locator('[role="dialog"]').count() !== 0) {
+    console.error("FAIL  the dialog survived an answer")
+    failures++
+  } else console.log("  ✓ answering closes it and unlocks the page")
+  await ctx.close()
+}
+
 // ── Keyboard behaviour ───────────────────────────────────────────────
+// The answer is seeded, so the dialog is not up: these are checks on the
+// page itself.
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } })
+await ctx.addInitScript(() => localStorage.setItem("wzd-consent", "denied"))
 const page = await ctx.newPage()
 console.log(`\n── keyboard ────────────────────────────`)
 

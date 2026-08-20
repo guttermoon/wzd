@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Script from "next/script"
-import { useConsent } from "@/lib/consent"
+import { useConsent, writeConsent } from "@/lib/consent"
 
 /**
  * The Zeffy registration and donation form, embedded.
@@ -31,22 +31,31 @@ export function ZeffyEmbed() {
   const [failed, setFailed] = useState(false)
   const consent = useConsent()
 
-  // Before consent, a button straight to the form on Zeffy's site. It used
-  // to be a panel explaining the cookie position, which nobody else does
-  // and which put a paragraph about cookies in the place where the form
-  // people came for should be. The cookie bar has already asked; this only
-  // has to work.
+  // This only shows to someone who answered "No thanks" in the cookie
+  // dialog: Zeffy sets its own cookies, so their form cannot load after a
+  // refusal. Two ways on rather than one, because a refusal should not
+  // cost anyone their place on the walk: change your mind and the embed
+  // appears in place, or go to Zeffy and deal with them directly.
   if (consent !== "granted") {
     return (
-      <a
-        href={FORM_URL}
-        rel="noopener noreferrer"
-        target="_blank"
-        className="btn btn-primary"
-      >
-        Register on Zeffy
-        <span className="sr-only"> (opens in a new tab)</span>
-      </a>
+      <div className="flex flex-wrap gap-3">
+        <button
+          type="button"
+          onClick={() => writeConsent("granted")}
+          className="btn btn-primary"
+        >
+          Load the form here
+        </button>
+        <a
+          href={FORM_URL}
+          rel="noopener noreferrer"
+          target="_blank"
+          className="btn btn-secondary"
+        >
+          Register on Zeffy
+          <span className="sr-only"> (opens in a new tab)</span>
+        </a>
+      </div>
     )
   }
 

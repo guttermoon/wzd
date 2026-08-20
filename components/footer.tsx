@@ -29,8 +29,16 @@ export function Footer({ copy }: { copy: SiteCopy }) {
           form carries its own, and two titles in a row said the same thing
           twice. */}
       <div className="bg-bg pt-16">
-        <div className="mx-auto max-w-page px-4 sm:px-6">
-          <EmailSignup />
+        <div className="mx-auto max-w-page px-4 text-center sm:px-6">
+          <h2 className="display text-[clamp(1.5rem,4vw,2.25rem)]">
+            <T k="site.name" />
+          </h2>
+          <p className="mx-auto mt-4 max-w-[46ch] font-body text-muted">
+            <T k="footer.tagline" />
+          </p>
+          <div className="mt-8">
+            <EmailSignup />
+          </div>
         </div>
 
         {/* The blood pooled at the foot of the page. Two layers with hard
@@ -57,18 +65,18 @@ export function Footer({ copy }: { copy: SiteCopy }) {
       </div>
 
       <div className="bg-blood text-blood-text">
-        <div className="mx-auto max-w-page px-4 pb-10 pt-2 sm:px-6">
+        <div className="mx-auto max-w-page px-4 pb-10 pt-2 text-center sm:px-6">
           <h2 className="sr-only">
             <T k="footer.follow.title" />
           </h2>
-          <ul className="flex flex-wrap gap-2">
+          <ul className="flex flex-wrap justify-center gap-2">
             {EVENT.social.map((item) => (
               <li key={item.url}>
                 <a
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-11 w-11 items-center justify-center hover:opacity-70 -ml-2 first:ml-0"
+                  className="inline-flex h-11 w-11 items-center justify-center hover:opacity-70"
                 >
                   <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden="true">
                     <path d={ICONS[item.name]} fill="currentColor" />
@@ -86,15 +94,10 @@ export function Footer({ copy }: { copy: SiteCopy }) {
               this is a sign-off, not a title card, and the masthead
               already carries the mark. The lettering takes `currentColor`,
               so the one file serves this field and both themes. */}
-          <Wordmark className="mt-8 w-full max-w-[14rem] sm:max-w-[16rem]" />
-          {/* Not `text-muted`: that grey is tuned for the page ground and
-              drops below 4.5:1 on the blood. */}
-          <p className="mt-3 max-w-[46ch] font-body text-blood-text">
-            <T k="footer.tagline" />
-          </p>
+          <Wordmark className="mx-auto mt-8 w-full max-w-[7rem] sm:max-w-[8rem]" />
 
           <nav aria-label="Footer" className="mt-6">
-            <ul className="flex flex-wrap gap-x-5 gap-y-1">
+            <ul className="flex flex-wrap justify-center gap-x-5 gap-y-1">
               {[...NAV, ...FOOTER_NAV].map((item) => (
                 <li key={item.href}>
                   <Link
