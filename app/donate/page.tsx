@@ -33,7 +33,7 @@ export default async function DonatePage() {
           photo={photo("groaning-group")}
           priority
           bleed="full"
-          ratio="32/9"
+          ratio="80/27"
           sizes="100vw"
         />
       }

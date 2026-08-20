@@ -156,11 +156,28 @@
   /* Third-party embeds size and centre themselves. Everything on this site
      is set from the left, and nothing is allowed to reach past the
      container, so whatever the script injects is pinned to both. */
-  .zeffy-embed,
-  .zeffy-embed > *,
-  .zeffy-embed iframe {
-    max-width: 100%;
-    margin-inline: 0;
+  .zeffy-embed {
+    /* Capped, so the form cannot run the width of the page, and pinned to
+       the left of whatever space is left over. */
+    max-width: 46rem;
+    margin-inline: 0 auto;
+  }
+
+  /* Their script builds its own wrappers inside ours, and at least one of
+     them centres itself. Only a direct-child rule was reaching the first
+     level, so anything auto-margined below that stayed centred; three
+     levels covers every wrapper they nest without reaching into the form
+     itself, where an auto margin might be centring a button on purpose.
+
+     `!important` because these are inline styles on elements we do not
+     own, and `:where()` keeps the specificity at zero so nothing else on
+     the site has to out-rank it. */
+  .zeffy-embed > :where(*),
+  .zeffy-embed > :where(*) > :where(*),
+  .zeffy-embed > :where(*) > :where(*) > :where(*),
+  .zeffy-embed :where(iframe) {
+    max-width: 100% !important;
+    margin-inline: 0 auto !important;
   }
 
   /* Display type: Grandstander, always caps, tight and heavy. */
@@ -214,7 +231,17 @@
        no hue-rotate — rotating the hue would drag every red on the site
        away from Zombie Red, which is the one colour that has to stay
        exactly #E74C3C. */
-    filter: url(#vhs-tape) saturate(0.72) contrast(1.08) brightness(0.86);
+    filter: url(#vhs-tape) saturate(0.85) contrast(1.04) brightness(0.94);
+  }
+
+  /* Crowds take the whole treatment at about half strength: the weaker
+     filter, a lighter wash, finer scanlines, less vignette. On a single
+     large subject the split and the tear read as texture; on two hundred
+     small ones they read as noise, and the one thing the picture has to
+     say is that there are two hundred of them. Which photographs count is
+     the `busy` flag in content/photos.json. */
+  .vhs-light img {
+    filter: url(#vhs-tape-light) saturate(0.9) contrast(1.02) brightness(0.97);
   }
 
   /* The magenta cast of a tape played once too often, and the bloom that
@@ -239,7 +266,7 @@
        survives: at 1 every photograph is a monochrome. */
     background-color: var(--zombie-red);
     mix-blend-mode: color;
-    opacity: 0.62;
+    opacity: 0.42;
   }
 
   /* Scanlines and the vignette of a CRT. Deliberately gentle: a 4px period
@@ -257,12 +284,28 @@
     background-image:
       repeating-linear-gradient(
         to bottom,
-        rgb(0 0 0 / 0.2) 0px,
-        rgb(0 0 0 / 0.2) 1px,
+        rgb(0 0 0 / 0.13) 0px,
+        rgb(0 0 0 / 0.13) 1px,
         transparent 1px,
         transparent 4px
       ),
-      radial-gradient(ellipse at center, transparent 60%, rgb(0 0 0 / 0.3) 100%);
+      radial-gradient(ellipse at center, transparent 64%, rgb(0 0 0 / 0.24) 100%);
+  }
+
+  .vhs-light::before {
+    opacity: 0.26;
+  }
+
+  .vhs-light::after {
+    background-image:
+      repeating-linear-gradient(
+        to bottom,
+        rgb(0 0 0 / 0.08) 0px,
+        rgb(0 0 0 / 0.08) 1px,
+        transparent 1px,
+        transparent 5px
+      ),
+      radial-gradient(ellipse at center, transparent 70%, rgb(0 0 0 / 0.16) 100%);
   }
 
   /* Anyone who has asked for higher contrast or less visual noise gets the
@@ -433,10 +476,6 @@
     color: var(--blood-text);
   }
 
-  /* Credits sit back on the container line even when the panel does not,
-     so a photographer's name is never pushed off the screen. */
-  .credit-inset { padding-inline: 1rem; }
-
   /* Tucked into the corner of the frame rather than set underneath it. On
      its own chip of ink, not straight onto the photograph or the mat:
      Greige on ink is 14.4:1 whatever is behind it, where white on Zombie
@@ -448,6 +487,11 @@
      right on those. */
   .credit-tag {
     position: absolute;
+    /* Above the panel, which sets z-index 1 on itself (see .panel-ground),
+       and below the page title on a banner, which sets 10. Without this
+       the chip paints underneath the photograph on every bleeding panel
+       and simply is not there. */
+    z-index: 2;
     bottom: 0.6rem;
     left: 0.6rem;
     max-width: calc(100% - 1.2rem);
@@ -463,8 +507,12 @@
     right: 0.6rem;
   }
 
-  @media (min-width: 640px) {
-    .credit-inset { padding-inline: 1.5rem; }
+  /* On a full-width band the bottom edge is cut at an angle, so the chip
+     sits a little higher to stay on the photograph wherever that angle
+     happens to fall. It is on the right for a second reason too: the page
+     title sits on the band's bottom-left. */
+  .credit-tag-band {
+    bottom: 1.5rem;
   }
 
   /* The blood arrives once: both layers slide up, the darker one a beat
@@ -483,42 +531,43 @@
     animation: drip-settle 640ms var(--ease-cut) 110ms both;
   }
 
-  /* The swell. The two layers drift at different speeds and out of phase,
-     which is what reads as water rather than as one thing sliding: the
-     crests of the near layer pass the crests of the far one and the line
-     between them keeps changing shape.
+  /* The tide. The near layer travels right, the far one left, both at a
+     constant rate and both forever.
+
+     The travel is a whole period of the wave — 1440 user units, the width
+     of the viewBox — and each path carries three periods of the same crest
+     sequence from -1440 to 2880. Shifting by exactly one period therefore
+     lands the wave back on itself, so the loop has no seam and no jump at
+     the restart. Anything other than a whole period would visibly snap.
+
+     `linear`, because a tide does not ease. Different durations so the two
+     layers are never in step: the crests of the near layer pass the crests
+     of the far one, which is what reads as water rather than as one thing
+     sliding.
 
      They are on wrapping groups rather than on the paths themselves, so
      this composes with the arrival above instead of replacing it — two
      animations on one element would not, since both drive transform.
 
-     Wider than they need to be (scaleX 1.06) so the horizontal drift never
-     pulls an edge into view, and the vertical drift only ever goes down,
-     because up would open a gap above the crest.
-
-     This is a loop, which the rest of the site does not do, and it is the
-     owner's decision. It is decorative, marked aria-hidden, and under
-     prefers-reduced-motion it does not run at all. */
+     This is the one loop on the site, and it is the owner's decision. It
+     is decorative, marked aria-hidden, and under prefers-reduced-motion it
+     does not run at all. */
   .drip-wave-front {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: drip-wave-front 11s ease-in-out infinite alternate;
+    animation: drip-travel-right 26s linear infinite;
   }
 
   .drip-wave-back {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: drip-wave-back 17s ease-in-out infinite alternate;
+    animation: drip-travel-left 38s linear infinite;
   }
 
-  @keyframes drip-wave-front {
-    from { transform: scaleX(1.06) translate3d(-1.4%, 0, 0); }
-    to { transform: scaleX(1.06) translate3d(1.4%, 5px, 0); }
+  @keyframes drip-travel-right {
+    from { transform: translateX(-1440px); }
+    to { transform: translateX(0); }
   }
 
-  @keyframes drip-wave-back {
-    from { transform: scaleX(1.06) translate3d(1.1%, 4px, 0); }
-    to { transform: scaleX(1.06) translate3d(-1.1%, 0, 0); }
+  @keyframes drip-travel-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-1440px); }
   }
 
   /* ── Bars ───────────────────────────────────────────────────────────

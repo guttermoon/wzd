@@ -37,7 +37,7 @@ const REQUIRED = [
   "in-view",
   // Layout devices.
   "edge-left", "edge-right", "breakout", "panel-ground",
-  "credit-inset", "credit-tag", "credit-tag-right", "on-blood", "vhs", "zeffy-embed",
+  "credit-tag", "credit-tag-right", "credit-tag-band", "on-blood", "vhs", "vhs-light", "zeffy-embed",
 ]
 
 let files

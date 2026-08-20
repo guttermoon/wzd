@@ -11,6 +11,13 @@ export interface Photo {
   /** Describes the scene for someone who can't see it. Never the credit. */
   alt: string
   slot?: string
+  /**
+   * A crowd. The tape treatment is applied at half strength on these: the
+   * channel split and the tear read as texture on a single large subject
+   * and as noise on two hundred small ones, where they cost the picture
+   * the only thing it has, which is that there are two hundred of them.
+   */
+  busy?: boolean
   /** Note about an uncertain or disputed credit, surfaced in IMAGES.md. */
   creditNote?: string
 }

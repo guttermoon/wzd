@@ -31,7 +31,7 @@ export default async function PrivacyPage() {
           photo={photo("makeup-blood")}
           priority
           bleed="full"
-          ratio="32/9"
+          ratio="80/27"
           sizes="100vw"
         />
       }

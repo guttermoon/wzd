@@ -29,7 +29,7 @@ export default async function SponsorsPage() {
           photo={photo("groaning-group")}
           priority
           bleed="full"
-          ratio="32/9"
+          ratio="80/27"
           sizes="100vw"
         />
       }
@@ -78,7 +78,7 @@ export default async function SponsorsPage() {
         <Photo
           photo={photo("kissing-booth")}
           bleed="full"
-          ratio="3/1"
+          ratio="5/2"
           sizes="100vw"
           className="breakout"
         />
