@@ -7,6 +7,7 @@ import { Photo, Graphic } from "@/components/photo"
 import { ZeffyEmbed } from "@/components/zeffy-embed"
 import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
+import { ExternalLink } from "@/components/external-link"
 
 export const revalidate = 60
 export const metadata: Metadata = {
@@ -59,13 +60,13 @@ export default async function RegisterPage() {
         </ul>
         <p className="prose-wzd mt-4 font-body"><T k="register.cause.thanks" /></p>
         <p className="mt-4 font-body">
-          <a className="link" href={EVENT.cause.url} rel="noopener noreferrer">
+          <ExternalLink className="link" href={EVENT.cause.url}>
             {EVENT.cause.name}
-          </a>{" "}
+          </ExternalLink>{" "}
           &middot;{" "}
-          <a className="link" href={EVENT.cause.donateUrl} rel="noopener noreferrer">
+          <ExternalLink className="link" href={EVENT.cause.donateUrl}>
             {EVENT.cause.donateLabel}
-          </a>
+          </ExternalLink>
         </p>
       </Section>
 
@@ -92,15 +93,9 @@ export default async function RegisterPage() {
             <p className="prose-wzd mt-4 font-body"><T k="party.proceeds" /></p>
 
             <p className="mt-6 font-body">
-              <a
-                className="link"
-                href={EVENT.afterParty.url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <ExternalLink className="link" href={EVENT.afterParty.url}>
                 {EVENT.afterParty.venue}
-                <span className="sr-only"> (opens in a new tab)</span>
-              </a>{" "}
+              </ExternalLink>{" "}
               &middot; {EVENT.afterParty.address}
             </p>
             <p className="prose-wzd mt-4 font-body text-muted">

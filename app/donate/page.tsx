@@ -7,6 +7,7 @@ import { Photo } from "@/components/photo"
 import { ZeffyEmbed, ZeffyThermometer } from "@/components/zeffy-embed"
 import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
+import { ExternalLink } from "@/components/external-link"
 
 export const revalidate = 60
 export const metadata: Metadata = {
@@ -87,13 +88,13 @@ export default async function DonatePage() {
         </div>
 
         <p className="mt-6 font-body">
-          <a className="link" href={EVENT.cause.url} rel="noopener noreferrer">
+          <ExternalLink className="link" href={EVENT.cause.url}>
             {EVENT.cause.name}
-          </a>{" "}
+          </ExternalLink>{" "}
           &middot;{" "}
-          <a className="link" href={EVENT.cause.donateUrl} rel="noopener noreferrer">
+          <ExternalLink className="link" href={EVENT.cause.donateUrl}>
             {EVENT.cause.donateLabel}
-          </a>
+          </ExternalLink>
         </p>
       </Section>
 

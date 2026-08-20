@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { ExternalLink } from "@/components/external-link"
 
 /**
  * The newsletter signup, in the site's own type and colours.
@@ -99,15 +100,9 @@ export function EmailSignup() {
         {state === "failed" ? (
           <>
             That did not go through.{" "}
-            <a
-              className="link"
-              href={FORM_URL}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
+            <ExternalLink className="link" href={FORM_URL}>
               Sign up on paa.ge instead
-              <span className="sr-only"> (opens in a new tab)</span>
-            </a>
+            </ExternalLink>
           </>
         ) : null}
       </p>

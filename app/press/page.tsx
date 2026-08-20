@@ -6,6 +6,7 @@ import { photo } from "@/lib/photos"
 import { makeT, makeS } from "@/components/notion-text"
 import { PageShell, Section } from "@/components/page-shell"
 import { BrandKit } from "@/components/brand-kit"
+import { ExternalLink } from "@/components/external-link"
 
 export const revalidate = 60
 export const metadata: Metadata = {
@@ -103,15 +104,9 @@ export default async function PressPage() {
             moves year to year and the owner is the one who moves it. Until
             then, the line below says so. */}
         {photoFolder ? (
-          <a
-            href={photoFolder}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-primary mt-6"
-          >
+          <ExternalLink href={photoFolder} className="btn btn-primary mt-6">
             <T k="press.photos.cta" />
-            <span className="sr-only"> (opens in a new tab)</span>
-          </a>
+          </ExternalLink>
         ) : (
           <p className="prose-wzd mt-4 font-body text-muted">
             <T k="press.photos.pending" />
@@ -132,15 +127,9 @@ export default async function PressPage() {
             announces as unavailable. The line underneath says why and how
             to get the release in the meantime. */}
         {pressRelease ? (
-          <a
-            href={pressRelease}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-primary mt-6"
-          >
+          <ExternalLink href={pressRelease} className="btn btn-primary mt-6">
             <T k="press.release.cta" />
-            <span className="sr-only"> (opens in a new tab)</span>
-          </a>
+          </ExternalLink>
         ) : (
           <>
             <button

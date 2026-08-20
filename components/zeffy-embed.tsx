@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Script from "next/script"
+import { ExternalLink } from "@/components/external-link"
 
 /**
  * The Zeffy ticketing and donation form, embedded.
@@ -87,10 +88,9 @@ export function ZeffyEmbed({
           in anyone's way when the form is there. */}
       <p className="mt-4 font-body text-sm text-muted">
         Trouble with the form?{" "}
-        <a className="link" href={FORM_URL} rel="noopener noreferrer" target="_blank">
+        <ExternalLink className="link" href={FORM_URL}>
           Open it on Zeffy
-          <span className="sr-only"> (opens in a new tab)</span>
-        </a>
+        </ExternalLink>
       </p>
     </div>
   )
