@@ -25,6 +25,7 @@ export type SubmitCopy = {
   linksHelp: string
   notesLabel: string
   notesHelp: string
+  accessLabel: string
   required: string
   send: string
   sending: string
@@ -48,6 +49,7 @@ export function PhotoSubmission({
   const [credit, setCredit] = useState("")
   const [links, setLinks] = useState("")
   const [notes, setNotes] = useState("")
+  const [access, setAccess] = useState(false)
 
   /** Everything typed so far, as a mail their own client can send. */
   const mailto = () => {
@@ -57,6 +59,8 @@ export function PhotoSubmission({
       "Links:",
       links,
       ...(notes ? ["", "Notes:", notes] : []),
+      "",
+      `Access confirmed: ${access ? "yes" : "no"}`,
     ].join("\n")
     return `mailto:${to}?subject=${encodeURIComponent(
       `Photo submission from ${credit || "a photographer"}`,
@@ -74,7 +78,7 @@ export function PhotoSubmission({
       const response = await fetch("/api/photo-submissions", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ credit, links, notes }),
+        body: JSON.stringify({ credit, links, notes, access }),
       })
       setState(response.ok ? "done" : "failed")
     } catch {
@@ -166,6 +170,28 @@ export function PhotoSubmission({
           }}
           className={`mt-3 ${field}`}
         />
+      </div>
+
+      {/* Not required, deliberately. The help above tells people a public
+          link is fine, and for one of those there is no access to grant
+          and no password to set: a required box would turn a perfectly
+          good submission away. Ticked or not, the answer is in the email,
+          so whoever opens it knows whether to expect a locked folder. */}
+      <div className="mt-8 flex items-start gap-3">
+        <input
+          id="submit-access"
+          name="access"
+          type="checkbox"
+          checked={access}
+          onChange={(e) => {
+            setAccess(e.target.checked)
+            if (state !== "idle") setState("idle")
+          }}
+          className="mt-1 h-5 w-5 shrink-0 accent-accent-strong"
+        />
+        <label htmlFor="submit-access" className="font-body">
+          {copy.accessLabel}
+        </label>
       </div>
 
       <button

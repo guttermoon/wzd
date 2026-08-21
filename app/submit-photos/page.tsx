@@ -39,7 +39,19 @@ export default async function SubmitPhotosPage() {
       }
     >
       <Section className="mt-10">
-        <P k="submit.intro" className="prose-wzd font-body" />
+        {/* First thing on the page, above even the introduction. Both of
+            these have to happen before anyone opens a folder, let alone
+            starts filling the form in, and anything below the fold gets
+            read after the work is already done. The naming one is not
+            housekeeping: it is how a credit stays attached to a
+            photograph once it has left the folder it arrived in. */}
+        <div className="border-2 border-text p-6">
+          <h2 className="display text-xl"><T k="submit.prep.title" /></h2>
+          <P k="submit.prep.name" className="prose-wzd mt-3 font-body" />
+          <P k="submit.prep.size" className="prose-wzd mt-4 font-body" />
+        </div>
+
+        <P k="submit.intro" className="prose-wzd mt-8 font-body" />
         <Cta
           k="submit.policy.cta"
           href="/photo-policy"
@@ -58,6 +70,7 @@ export default async function SubmitPhotosPage() {
             linksHelp: S("submit.links.help"),
             notesLabel: S("submit.notes.label"),
             notesHelp: S("submit.notes.help"),
+            accessLabel: S("submit.access.label"),
             required: S("submit.required"),
             send: S("submit.send"),
             sending: S("submit.sending"),

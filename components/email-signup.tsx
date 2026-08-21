@@ -1,27 +1,31 @@
 "use client"
 
 import { useState } from "react"
-import { ExternalLink } from "@/components/external-link"
+import { EVENT } from "@/lib/event"
 
 /**
  * The newsletter signup, in the site's own type and colours.
  *
- * It used to be paa.ge's page in an iframe. Nothing of ours could reach
- * inside it, so it could never be made to match, and it brought paa.ge's
- * own cookie notice onto our page. This posts to app/api/newsletter, which
- * hands the address on to paa.ge from the server, so nothing third party
- * runs in the visitor's browser and the form needs no consent at all.
+ * It used to be an iframe of the list provider's own page. Nothing of
+ * ours could reach inside it, so it could never be made to match, and it
+ * brought their cookie notice onto every page of ours. This posts to
+ * app/api/newsletter, which hands the address to Brevo from the server,
+ * so nothing third party runs in the visitor's browser and the form needs
+ * no consent at all. Swapping the list from paa.ge to Brevo changed that
+ * route and nothing here: the form looks and behaves exactly as it did.
  *
  * The states are: idle, sending, done, and two failures worth telling
  * apart. `bad-email` is the visitor's to fix and the message says so;
- * anything else is ours, and rather than leave someone stuck it offers the
- * form on paa.ge, where they can sign up directly.
+ * anything else is ours, and rather than leave someone stuck it offers a
+ * way to be added by hand.
  *
  * The status line is a live region so the outcome is announced rather than
  * only shown, and the input points at it so an error is read as part of
  * the field.
  */
-const FORM_URL = "https://paa.ge/worldzombieday/email-signup"
+/** Where the failure message sends someone. A mail we will act on beats
+ *  a form that has just refused them. */
+const FALLBACK_URL = `mailto:${EVENT.email}?subject=${encodeURIComponent("Newsletter signup")}`
 
 type State = "idle" | "sending" | "done" | "bad-email" | "failed"
 
@@ -112,9 +116,9 @@ export function EmailSignup({ copy }: { copy: SignupCopy }) {
         {state === "failed" ? (
           <>
             {copy.failed}{" "}
-            <ExternalLink className="link" href={FORM_URL}>
+            <a className="link" href={FALLBACK_URL}>
               {copy.failedCta}
-            </ExternalLink>
+            </a>
           </>
         ) : null}
       </p>

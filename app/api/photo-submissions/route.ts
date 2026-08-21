@@ -30,11 +30,22 @@ const ENDPOINT =
   process.env.PHOTO_SUBMISSIONS_URL || "https://api.brevo.com/v3/smtp/email"
 
 /**
- * The from-address has to be one the sender has verified, so it is ours
- * rather than the photographer's. Their address, if they gave one, goes
- * in reply-to, which is what a reply should actually go to.
+ * From and to are the same address, and that is deliberate.
+ *
+ * Brevo will only send from a sender it has verified, and the verified
+ * one on this account is Megan's, with DKIM and DMARC set up on the
+ * domain behind it. Sending from anything else is refused, so a
+ * submission arrives from her address as well as to it, which is the
+ * ordinary shape of a form notification.
+ *
+ * It is not sent from the photographer either way: their address would
+ * fail SPF and DKIM for a domain that is not theirs, and the form does
+ * not ask for one.
+ *
+ * `PHOTO_SUBMISSIONS_FROM` overrides it if another sender is verified
+ * later.
  */
-const FROM = process.env.PHOTO_SUBMISSIONS_FROM || EVENT.email
+const FROM = process.env.PHOTO_SUBMISSIONS_FROM || EVENT.photoSubmissions
 const TO = process.env.PHOTO_SUBMISSIONS_TO || EVENT.photoSubmissions
 
 /** Long enough for a folder full of links, short enough not to be a dump. */
@@ -54,6 +65,9 @@ export async function POST(request: Request) {
   const credit = text(body?.credit, LIMITS.credit)
   const links = text(body?.links, LIMITS.links)
   const notes = text(body?.notes, LIMITS.notes)
+  // Whether they confirmed the folder is reachable. Not required of them,
+  // but the answer saves a round trip when it turns out not to be.
+  const access = body?.access === true
 
   // The two the form marks required. Checked here as well as in the page,
   // because a form is only a suggestion once it has left the browser.
@@ -75,6 +89,8 @@ export async function POST(request: Request) {
     "Links:",
     links,
     ...(notes ? ["", "Notes:", notes] : []),
+    "",
+    `Access confirmed: ${access ? "yes" : "no"}`,
   ].join("\n")
 
   try {
