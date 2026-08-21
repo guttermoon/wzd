@@ -408,7 +408,9 @@ to another application rather than opening a page.
 - **Photograph submissions** (`/submit-photos`) post to
   `POST /api/photo-submissions`, which emails them to
   `EVENT.photoSubmissions` — Megan, not the general address, because she
-  is the one who credits them. Sending needs `BREVO_API_KEY`; without it
+  is the one who credits them. Sending needs `BREVO_API_KEY`, and it goes
+  out *from* her address as well as to it: Brevo will only send from a
+  sender it has verified, and hers is the verified one. Without the key
   the route returns 503 `unconfigured` and the form hands the visitor a
   `mailto:` with everything they typed already in it. That fallback is
   the point, not a nicety: someone who has just written out where their
