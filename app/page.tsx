@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { getSiteCopy } from "@/lib/site-copy"
 import { makeT, makeS } from "@/components/notion-text"
 import { Photo } from "@/components/photo"
@@ -9,7 +8,7 @@ import { Divider } from "@/components/divider"
 import { Hand } from "@/components/hand"
 import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
-import { ExternalLink } from "@/components/external-link"
+import { makeCta } from "@/components/cta"
 
 export const revalidate = 60
 
@@ -31,6 +30,7 @@ export default async function HomePage() {
   const copy = await getSiteCopy()
   const T = makeT(copy)
   const S = makeS(copy)
+  const Cta = makeCta(copy)
 
   const essentials = [
     { k: "when", href: "/faq" },
@@ -84,17 +84,18 @@ export default async function HomePage() {
                 rather than appearing with the paragraph above them. */}
             <div className="mt-8 flex flex-wrap gap-3">
               <Reveal variant="slide-left" delay={420}>
-                <Link href="/register" className="btn bg-blood-text text-blood">
-                  <T k="home.hero.cta.primary" />
-                </Link>
+                <Cta
+                  k="home.hero.cta.primary"
+                  href="/register"
+                  className="btn bg-blood-text text-blood"
+                />
               </Reveal>
               <Reveal variant="slide-left" delay={520}>
-                <ExternalLink
+                <Cta
+                  k="home.hero.cta.secondary"
                   href={EVENT.cause.donateUrl}
                   className="btn border-2 border-blood-text text-blood-text"
-                >
-                  <T k="home.hero.cta.secondary" />
-                </ExternalLink>
+                />
               </Reveal>
             </div>
           </div>
@@ -184,9 +185,7 @@ export default async function HomePage() {
             {/* A button, not an underlined line of prose: this is the way
                 on to the next page, and it should look like something you
                 press. Still a link, because it navigates. */}
-            <Link href="/survival" className="btn btn-secondary mt-6">
-              <T k="home.day.cta" />
-            </Link>
+            <Cta k="home.day.cta" href="/survival" className="btn btn-secondary mt-6" />
           </div>
         </div>
       </section>
@@ -197,13 +196,16 @@ export default async function HomePage() {
       <section className="w-full bg-surface py-14">
         <div className="edge-right items-center gap-8 lg:gap-0">
           <div className="prose-wzd px-4 sm:px-6 lg:col-start-2 lg:px-0 lg:pe-12">
+            {/* The home page's own keys, not /register's. The words
+                start out the same, but this is the trailer and that is the
+                page: they should be free to diverge, and a row for what is
+                on the home page belongs under home in the table rather
+                than filed halfway down register. */}
             <h2 className="display text-[clamp(1.75rem,4vw,2.75rem)]">
-              <T k="register.access.title" />
+              <T k="home.access.title" />
             </h2>
-            <p><T k="register.access.body" /></p>
-            <Link href="/faq" className="btn btn-secondary mt-6">
-              More about access, dogs and children
-            </Link>
+            <p><T k="home.access.body" /></p>
+            <Cta k="home.access.cta" href="/faq" className="btn btn-secondary mt-6" />
           </div>
           <Photo
             photo={photo("family-kerb")}
@@ -239,12 +241,8 @@ export default async function HomePage() {
           <p><T k="home.cause.body3" /></p>
         </div>
         <div className="mt-6 flex flex-wrap gap-3">
-          <ExternalLink href={EVENT.cause.donateUrl} className="btn btn-primary">
-            <T k="home.cause.cta" />
-          </ExternalLink>
-          <ExternalLink href={EVENT.cause.url} className="btn btn-secondary">
-            Visit {EVENT.cause.name}
-          </ExternalLink>
+          <Cta k="home.cause.cta" href={EVENT.cause.donateUrl} className="btn btn-primary" />
+          <Cta k="home.cause.visit" href={EVENT.cause.url} className="btn btn-secondary" />
         </div>
         </div>
       </section>
@@ -259,9 +257,7 @@ export default async function HomePage() {
         <p className="mx-auto mt-4 max-w-[46ch] font-body text-lg text-muted">
           <T k="home.cta.body" />
         </p>
-        <Link href="/register" className="btn btn-primary mt-8">
-          <T k="home.cta.button" />
-        </Link>
+        <Cta k="home.cta.button" href="/register" className="btn btn-primary mt-8" />
       </section>
 
     </>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { getSiteCopy } from "@/lib/site-copy"
 import { makeT, makeS } from "@/components/notion-text"
+import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
 import { Photo, Graphic } from "@/components/photo"
 import { ZeffyEmbed } from "@/components/zeffy-embed"
@@ -21,6 +21,7 @@ export default async function RegisterPage() {
   const copy = await getSiteCopy()
   const T = makeT(copy)
   const S = makeS(copy)
+  const Cta = makeCta(copy)
 
   return (
     <PageShell
@@ -151,9 +152,7 @@ export default async function RegisterPage() {
       </Section>
 
       <Section>
-        <Link href="/survival" className="btn btn-secondary">
-          Read the rules of conduct
-        </Link>
+        <Cta k="register.rules.cta" href="/survival" className="btn btn-secondary" />
       </Section>
     </PageShell>
   )

@@ -1,5 +1,4 @@
-import { readFileSync } from "node:fs"
-import { join } from "node:path"
+import { brandSvg } from "@/lib/brand-art"
 
 /**
  * The brain-globe on its own — the masthead mark.
@@ -13,8 +12,7 @@ import { join } from "node:path"
  *
  * Decorative: the accessible name comes from the link wrapping it.
  */
-const svg = readFileSync(join(process.cwd(), "public/brand/brain-mark.svg"), "utf8")
-  .replace(/<svg([^>]*)>/, "<svg$1 aria-hidden=\"true\" focusable=\"false\">")
+const svg = brandSvg("brain-mark.svg")
 
 export function BrainMark({ className = "" }: { className?: string }) {
   return (

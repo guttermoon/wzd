@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { getSiteCopy } from "@/lib/site-copy"
 import { makeT, makeS } from "@/components/notion-text"
+import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
 import { Photo } from "@/components/photo"
 import { ZeffyEmbed } from "@/components/zeffy-embed"
@@ -23,6 +23,7 @@ export default async function DonatePage() {
   const copy = await getSiteCopy()
   const T = makeT(copy)
   const S = makeS(copy)
+  const Cta = makeCta(copy)
 
   return (
     <PageShell
@@ -97,9 +98,7 @@ export default async function DonatePage() {
 
       <Section title={<T k="donate.other.title" />}>
         <p className="prose-wzd font-body"><T k="donate.other.body" /></p>
-        <Link href="/become-a-sponsor" className="btn btn-primary mt-6">
-          <T k="sponsors.title" />
-        </Link>
+        <Cta k="donate.other.cta" href="/become-a-sponsor" className="btn btn-primary mt-6" />
       </Section>
     </PageShell>
   )

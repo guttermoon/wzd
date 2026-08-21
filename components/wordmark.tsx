@@ -1,5 +1,4 @@
-import { readFileSync } from "node:fs"
-import { join } from "node:path"
+import { brandSvg } from "@/lib/brand-art"
 
 /**
  * The full lock-up, inlined.
@@ -14,9 +13,7 @@ import { join } from "node:path"
  * reader needs to hear it. Callers that already announce the name — the
  * masthead link, for instance — should pass `label={false}`.
  */
-const svg = readFileSync(join(process.cwd(), "public/brand/wordmark.svg"), "utf8")
-  // Standalone document: strip its own sizing so the caller can size it.
-  .replace(/<svg([^>]*)>/, '<svg$1 aria-hidden="true" focusable="false">')
+const svg = brandSvg("wordmark.svg")
 
 export function Wordmark({
   className = "",

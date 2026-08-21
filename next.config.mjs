@@ -4,6 +4,18 @@ const nextConfig = {
     // Lint is run separately; a lint warning shouldn't block a deploy.
     ignoreDuringBuilds: true,
   },
+  experimental: {
+    // components/wordmark.tsx and components/brain-mark.tsx read these off
+    // disk to inline them. public/ is served as static assets and is not
+    // part of the serverless bundle, and the path is built at runtime, so
+    // tracing cannot infer it: without this the read works during the
+    // build and then throws ENOENT in the lambda. That took every page
+    // regeneration down with it and froze the site on its last good
+    // render — see lib/brand-art.ts.
+    outputFileTracingIncludes: {
+      "/**": ["./public/brand/*.svg"],
+    },
+  },
   images: {
     // Renditions are pre-built by scripts/prepare-images.mjs and served as
     // a plain <picture>, so there is nothing for the optimiser to do.

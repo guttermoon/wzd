@@ -1,12 +1,11 @@
 import type { Metadata } from "next"
-import Link from "next/link"
-import { getSiteCopy } from "@/lib/site-copy"
+import { getSiteCopy, urlKey } from "@/lib/site-copy"
 import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
 import { makeT, makeS } from "@/components/notion-text"
+import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
 import { BrandKit } from "@/components/brand-kit"
-import { ExternalLink } from "@/components/external-link"
 
 export const revalidate = 60
 export const metadata: Metadata = {
@@ -22,16 +21,22 @@ export default async function PressPage() {
   const copy = await getSiteCopy()
   const T = makeT(copy)
   const S = makeS(copy)
+  const Cta = makeCta(copy)
 
-  // Both editable in Notion. Only http(s) is honoured, so a malformed or
-  // unexpected value falls back to the "not up yet" message rather than
-  // becoming a live link.
+  // Both editable in Notion, and both looked for in two places: the `URL`
+  // field of the button's own row, which is where every other link on the
+  // site is now set, and the older `press.*.url` row that held the address
+  // as text before there was a URL field. The field wins; the row still
+  // works, so nothing the owner has already pasted stops working.
+  //
+  // Only http(s) is honoured, so a malformed or half-typed value leaves
+  // the "not up yet" message in place rather than becoming a dead link.
   const link = (key: string) => {
-    const raw = (copy[key] ?? "").trim()
+    const raw = (copy[urlKey(`${key}.cta`)] || copy[`${key}.url`] || "").trim()
     return /^https?:\/\//i.test(raw) ? raw : ""
   }
-  const photoFolder = link("press.photos.url")
-  const pressRelease = link("press.release.url")
+  const photoFolder = link("press.photos")
+  const pressRelease = link("press.release")
 
   return (
     <PageShell
@@ -104,9 +109,7 @@ export default async function PressPage() {
             moves year to year and the owner is the one who moves it. Until
             then, the line below says so. */}
         {photoFolder ? (
-          <ExternalLink href={photoFolder} className="btn btn-primary mt-6">
-            <T k="press.photos.cta" />
-          </ExternalLink>
+          <Cta k="press.photos.cta" href={photoFolder} className="btn btn-primary mt-6" />
         ) : (
           <p className="prose-wzd mt-4 font-body text-muted">
             <T k="press.photos.pending" />
@@ -127,9 +130,7 @@ export default async function PressPage() {
             announces as unavailable. The line underneath says why and how
             to get the release in the meantime. */}
         {pressRelease ? (
-          <ExternalLink href={pressRelease} className="btn btn-primary mt-6">
-            <T k="press.release.cta" />
-          </ExternalLink>
+          <Cta k="press.release.cta" href={pressRelease} className="btn btn-primary mt-6" />
         ) : (
           <>
             <button
@@ -156,9 +157,7 @@ export default async function PressPage() {
 
       <Section title={<T k="press.shooting.title" />}>
         <p className="prose-wzd font-body"><T k="press.shooting.body" /></p>
-        <Link href="/photo-policy" className="btn btn-primary mt-6">
-          <T k="press.shooting.cta" />
-        </Link>
+        <Cta k="press.shooting.cta" href="/photo-policy" className="btn btn-primary mt-6" />
       </Section>
     </PageShell>
   )
