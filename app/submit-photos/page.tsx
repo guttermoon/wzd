@@ -39,24 +39,23 @@ export default async function SubmitPhotosPage() {
       }
     >
       <Section className="mt-10">
-        {/* First thing on the page, above even the introduction. Both of
-            these have to happen before anyone opens a folder, let alone
-            starts filling the form in, and anything below the fold gets
-            read after the work is already done. The naming one is not
-            housekeeping: it is how a credit stays attached to a
-            photograph once it has left the folder it arrived in. */}
-        <div className="border-2 border-text p-6">
-          <h2 className="display text-xl"><T k="submit.prep.title" /></h2>
-          <P k="submit.prep.name" className="prose-wzd mt-3 font-body" />
-          <P k="submit.prep.size" className="prose-wzd mt-4 font-body" />
-        </div>
-
-        <P k="submit.intro" className="prose-wzd mt-8 font-body" />
+        <P k="submit.intro" className="prose-wzd font-body" />
         <Cta
           k="submit.policy.cta"
           href="/photo-policy"
           className="btn btn-secondary mt-6"
         />
+
+        {/* Between the policy and the form: the last thing read before
+            anyone starts filling anything in. Both of these are about how
+            to prepare the files, and the naming one is not housekeeping —
+            it is how a credit stays attached to a photograph once it has
+            left the folder it arrived in. */}
+        <div className="mt-10 border-2 border-text p-6">
+          <h2 className="display text-xl"><T k="submit.prep.title" /></h2>
+          <P k="submit.prep.name" className="prose-wzd mt-3 font-body" />
+          <P k="submit.prep.size" className="prose-wzd mt-4 font-body" />
+        </div>
 
         {/* The form is the site's own and posts to our own origin, so
             nothing third party runs in the page and there is nothing to
