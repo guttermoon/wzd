@@ -32,7 +32,21 @@ import { useConsent, writeConsent } from "@/lib/consent"
  * `.consent-drop` / `.consent-swing` / `.consent-string` in globals.css.
  * Under prefers-reduced-motion it is simply there, hanging still.
  */
-export function ConsentBanner() {
+/**
+ * The words are passed in rather than read here: this is a client
+ * component and getSiteCopy is server-only, so app/layout.tsx — which
+ * already has the copy for the footer — hands over the five strings this
+ * needs. They are editable in Notion like everything else.
+ */
+export type ConsentCopy = {
+  title: string
+  body: string
+  link: string
+  accept: string
+  reject: string
+}
+
+export function ConsentBanner({ copy }: { copy: ConsentCopy }) {
   const consent = useConsent()
   const open = consent === null
   const panel = useRef<HTMLDivElement>(null)
@@ -111,17 +125,15 @@ export function ConsentBanner() {
                 id="consent-title"
                 className="display text-[clamp(1.5rem,4vw,2rem)]"
               >
-                Cookies
+                {copy.title}
               </h2>
               <p className="mt-4 font-body">
-                This site needs your consent for third-party cookies:
-                PostHog and Google Analytics, which tell us which pages get
-                read. Neither loads until you say yes.{" "}
+                {copy.body}{" "}
                 <Link
                   href="/privacy"
                   className="underline decoration-2 underline-offset-4"
                 >
-                  What we collect
+                  {copy.link}
                 </Link>
               </p>
               {/* Decline first, confirm on the right, which is where a
@@ -134,7 +146,7 @@ export function ConsentBanner() {
                   onClick={() => writeConsent("denied")}
                   className="btn border-2 border-blood-text text-blood-text"
                 >
-                  No thanks
+                  {copy.reject}
                 </button>
                 <button
                   ref={first}
@@ -142,7 +154,7 @@ export function ConsentBanner() {
                   onClick={() => writeConsent("granted")}
                   className="btn bg-blood-text text-blood"
                 >
-                  Okay
+                  {copy.accept}
                 </button>
               </div>
             </div>

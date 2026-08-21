@@ -25,7 +25,19 @@ const FORM_URL = "https://paa.ge/worldzombieday/email-signup"
 
 type State = "idle" | "sending" | "done" | "bad-email" | "failed"
 
-export function EmailSignup() {
+/** Passed in from the footer, which is a server component with the copy. */
+export type SignupCopy = {
+  label: string
+  placeholder: string
+  submit: string
+  sending: string
+  done: string
+  bademail: string
+  failed: string
+  failedCta: string
+}
+
+export function EmailSignup({ copy }: { copy: SignupCopy }) {
   const [state, setState] = useState<State>("idle")
   const [email, setEmail] = useState("")
 
@@ -52,7 +64,7 @@ export function EmailSignup() {
   if (state === "done") {
     return (
       <p className="font-body text-lg" role="status">
-        You are on the list. Watch your inbox.
+        {copy.done}
       </p>
     )
   }
@@ -61,7 +73,7 @@ export function EmailSignup() {
     <form onSubmit={onSubmit} className="mx-auto w-full max-w-md">
       <div className="flex flex-col gap-3 sm:flex-row">
         <label htmlFor="newsletter-email" className="sr-only">
-          Email address
+          {copy.label}
         </label>
         <input
           id="newsletter-email"
@@ -69,7 +81,7 @@ export function EmailSignup() {
           name="email"
           required
           autoComplete="email"
-          placeholder="you@example.com"
+          placeholder={copy.placeholder}
           value={email}
           onChange={(event) => {
             setEmail(event.target.value)
@@ -84,7 +96,7 @@ export function EmailSignup() {
           disabled={state === "sending"}
           className="btn btn-primary shrink-0 disabled:opacity-70"
         >
-          {state === "sending" ? "Signing up" : "Sign up"}
+          {state === "sending" ? copy.sending : copy.submit}
         </button>
       </div>
 
@@ -96,12 +108,12 @@ export function EmailSignup() {
         role="status"
         className="mt-3 min-h-[1.5rem] font-body text-sm"
       >
-        {state === "bad-email" ? "That does not look like an email address." : null}
+        {state === "bad-email" ? copy.bademail : null}
         {state === "failed" ? (
           <>
-            That did not go through.{" "}
+            {copy.failed}{" "}
             <ExternalLink className="link" href={FORM_URL}>
-              Sign up on paa.ge instead
+              {copy.failedCta}
             </ExternalLink>
           </>
         ) : null}

@@ -3,6 +3,8 @@
  * structural (URLs, dates used for machine-readable markup); the words
  * around them live in content/site-copy.json and are editable in Notion.
  */
+const DISCORD = "https://discord.com/invite/EFr4eCu5Mh"
+
 export const EVENT = {
   name: "World Zombie Day: London",
   shortName: "World Zombie Day",
@@ -30,6 +32,8 @@ export const EVENT = {
      */
     donateUrl: "https://www.zeffy.com/en-GB/peer-to-peer/world-zombie-day-london",
     donateLabel: "Donate on Zeffy",
+    /** Their manifesto — what the club is for, in their own words. */
+    manifestoUrl: "https://deadgoodclub.com/manifesto",
   },
   /**
    * The after-party, which is a separate venue with its own ticket. The
@@ -45,11 +49,18 @@ export const EVENT = {
     supporters: ["BLOODSport by MEATliquor", "Harbour Brewing Co"],
   },
   hashtags: ["#WZD2026", "#WorldZombieDay"],
+  /**
+   * The community. It is in `social` below as well, because it is one of
+   * the four icons in the footer; named here because /faq sends people to
+   * it as the first place to ask a question, and one address should not
+   * be typed twice.
+   */
+  discordUrl: DISCORD,
   /** Order is the order they appear in the footer. */
   social: [
     { name: "Instagram", url: "https://www.instagram.com/worldzombieday/" },
     { name: "WhatsApp", url: "https://www.whatsapp.com/channel/0029Vb8N0wmInlqHa7MdYB1S" },
-    { name: "Discord", url: "https://discord.com/invite/EFr4eCu5Mh" },
+    { name: "Discord", url: DISCORD },
     { name: "Facebook", url: "https://www.facebook.com/worldzombiedaylondon/" },
   ],
 } as const

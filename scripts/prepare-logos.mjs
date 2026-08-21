@@ -11,6 +11,10 @@
  *   wordmark-light-bg.png / wordmark-dark-bg.png / brain.png
  *                  the press kit's downloads, copied straight from
  *                  public/logos as supplied. Renamed, never resized.
+ *   dgc-light-bg.webp / dgc-dark-bg.webp
+ *                  The Dead Good Club's lock-up, one per ground,
+ *                  re-encoded from the supplied PNGs. Same drawing, same
+ *                  proportions, a fraction of the bytes.
  * and app/icon.svg, the favicon.
  *
  * Two sources, because they are different kinds of thing:
@@ -27,7 +31,7 @@
  * here alters proportion or hue; the lettering is themed only between the
  * two inks the lock-up already ships in.
  */
-import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from "node:fs"
+import { readFileSync, writeFileSync, mkdirSync, copyFileSync, statSync } from "node:fs"
 import { execFileSync } from "node:child_process"
 import sharp from "sharp"
 const OUT = "public/brand"
@@ -101,8 +105,34 @@ for (const [from, to] of COPIES) {
   copyFileSync(from, `${OUT}/${to}`)
 }
 
+// ── The Dead Good Club's lock-up ─────────────────────────────────────
+//
+// Not our mark: it belongs to the cause we fundraise for, and it is
+// reproduced as supplied. Two files because it was drawn twice, one for
+// each ground — on the dark variant the lettering is white, which is why
+// it looks almost empty against a white preview.
+//
+// Served as WebP rather than the supplied PNG. These are line artwork on
+// transparency at 1083x1536, which PNG stores badly; WebP carries the
+// same alpha at a fraction of the weight, and nothing about the drawing
+// changes. Proportion and colour are untouched — the style guide's rule
+// against stretching and recolouring applies to their mark as much as to
+// ours.
+const CAUSE = [
+  ["public/logos/dgc stacked official.png", "dgc-light-bg.webp"],
+  ["public/logos/dgc stacked official dark.png", "dgc-dark-bg.webp"],
+]
+const causeSizes = []
+for (const [from, to] of CAUSE) {
+  await sharp(from).webp({ quality: 90 }).toFile(`${OUT}/${to}`)
+  const before = statSync(from).size
+  const after = statSync(`${OUT}/${to}`).size
+  causeSizes.push(`${to} ${(after / 1024).toFixed(1)}KB (from ${(before / 1024).toFixed(1)}KB PNG)`)
+}
+
 const kb = (s) => (Buffer.byteLength(s) / 1024).toFixed(1)
 console.log(`brain.svg    ${kb(brainFull)}KB   (full detail)`)
 console.log(`app/icon.svg ${kb(brainSmall)}KB   (favicon + masthead)`)
 console.log(`wordmark.svg ${kb(wordmark)}KB   (${letterPaths} lettering paths → currentColor)`)
 console.log(`PNGs         ${COPIES.map(([, to]) => to).join(", ")} (copied as supplied)`)
+for (const line of causeSizes) console.log(`cause        ${line}`)

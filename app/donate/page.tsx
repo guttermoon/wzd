@@ -3,7 +3,7 @@ import { getSiteCopy } from "@/lib/site-copy"
 import { makeT, makeS, makeHas, makeAny, makeP } from "@/components/notion-text"
 import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
-import { Photo } from "@/components/photo"
+import { Photo, Graphic } from "@/components/photo"
 import { ZeffyEmbed } from "@/components/zeffy-embed"
 import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
@@ -71,7 +71,11 @@ export default async function DonatePage() {
             <P k="donate.cause.thanks" className="prose-wzd mt-4 font-body" />
 
             <div className="mt-8">
-              <ZeffyEmbed form="donation" />
+              <ZeffyEmbed
+                form="donation"
+                trouble={S("site.form.trouble")}
+                troubleCta={S("site.form.trouble.cta")}
+              />
             </div>
           </div>
 
@@ -91,15 +95,67 @@ export default async function DonatePage() {
           />
         </div>
 
-        <p className="mt-6 font-body">
-          <ExternalLink className="link" href={EVENT.cause.url}>
-            {EVENT.cause.name}
-          </ExternalLink>{" "}
-          &middot;{" "}
-          <ExternalLink className="link" href={EVENT.cause.donateUrl}>
-            {EVENT.cause.donateLabel}
-          </ExternalLink>
-        </p>
+      </Section>
+
+      {/* Who the money actually goes to, in their words rather than ours.
+          This replaced a bare pair of links, which asked someone who had
+          just read about the cause to go and find out what it was
+          somewhere else.
+
+          Their lock-up was drawn twice, once for each ground, so the
+          right one is shown and the other is not rendered at all rather
+          than hidden and downloaded anyway — `dark:` on the wrapper,
+          which is how the theme is switched everywhere else. It carries
+          no alt: the heading beside it already says the name, and a
+          second announcement of it is noise. */}
+      <Section title={<T k="donate.about.title" />}>
+        <div className="grid items-start gap-8 lg:grid-cols-12 lg:gap-10">
+          {/* The lock-up links to the club, and takes the accent colour
+              on hover and on keyboard focus — see .dgc-mark in
+              globals.css. It carries the name rather than an empty alt:
+              it is a link now, and a link with nothing to announce is a
+              link nobody can follow. Only one of the two is ever
+              displayed, so the name is never said twice. */}
+          <div className="lg:col-span-4">
+            <ExternalLink
+              href={EVENT.cause.url}
+              className="mx-auto block w-full max-w-[14rem] lg:mx-0"
+            >
+              <span className="dgc-mark dark:hidden">
+                <Graphic
+                  src="/brand/dgc-light-bg.webp"
+                  alt={EVENT.cause.name}
+                  width={1083}
+                  height={1536}
+                  frame={false}
+                  sizes="(min-width: 64rem) 14rem, 55vw"
+                />
+                <span className="dgc-mark-tint dgc-mark-tint-light" aria-hidden="true" />
+              </span>
+              <span className="dgc-mark hidden dark:block">
+                <Graphic
+                  src="/brand/dgc-dark-bg.webp"
+                  alt={EVENT.cause.name}
+                  width={1083}
+                  height={1536}
+                  frame={false}
+                  sizes="(min-width: 64rem) 14rem, 55vw"
+                />
+                <span className="dgc-mark-tint dgc-mark-tint-dark" aria-hidden="true" />
+              </span>
+            </ExternalLink>
+          </div>
+
+          <div className="lg:col-span-8">
+            <P k="donate.about.body1" className="prose-wzd font-body" />
+            <P k="donate.about.body2" className="prose-wzd mt-4 font-body" />
+            <Cta
+              k="donate.about.cta"
+              href={EVENT.cause.manifestoUrl}
+              className="btn btn-secondary mt-6"
+            />
+          </div>
+        </div>
       </Section>
 
       <Section title={<T k="donate.other.title" />}>

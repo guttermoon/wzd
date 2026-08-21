@@ -69,7 +69,16 @@ export default async function PrivacyPage() {
 
       <Section title={<T k="privacy.cookies.title" />}>
         <P k="privacy.cookies.body" className="prose-wzd font-body" />
-        <ConsentChoice />
+        <ConsentChoice
+          copy={{
+            accepted: S("site.consent.status.accepted"),
+            declined: S("site.consent.status.declined"),
+            unanswered: S("site.consent.status.unanswered"),
+            accept: S("site.consent.accept"),
+            withdraw: S("site.consent.withdraw"),
+            note: S("site.consent.withdraw.note"),
+          }}
+        />
       </Section>
 
       <Section title={<T k="privacy.sharing.title" />}>

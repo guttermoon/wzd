@@ -157,7 +157,10 @@ export default async function RegisterPage() {
       {/* The form sits at the end, after everything someone needs to know
           before they fill it in. */}
       <Section title={<T k="register.status.title" />}>
-        <ZeffyEmbed />
+        <ZeffyEmbed
+                trouble={S("site.form.trouble")}
+                troubleCta={S("site.form.trouble.cta")}
+              />
       </Section>
 
       <Section>

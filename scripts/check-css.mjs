@@ -38,6 +38,7 @@ const REQUIRED = [
   // Layout devices.
   "edge-left", "edge-right", "breakout", "panel-ground",
   "credit-tag", "credit-tag-right", "credit-tag-band", "on-blood", "vhs", "vhs-light", "zeffy-embed",
+  "dgc-mark", "dgc-mark-tint", "dgc-mark-tint-light", "dgc-mark-tint-dark",
 ]
 
 let files
