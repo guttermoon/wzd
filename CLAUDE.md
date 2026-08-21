@@ -23,9 +23,19 @@ Two layers, and the first one is complete on its own:
    key from here to "move it to Notion"; Notion overrides, it doesn't own.
 2. **Notion database `wzd-pages`** (`NOTION_DATABASE_ID`,
    `3c16f6ccb2c180e087a4da55703d5792`) — rows with `Name` = the key and
-   `Text` = the copy. Currently 192 rows, one per key. Fetched in one
+   `Text` = the copy. 251 rows, of which 225 are keys the site renders and
+   the rest are left over from copy that has since been cut. Fetched in one
    paginated query by `lib/site-copy.ts`; rows whose title isn't a dotted
    key are ignored.
+   An `Order` number column carries the reading order, and the table view
+   sorts on it, so the rows run down the page the way a visitor runs
+   through the site: `site.` first, then home, register and the after
+   party, survival, FAQ, sponsors, donate, press, photo policy, privacy,
+   footer. The number encodes both, as `page number x 1000 + position x
+   10`, so `5140` is the fourteenth row of the fifth page, and there is
+   room to slot a new key between any two without renumbering. The dead rows are left
+   empty deliberately: Notion sorts blanks last, so they collect at the
+   bottom rather than interrupting a page.
    The live/draft gate is deliberately flexible (`isLive()` in
    `lib/site-copy.ts`): a `Published` checkbox if the database has one,
    else a `Status` of Done/Published/Live/Complete, else everything is
