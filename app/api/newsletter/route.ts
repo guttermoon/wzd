@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { SITE_URL } from "@/lib/site"
 
 /**
  * The newsletter signup, posted from our own form.
@@ -28,15 +29,34 @@ import { NextResponse } from "next/server"
  * missing environment variable costs a signup rather than losing one
  * silently.
  *
- * `BREVO_LIST_ID` picks the list. It defaults to 7, "WZDNewsletter".
- * Not 2, which is "DGCNewsletter" and belongs to the club rather than to
- * the walk; the two are easy to confuse and should not be mixed.
+ * ── Double opt-in ───────────────────────────────────────────────────
+ *
+ * Nobody is added to the list by this route. It asks Brevo to send a
+ * confirmation email, and the address joins the list only when the person
+ * clicks the link in it. That is the difference between someone typing an
+ * address and someone consenting to be written to, and it is worth having:
+ * it keeps out typos and other people's addresses, and it means the list
+ * is made of people who said yes twice.
+ *
+ * `BREVO_LIST_ID` picks the list. It defaults to 7, "WZDNewsletter". Not
+ * 2, which is "DGCNewsletter" and belongs to the club rather than to the
+ * walk; the two are easy to confuse and should not be mixed.
+ *
+ * `BREVO_DOI_TEMPLATE_ID` is the confirmation email, and it has to be a
+ * template containing Brevo's `{{ doubleoptin }}` link or the recipient
+ * has nothing to click. It defaults to 1, their "Double opt-in
+ * confirmation" template. `BREVO_DOI_REDIRECT` is where clicking it lands
+ * them, and defaults to the site root.
  */
 export const runtime = "nodejs"
 export const preferredRegion = "lhr1"
 
-const ENDPOINT = process.env.BREVO_CONTACTS_URL || "https://api.brevo.com/v3/contacts"
+const ENDPOINT =
+  process.env.BREVO_CONTACTS_URL ||
+  "https://api.brevo.com/v3/contacts/doubleOptinConfirmation"
 const LIST_ID = Number(process.env.BREVO_LIST_ID || 7)
+const TEMPLATE_ID = Number(process.env.BREVO_DOI_TEMPLATE_ID || 1)
+const REDIRECT = process.env.BREVO_DOI_REDIRECT || SITE_URL
 
 /**
  * Deliberately loose. The only test that means anything is whether the
@@ -77,22 +97,29 @@ export async function POST(request: Request) {
         "content-type": "application/json",
         accept: "application/json",
       },
-      // updateEnabled so that someone signing up again is added back to
-      // the list rather than refused as a duplicate. Re-subscribing is a
-      // thing people do, and it should not read as an error.
       body: JSON.stringify({
         email,
-        listIds: [LIST_ID],
-        updateEnabled: true,
+        includeListIds: [LIST_ID],
+        templateId: TEMPLATE_ID,
+        redirectionUrl: REDIRECT,
       }),
       signal: AbortSignal.timeout(8000),
     })
 
-    // 201 created, 204 updated. Anything else is a failure worth logging.
+    // 204 when the confirmation is on its way.
     if (!response.ok) {
-      console.error(
-        `newsletter: upstream ${response.status} ${(await response.text()).slice(0, 200)}`,
-      )
+      const detail = (await response.text()).slice(0, 200)
+
+      // Someone who is already on the list gets no second confirmation,
+      // and Brevo says so with a duplicate error. From where they are
+      // standing they have subscribed, which is what the form should tell
+      // them: this is not a failure to report back.
+      if (response.status === 400 && /duplicate|already/i.test(detail)) {
+        console.warn(`newsletter: already subscribed (${detail})`)
+        return NextResponse.json({ ok: true })
+      }
+
+      console.error(`newsletter: upstream ${response.status} ${detail}`)
       return NextResponse.json({ error: "upstream" }, { status: 502 })
     }
   } catch (error) {
