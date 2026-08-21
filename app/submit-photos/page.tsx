@@ -46,6 +46,16 @@ export default async function SubmitPhotosPage() {
           className="btn btn-secondary mt-6"
         />
 
+        {/* How to prepare the files, above the form rather than beside a
+            field: both of these have to happen before anyone starts
+            filling anything in, and a note further down would be read
+            after the work was already done. */}
+        <div className="mt-8 border-2 border-text p-6">
+          <h2 className="display text-xl"><T k="submit.prep.title" /></h2>
+          <P k="submit.prep.name" className="prose-wzd mt-3 font-body" />
+          <P k="submit.prep.size" className="prose-wzd mt-4 font-body" />
+        </div>
+
         {/* The form is the site's own and posts to our own origin, so
             nothing third party runs in the page and there is nothing to
             gate behind the cookie dialog. */}
@@ -58,6 +68,7 @@ export default async function SubmitPhotosPage() {
             linksHelp: S("submit.links.help"),
             notesLabel: S("submit.notes.label"),
             notesHelp: S("submit.notes.help"),
+            accessLabel: S("submit.access.label"),
             required: S("submit.required"),
             send: S("submit.send"),
             sending: S("submit.sending"),

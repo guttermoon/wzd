@@ -65,6 +65,9 @@ export async function POST(request: Request) {
   const credit = text(body?.credit, LIMITS.credit)
   const links = text(body?.links, LIMITS.links)
   const notes = text(body?.notes, LIMITS.notes)
+  // Whether they confirmed the folder is reachable. Not required of them,
+  // but the answer saves a round trip when it turns out not to be.
+  const access = body?.access === true
 
   // The two the form marks required. Checked here as well as in the page,
   // because a form is only a suggestion once it has left the browser.
@@ -86,6 +89,8 @@ export async function POST(request: Request) {
     "Links:",
     links,
     ...(notes ? ["", "Notes:", notes] : []),
+    "",
+    `Access confirmed: ${access ? "yes" : "no"}`,
   ].join("\n")
 
   try {
