@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { getSiteCopy } from "@/lib/site-copy"
-import { makeT, makeS } from "@/components/notion-text"
+import { makeT, makeS, makeHas, makeAny, makeP } from "@/components/notion-text"
 import { PageShell, Section } from "@/components/page-shell"
 import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
@@ -19,6 +19,9 @@ export default async function RulesPage() {
   const copy = await getSiteCopy()
   const T = makeT(copy)
   const S = makeS(copy)
+  const has = makeHas(copy)
+  const any = makeAny(copy)
+  const P = makeP(copy)
 
   return (
     <PageShell
@@ -49,7 +52,7 @@ export default async function RulesPage() {
           {/* A numbered list, not a set of headings: these are read in
               order. */}
           <ol className="prose-wzd space-y-6">
-            {RULES.map((n) => (
+            {RULES.filter((n) => has(`rules.${n}`)).map((n) => (
               <li key={n} className="flex gap-4">
                 <span
                   className="display shrink-0 text-3xl text-accent-text"
@@ -80,7 +83,7 @@ export default async function RulesPage() {
       </div>
 
       <Section title={<T k="rules.stewards.title" />}>
-        <p className="prose-wzd font-body"><T k="rules.stewards.body" /></p>
+        <P k="rules.stewards.body" className="prose-wzd font-body" />
       </Section>
     </PageShell>
   )

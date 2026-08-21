@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { getSiteCopy } from "@/lib/site-copy"
-import { makeT, makeS } from "@/components/notion-text"
+import { makeT, makeS, makeHas, makeAny, makeP } from "@/components/notion-text"
 import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
 import { Photo, Graphic } from "@/components/photo"
@@ -8,6 +8,9 @@ import { ZeffyEmbed } from "@/components/zeffy-embed"
 import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
 import { ExternalLink } from "@/components/external-link"
+
+const WORK = ["1", "2", "3", "4", "5"]
+const VIP = ["1", "2", "3", "4"]
 
 export const revalidate = 60
 export const metadata: Metadata = {
@@ -22,6 +25,9 @@ export default async function RegisterPage() {
   const T = makeT(copy)
   const S = makeS(copy)
   const Cta = makeCta(copy)
+  const has = makeHas(copy)
+  const any = makeAny(copy)
+  const P = makeP(copy)
 
   return (
     <PageShell
@@ -40,10 +46,10 @@ export default async function RegisterPage() {
     >
       <div className="mt-10 grid gap-10 lg:grid-cols-2 lg:gap-14">
         <Section title={<T k="register.why.title" />} className="mt-0">
-          <p className="prose-wzd font-body"><T k="register.why.body" /></p>
+          <P k="register.why.body" className="prose-wzd font-body" />
         </Section>
         <Section title={<T k="register.cost.title" />} className="mt-0">
-          <p className="prose-wzd font-body"><T k="register.cost.body" /></p>
+          <P k="register.cost.body" className="prose-wzd font-body" />
         </Section>
       </div>
 
@@ -60,34 +66,31 @@ export default async function RegisterPage() {
           stretches them to the same height however uneven the copy is. */}
       <Section>
         <div className="grid gap-8 lg:grid-cols-2">
+          {any("register.access.title", "register.access.body") ? (
           <article className="cut-panel p-6">
             <h2 className="display text-xl"><T k="register.access.title" /></h2>
             <div className="prose-wzd mt-4 font-body">
-              <p><T k="register.access.body" /></p>
+              <P k="register.access.body" />
             </div>
           </article>
+          ) : null}
 
           <article className="cut-panel p-6">
             <h2 className="display text-xl"><T k="register.cause.title" /></h2>
             <div className="prose-wzd mt-4 font-body">
-              <p><T k="register.cause.body" /></p>
-              <p><T k="register.cause.donation" /></p>
+              <P k="register.cause.body" />
+              <P k="register.cause.donation" />
             </div>
-            <ul className="mt-4 list-disc space-y-2 pl-5 font-body">
-              {["1", "2", "3", "4", "5"].map((n) => (
-                <li key={n}><T k={`register.cause.work.${n}`} /></li>
-              ))}
-            </ul>
-            <p className="prose-wzd mt-4 font-body"><T k="register.cause.thanks" /></p>
-            <p className="mt-4 font-body">
-              <ExternalLink className="link" href={EVENT.cause.url}>
-                {EVENT.cause.name}
-              </ExternalLink>{" "}
-              &middot;{" "}
-              <ExternalLink className="link" href={EVENT.cause.donateUrl}>
-                {EVENT.cause.donateLabel}
-              </ExternalLink>
-            </p>
+            {/* Only the ones that still say something. An emptied row
+                should take its bullet with it, not leave a stray marker. */}
+            {WORK.some((n) => has(`register.cause.work.${n}`)) ? (
+              <ul className="mt-4 list-disc space-y-2 pl-5 font-body">
+                {WORK.filter((n) => has(`register.cause.work.${n}`)).map((n) => (
+                  <li key={n}><T k={`register.cause.work.${n}`} /></li>
+                ))}
+              </ul>
+            ) : null}
+            <P k="register.cause.thanks" className="prose-wzd mt-4 font-body" />
           </article>
         </div>
       </Section>
@@ -99,20 +102,28 @@ export default async function RegisterPage() {
       <Section title={<T k="party.title" />}>
         <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-7">
-            <p className="prose-wzd font-body"><T k="party.body1" /></p>
-            <p className="prose-wzd mt-4 font-body"><T k="party.body2" /></p>
-            <p className="prose-wzd mt-4 font-body"><T k="party.doors" /></p>
+            <P k="party.body1" className="prose-wzd font-body" />
+            <P k="party.body2" className="prose-wzd mt-4 font-body" />
+            <P k="party.doors" className="prose-wzd mt-4 font-body" />
 
-            <h3 className="display mt-8 text-lg">
-              <T k="party.vip.title" />
-            </h3>
-            <ul className="prose-wzd mt-4 list-disc space-y-2 pl-5 font-body">
-              {["1", "2", "3", "4"].map((n) => (
-                <li key={n}><T k={`party.vip.${n}`} /></li>
-              ))}
-            </ul>
-            <p className="prose-wzd mt-4 font-body"><T k="party.vip.limit" /></p>
-            <p className="prose-wzd mt-4 font-body"><T k="party.proceeds" /></p>
+            {any("party.vip.title", ...VIP.map((n) => `party.vip.${n}`)) ? (
+              <>
+                {has("party.vip.title") ? (
+                  <h3 className="display mt-8 text-lg">
+                    <T k="party.vip.title" />
+                  </h3>
+                ) : null}
+                {VIP.some((n) => has(`party.vip.${n}`)) ? (
+                  <ul className="prose-wzd mt-4 list-disc space-y-2 pl-5 font-body">
+                    {VIP.filter((n) => has(`party.vip.${n}`)).map((n) => (
+                      <li key={n}><T k={`party.vip.${n}`} /></li>
+                    ))}
+                  </ul>
+                ) : null}
+              </>
+            ) : null}
+            <P k="party.vip.limit" className="prose-wzd mt-4 font-body" />
+            <P k="party.proceeds" className="prose-wzd mt-4 font-body" />
 
             <p className="mt-6 font-body">
               <ExternalLink className="link" href={EVENT.afterParty.url}>
@@ -120,9 +131,7 @@ export default async function RegisterPage() {
               </ExternalLink>{" "}
               &middot; {EVENT.afterParty.address}
             </p>
-            <p className="prose-wzd mt-4 font-body text-muted">
-              <T k="party.thanks" />
-            </p>
+            <P k="party.thanks" className="prose-wzd mt-4 font-body text-muted" />
           </div>
 
           {/* The after-party artwork, plain: the mat and the cut so it sits

@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { getSiteCopy } from "@/lib/site-copy"
-import { makeT, makeS } from "@/components/notion-text"
+import { makeT, makeS, makeHas, makeAny, makeP } from "@/components/notion-text"
 import { PageShell, Section } from "@/components/page-shell"
 import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
@@ -19,6 +19,9 @@ export default async function FaqPage() {
   const copy = await getSiteCopy()
   const T = makeT(copy)
   const S = makeS(copy)
+  const has = makeHas(copy)
+  const any = makeAny(copy)
+  const P = makeP(copy)
 
   // Mirrors the visible copy so search engines get the same answers.
   const faqSchema = {
@@ -58,7 +61,7 @@ export default async function FaqPage() {
       <div className="mt-10 grid gap-8 lg:grid-cols-12 lg:gap-10">
         {/* Native <details>: keyboard-operable and readable before hydration. */}
         <div className="border-t-2 border-edge lg:col-span-8">
-          {QUESTIONS.map((n) => (
+          {QUESTIONS.filter((n) => any(`faq.q${n}`, `faq.a${n}`)).map((n) => (
             <details key={n} className="group border-b-2 border-edge">
               <summary className="display flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-4 py-4 text-lg [&::-webkit-details-marker]:hidden">
                 <T k={`faq.q${n}`} />

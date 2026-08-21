@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { getSiteCopy } from "@/lib/site-copy"
-import { makeT, makeS } from "@/components/notion-text"
+import { makeT, makeS, makeHas, makeAny, makeP } from "@/components/notion-text"
 import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
 import { Photo } from "@/components/photo"
@@ -24,6 +24,9 @@ export default async function DonatePage() {
   const T = makeT(copy)
   const S = makeS(copy)
   const Cta = makeCta(copy)
+  const has = makeHas(copy)
+  const any = makeAny(copy)
+  const P = makeP(copy)
 
   return (
     <PageShell
@@ -55,14 +58,14 @@ export default async function DonatePage() {
             what the page is for. */}
         <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-7">
-            <p className="prose-wzd font-body"><T k="register.cause.body" /></p>
-            <p className="prose-wzd mt-4 font-body"><T k="register.cause.donation" /></p>
+            <P k="register.cause.body" className="prose-wzd font-body" />
+            <P k="register.cause.donation" className="prose-wzd mt-4 font-body" />
             <ul className="prose-wzd mt-4 list-disc space-y-2 pl-5 font-body">
-              {WORK.map((n) => (
+              {WORK.filter((n) => has(`register.cause.work.${n}`)).map((n) => (
                 <li key={n}><T k={`register.cause.work.${n}`} /></li>
               ))}
             </ul>
-            <p className="prose-wzd mt-4 font-body"><T k="register.cause.thanks" /></p>
+            <P k="register.cause.thanks" className="prose-wzd mt-4 font-body" />
           </div>
 
           {/* 5/6 with the crop held to the top takes exactly the bottom
@@ -97,7 +100,7 @@ export default async function DonatePage() {
       </Section>
 
       <Section title={<T k="donate.other.title" />}>
-        <p className="prose-wzd font-body"><T k="donate.other.body" /></p>
+        <P k="donate.other.body" className="prose-wzd font-body" />
         <Cta k="donate.other.cta" href="/become-a-sponsor" className="btn btn-primary mt-6" />
       </Section>
     </PageShell>

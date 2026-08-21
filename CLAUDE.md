@@ -51,6 +51,34 @@ Keys are dotted and lowercase (`home.hero.title`, `faq.q3`,
 `components/notion-text.tsx` exports `makeT` (renders a key, newlines →
 `<br/>`) and `makeS` (plain string, for attributes).
 
+### Clearing a row removes the copy
+
+An empty `Text` on a live row means empty, and beats the built-in the way
+any other edit does. That is the only way the owner can take a line off
+the site: if a blank cell fell back to `content/site-copy.json` the old
+words would reappear the moment it was cleared, and copy could be changed
+but never removed. The base layer is untouched by this — with no Notion
+there are no rows, so nothing is cleared and the site renders complete.
+
+The other half of that bargain is that **an emptied key must leave no
+markup behind**. A stray bullet, a paragraph holding open a margin, or a
+heading with a gap under it reads as a bug, not a decision. So:
+
+- `<P k="…">` (`makeP`) is a paragraph that is not there at all when its
+  key is empty. Prefer it to `<p><T k="…"/></p>` for any single-key
+  paragraph.
+- `makeHas` is the predicate; filter every mapped list through it
+  (`RULES.filter((n) => has(\`rules.${n}\`))`) so a cleared row takes its
+  own bullet with it.
+- `makeAny` is for the enclosing block: a section, panel or definition
+  whose keys are *all* empty should not render its heading or its frame
+  either.
+
+The check is mechanical — blank a handful of keys, build, and grep the
+rendered pages for `<li></li>`, `<p></p>` and `<dt></dt>`. It should be
+zero on every route. The one deliberate exception is the newsletter's
+`#newsletter-status`, which is an empty live region on purpose.
+
 **If you add a `<T k="…">`, add the key to `content/site-copy.json` too** —
 otherwise the slot renders empty. And add a matching Notion row, or the
 owner can't edit it.

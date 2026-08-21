@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { getSiteCopy, urlKey } from "@/lib/site-copy"
 import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
-import { makeT, makeS } from "@/components/notion-text"
+import { makeT, makeS, makeHas, makeAny, makeP } from "@/components/notion-text"
 import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
 import { BrandKit } from "@/components/brand-kit"
@@ -22,6 +22,9 @@ export default async function PressPage() {
   const T = makeT(copy)
   const S = makeS(copy)
   const Cta = makeCta(copy)
+  const has = makeHas(copy)
+  const any = makeAny(copy)
+  const P = makeP(copy)
 
   // Both editable in Notion, and both looked for in two places: the `URL`
   // field of the button's own row, which is where every other link on the
@@ -55,7 +58,7 @@ export default async function PressPage() {
     >
       <Section title={<T k="press.facts.title" />} className="mt-10">
         <dl className="grid gap-6 sm:grid-cols-2">
-          {FACTS.map((fact) => (
+          {FACTS.filter((f) => any(`press.facts.${f}.label`, `press.facts.${f}.value`)).map((fact) => (
             <div key={fact} className="border-l-4 border-accent pl-4">
               <dt className="display text-base"><T k={`press.facts.${fact}.label`} /></dt>
               <dd className="mt-1 font-body text-muted">
@@ -79,7 +82,7 @@ export default async function PressPage() {
       </Section>
 
       <Section title={<T k="press.logo.title" />}>
-        <p className="prose-wzd font-body"><T k="press.logo.body" /></p>
+        <P k="press.logo.body" className="prose-wzd font-body" />
         <BrandKit />
         {/* The supplied artwork itself, copied into public/brand by
             `npm run logos` and never resized or recoloured. The lock-up
@@ -152,11 +155,11 @@ export default async function PressPage() {
       </Section>
 
       <Section title={<T k="press.coverage.title" />}>
-        <p className="prose-wzd font-body"><T k="press.coverage.body" /></p>
+        <P k="press.coverage.body" className="prose-wzd font-body" />
       </Section>
 
       <Section title={<T k="press.shooting.title" />}>
-        <p className="prose-wzd font-body"><T k="press.shooting.body" /></p>
+        <P k="press.shooting.body" className="prose-wzd font-body" />
         <Cta k="press.shooting.cta" href="/photo-policy" className="btn btn-primary mt-6" />
       </Section>
     </PageShell>
