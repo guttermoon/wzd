@@ -30,3 +30,42 @@ export function makeT(copy: SiteCopy) {
 export function makeS(copy: SiteCopy) {
   return (k: string, fallback = ""): string => copy[k] ?? fallback
 }
+
+/**
+ * Whether a key has anything to say.
+ *
+ * Clearing a row in Notion is how the owner removes a line from the site,
+ * so every slot that can be emptied has to be able to disappear with it —
+ * markup included. A blank key left to render on its own gives an empty
+ * bullet, a paragraph of nothing, or a heading with a gap under it, which
+ * looks like a bug rather than a decision.
+ *
+ * Use it to drop the whole construct: `WORK.filter(has)` before a list,
+ * and a guard around a section that has been emptied out entirely.
+ */
+export function makeHas(copy: SiteCopy) {
+  return (k: string): boolean => (copy[k] ?? "").trim() !== ""
+}
+
+/** True if any of these keys has copy — for deciding whether a section survives. */
+export function makeAny(copy: SiteCopy) {
+  const has = makeHas(copy)
+  return (...keys: string[]): boolean => keys.some(has)
+}
+
+/**
+ * A paragraph that is not there at all when its key is empty, rather than
+ * an empty `<p>` holding open a margin.
+ */
+export function makeP(copy: SiteCopy) {
+  const T = makeT(copy)
+  const has = makeHas(copy)
+  return function P({ k, className = "" }: { k: string; className?: string }) {
+    if (!has(k)) return null
+    return (
+      <p className={className}>
+        <T k={k} />
+      </p>
+    )
+  }
+}

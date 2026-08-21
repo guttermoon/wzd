@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { getSiteCopy } from "@/lib/site-copy"
 import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
-import { makeT, makeS } from "@/components/notion-text"
+import { makeT, makeS, makeHas, makeAny, makeP } from "@/components/notion-text"
 import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
 import { ConsentChoice } from "@/components/consent-choice"
@@ -21,6 +21,9 @@ export default async function PrivacyPage() {
   const T = makeT(copy)
   const S = makeS(copy)
   const Cta = makeCta(copy)
+  const has = makeHas(copy)
+  const any = makeAny(copy)
+  const P = makeP(copy)
 
   return (
     <PageShell
@@ -42,12 +45,12 @@ export default async function PrivacyPage() {
       </p>
 
       <Section title={<T k="privacy.who.title" />}>
-        <p className="prose-wzd font-body"><T k="privacy.who.body" /></p>
+        <P k="privacy.who.body" className="prose-wzd font-body" />
       </Section>
 
       <Section title={<T k="privacy.collect.title" />}>
         <div className="space-y-6">
-          {["reg", "contact", "analytics"].map((k) => (
+          {["reg", "contact", "analytics"].filter((k) => any(`privacy.collect.${k}.title`, `privacy.collect.${k}.body`)).map((k) => (
             <article key={k}>
               <h3 className="display text-lg">
                 <T k={`privacy.collect.${k}.title`} />
@@ -61,37 +64,37 @@ export default async function PrivacyPage() {
       </Section>
 
       <Section title={<T k="privacy.why.title" />}>
-        <p className="prose-wzd font-body"><T k="privacy.why.body" /></p>
+        <P k="privacy.why.body" className="prose-wzd font-body" />
       </Section>
 
       <Section title={<T k="privacy.cookies.title" />}>
-        <p className="prose-wzd font-body"><T k="privacy.cookies.body" /></p>
+        <P k="privacy.cookies.body" className="prose-wzd font-body" />
         <ConsentChoice />
       </Section>
 
       <Section title={<T k="privacy.sharing.title" />}>
-        <p className="prose-wzd font-body"><T k="privacy.sharing.body" /></p>
+        <P k="privacy.sharing.body" className="prose-wzd font-body" />
       </Section>
 
       <Section title={<T k="privacy.retention.title" />}>
-        <p className="prose-wzd font-body"><T k="privacy.retention.body" /></p>
+        <P k="privacy.retention.body" className="prose-wzd font-body" />
       </Section>
 
       <Section title={<T k="privacy.rights.title" />}>
-        <p className="prose-wzd font-body"><T k="privacy.rights.body" /></p>
-        <p className="prose-wzd mt-4 font-body"><T k="privacy.rights.complain" /></p>
+        <P k="privacy.rights.body" className="prose-wzd font-body" />
+        <P k="privacy.rights.complain" className="prose-wzd mt-4 font-body" />
         <p className="mt-4 font-body">
           <a className="link" href={`mailto:${EVENT.email}`}>{EVENT.email}</a>
         </p>
       </Section>
 
       <Section title={<T k="privacy.photos.title" />}>
-        <p className="prose-wzd font-body"><T k="privacy.photos.body" /></p>
+        <P k="privacy.photos.body" className="prose-wzd font-body" />
         <Cta k="privacy.photos.cta" href="/photo-policy" className="btn btn-secondary mt-6" />
       </Section>
 
       <Section title={<T k="privacy.changes.title" />}>
-        <p className="prose-wzd font-body"><T k="privacy.changes.body" /></p>
+        <P k="privacy.changes.body" className="prose-wzd font-body" />
       </Section>
     </PageShell>
   )

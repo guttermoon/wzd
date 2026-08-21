@@ -62,12 +62,22 @@ export const getSiteCopy = cache(async (): Promise<SiteCopy> => {
         const key = extractPlainText(titleProp?.title || []).trim()
         if (!KEY_PATTERN.test(key) || !isLive(properties)) continue
 
-        // Text and URL are taken separately, and an empty one is left
-        // alone rather than written as "". Retargeting a button without
-        // rewording it is a normal thing to want, and so is the reverse.
-        const text = extractPlainText(properties.Text?.rich_text || [])
-        if (text) copy[key] = text
+        // An empty `Text` on a live row means empty. Clearing a cell is
+        // how the owner takes a line off the site, so it has to win over
+        // the built-in the same way any other edit does — otherwise there
+        // is no way to remove copy, only to change it, and the old words
+        // come back the moment the cell is cleared. Components skip the
+        // keys that come back blank rather than rendering an empty
+        // paragraph or a bullet with nothing in it.
+        //
+        // The base layer is untouched by this: with no Notion at all
+        // there are no rows, so nothing is cleared and the site renders
+        // complete.
+        copy[key] = extractPlainText(properties.Text?.rich_text || []).trim()
 
+        // The link is separate, and an empty one is left alone: pointing a
+        // button somewhere new without rewording it is a normal thing to
+        // want, and so is the reverse.
         const url = linkOf(properties)
         if (url) copy[urlKey(key)] = url
       }

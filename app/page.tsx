@@ -1,5 +1,5 @@
 import { getSiteCopy } from "@/lib/site-copy"
-import { makeT, makeS } from "@/components/notion-text"
+import { makeT, makeS, makeHas, makeAny, makeP } from "@/components/notion-text"
 import { Photo } from "@/components/photo"
 import { Reveal } from "@/components/reveal"
 import { Swipe } from "@/components/swipe"
@@ -31,6 +31,9 @@ export default async function HomePage() {
   const T = makeT(copy)
   const S = makeS(copy)
   const Cta = makeCta(copy)
+  const has = makeHas(copy)
+  const any = makeAny(copy)
+  const P = makeP(copy)
 
   const essentials = [
     { k: "when", href: "/faq" },
@@ -121,7 +124,7 @@ export default async function HomePage() {
             </h2>
           </Reveal>
           <dl className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {essentials.map((item, i) => (
+            {essentials.filter((it) => any(`home.essentials.${it.k}.label`, `home.essentials.${it.k}.value`)).map((item, i) => (
               <Reveal
                 key={item.k}
                 variant="slide-right"

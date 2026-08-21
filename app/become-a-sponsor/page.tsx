@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { getSiteCopy } from "@/lib/site-copy"
-import { makeT, makeS } from "@/components/notion-text"
+import { makeT, makeS, makeHas, makeAny, makeP } from "@/components/notion-text"
 import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
 import { Photo } from "@/components/photo"
@@ -20,6 +20,9 @@ export default async function SponsorsPage() {
   const T = makeT(copy)
   const S = makeS(copy)
   const Cta = makeCta(copy)
+  const has = makeHas(copy)
+  const any = makeAny(copy)
+  const P = makeP(copy)
 
   return (
     <PageShell
@@ -45,7 +48,7 @@ export default async function SponsorsPage() {
         <div className="grid gap-8 lg:grid-cols-2">
           <article className="cut-panel p-6">
             <h3 className="display text-xl"><T k="sponsors.onsite.title" /></h3>
-            <p className="display mt-2 text-accent-text"><T k="sponsors.onsite.amount" /></p>
+            <P k="sponsors.onsite.amount" className="display mt-2 text-accent-text" />
             <div className="prose-wzd mt-4 font-body">
               <p><T k="sponsors.onsite.body1" /></p>
               <p><T k="sponsors.onsite.body2" /></p>
@@ -54,23 +57,28 @@ export default async function SponsorsPage() {
               <T k="sponsors.onsite.examples.title" />
             </h4>
             <ul className="mt-3 list-disc space-y-1 pl-5 font-body">
-              <li><T k="sponsors.onsite.example1" /></li>
-              <li><T k="sponsors.onsite.example2" /></li>
-              <li><T k="sponsors.onsite.example3" /></li>
+              {["sponsors.onsite.example1", "sponsors.onsite.example2", "sponsors.onsite.example3"]
+                .filter(has)
+                .map((k) => (
+                  <li key={k}><T k={k} /></li>
+                ))}
             </ul>
             <h4 className="display mt-6 text-base">
               <T k="sponsors.onsite.noflyering.title" />
             </h4>
-            <p className="mt-2 font-body"><T k="sponsors.onsite.noflyering.body" /></p>
+            <P k="sponsors.onsite.noflyering.body" className="mt-2 font-body" />
           </article>
 
           <article className="cut-panel p-6">
             <h3 className="display text-xl"><T k="sponsors.prize.title" /></h3>
-            <p className="display mt-2 text-accent-text"><T k="sponsors.prize.amount" /></p>
-            <p className="prose-wzd mt-4 font-body"><T k="sponsors.prize.body" /></p>
+            <P k="sponsors.prize.amount" className="display mt-2 text-accent-text" />
+            <P k="sponsors.prize.body" className="prose-wzd mt-4 font-body" />
             <ul className="mt-4 list-disc space-y-2 pl-5 font-body">
-              <li><T k="sponsors.prize.item1" /></li>
-              <li><T k="sponsors.prize.item2" /></li>
+              {["sponsors.prize.item1", "sponsors.prize.item2"]
+                .filter(has)
+                .map((k) => (
+                  <li key={k}><T k={k} /></li>
+                ))}
             </ul>
           </article>
         </div>
@@ -87,7 +95,7 @@ export default async function SponsorsPage() {
       </Section>
 
       <Section title={<T k="sponsors.contact.title" />}>
-        <p className="prose-wzd font-body"><T k="sponsors.contact.body" /></p>
+        <P k="sponsors.contact.body" className="prose-wzd font-body" />
         <Cta
           k="sponsors.contact.cta"
           href={`mailto:${EVENT.email}`}
