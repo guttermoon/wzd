@@ -398,13 +398,22 @@ to another application rather than opening a page.
 - `POST /api/revalidate` requires `REVALIDATION_SECRET`; it returns 503 if
   unset. (The template's version skipped the check when no secret was sent.)
 - The newsletter signup is **our own form** (`components/email-signup.tsx`)
-  posting to `POST /api/newsletter`, which hands the address to paa.ge
-  (backend `api.lama.co`) server-side. It was an iframe of paa.ge's page,
+  posting to `POST /api/newsletter`, which adds the address to **Brevo**
+  server-side, to list **7, `WZDNewsletter`** (not 2, `DGCNewsletter`,
+  which is the club's). It was once an iframe of the provider's page,
   which could not be styled and put their cookie notice and their GA4 on
   every page of ours. Because nothing of theirs runs in the browser, this
-  needs no consent. The endpoint is public and lives in the route;
-  `PAAGE_SIGNUP_URL`, `PAAGE_SIGNUP_FIELD` and `PAAGE_SIGNUP_FORMAT`
-  override it if paa.ge changes anything.
+  needs no consent, and that stayed true when the list moved from paa.ge:
+  only the route changed, the form did not.
+
+  It calls the contacts API rather than the address Brevo's embed posts
+  to, because that one answers with a redirect and a page of HTML and a
+  server cannot tell from it whether the address was added. The API
+  answers 201 created or 204 updated, which is worth checking.
+  `updateEnabled` is on so re-subscribing works rather than reading as an
+  error. `BREVO_API_KEY` (shared with photo submissions), `BREVO_LIST_ID`
+  and `BREVO_CONTACTS_URL` configure it; with no key the route answers
+  503 and the form offers a `mailto:` instead of losing the signup.
 - **Photograph submissions** (`/submit-photos`) post to
   `POST /api/photo-submissions`, which emails them to
   `EVENT.photoSubmissions` — Megan, not the general address, because she
