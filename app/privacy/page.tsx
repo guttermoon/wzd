@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { getSiteCopy } from "@/lib/site-copy"
 import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
 import { makeT, makeS } from "@/components/notion-text"
+import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
 import { ConsentChoice } from "@/components/consent-choice"
 import { EVENT } from "@/lib/event"
@@ -20,6 +20,7 @@ export default async function PrivacyPage() {
   const copy = await getSiteCopy()
   const T = makeT(copy)
   const S = makeS(copy)
+  const Cta = makeCta(copy)
 
   return (
     <PageShell
@@ -86,9 +87,7 @@ export default async function PrivacyPage() {
 
       <Section title={<T k="privacy.photos.title" />}>
         <p className="prose-wzd font-body"><T k="privacy.photos.body" /></p>
-        <Link href="/photo-policy" className="btn btn-secondary mt-6">
-          <T k="privacy.photos.cta" />
-        </Link>
+        <Cta k="privacy.photos.cta" href="/photo-policy" className="btn btn-secondary mt-6" />
       </Section>
 
       <Section title={<T k="privacy.changes.title" />}>

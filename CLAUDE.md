@@ -23,8 +23,9 @@ Two layers, and the first one is complete on its own:
    key from here to "move it to Notion"; Notion overrides, it doesn't own.
 2. **Notion database `wzd-pages`** (`NOTION_DATABASE_ID`,
    `3c16f6ccb2c180e087a4da55703d5792`) — rows with `Name` = the key and
-   `Text` = the copy. 251 rows, of which 225 are keys the site renders and
-   the rest are left over from copy that has since been cut. Fetched in one
+   `Text` = the copy and `URL` = where it goes, if it is a button. 257
+   rows, of which 231 are keys the site renders and the rest are left over
+   from copy that has since been cut. Fetched in one
    paginated query by `lib/site-copy.ts`; rows whose title isn't a dotted
    key are ignored.
    An `Order` number column carries the reading order, and the table view
@@ -53,6 +54,43 @@ Keys are dotted and lowercase (`home.hero.title`, `faq.q3`,
 **If you add a `<T k="…">`, add the key to `content/site-copy.json` too** —
 otherwise the slot renders empty. And add a matching Notion row, or the
 owner can't edit it.
+
+### Buttons: the words and the link both come from the row
+
+Every button on the site that goes somewhere is a `<Cta>`
+(`components/cta.tsx`), built by `makeCta(copy)` beside `makeT` and
+`makeS`. It takes the key of a row and the built-in destination:
+
+```tsx
+<Cta k="home.cause.cta" href={EVENT.cause.donateUrl} className="btn btn-primary" />
+```
+
+The row's `Text` is the label and its `URL` is where it points. Both
+override, neither owns: with the `URL` cell empty — which is how every row
+starts — the button goes where the `href` says, so the site is correct
+with no Notion at all, exactly as it is for the words.
+
+Two things follow from this that are easy to get wrong:
+
+- **Where it points decides how it renders**, not whoever wrote it. An
+  `https:` destination goes through `ExternalLink` and gets the new tab,
+  the announcement and `rel="noopener noreferrer"`; a `/path` goes through
+  `next/link`; `mailto:` and `tel:` are plain anchors. That is the whole
+  reason this is one component — the owner can repoint a button at an
+  outside address long after the code was written, and `check:links` has
+  to keep passing without anyone remembering to change the markup.
+- **A pasted value is not trusted.** `isSafeHref` (`lib/site-copy.ts`)
+  allows `http(s)`, `mailto:`, `tel:` and a leading `/`, and anything else
+  — `javascript:` above all — is dropped and the built-in link stands. It
+  is checked twice on purpose: once as the value enters from Notion, and
+  again in `Cta`, which is the last thing between it and the DOM.
+
+The `URL` value is filed in the copy map under `url:<key>` (`urlKey()`).
+A copy key never contains a colon, so the two cannot collide.
+
+Buttons that download a file out of `public/` — the logo PNGs on `/press`
+— are deliberately *not* wired this way: those files are built by
+`npm run logos` and their paths belong to the build, not to the owner.
 
 Revalidation is 60s. `POST /api/revalidate` with the secret to force it.
 
@@ -230,9 +268,25 @@ owner's instruction:
 - `components/consent-choice.tsx` on `/privacy` shows the current answer
   and lets it be withdrawn. Consent that cannot be withdrawn as easily as
   it was given is not consent.
-- `components/zeffy-embed.tsx` always links to the same form on Zeffy's own
-  site underneath the embed, so an ad blocker or a bad deploy at their end
-  is never a dead end.
+- `components/zeffy-embed.tsx` puts the form on the page by one of three
+  routes, because relying on Zeffy's own snippet alone meant it was often
+  simply missing. Their script finds `[data-zeffy-embed]` and fills it,
+  which fails in more ways than it looks: it scans once when it executes,
+  so a client-side navigation between `/register` and `/donate` left a
+  fresh div nothing ever looked at; and when the paint landed during
+  hydration React recovered from the mismatch by rebuilding the root and
+  took the whole embed with it (React error #423 — the form vanished and
+  the DOM looked perfectly healthy).
+
+  So the script is injected from an effect, after hydration, on every
+  mount — that second execution is what makes it scan the div that is on
+  the page now. Then the result is **checked rather than assumed**: a
+  `MutationObserver` watches for their paint, and if nothing has appeared
+  within `DEADLINE_MS` the form is loaded straight from Zeffy in an
+  iframe instead. `<noscript>` carries the same iframe for a visitor with
+  no JavaScript, and the link to Zeffy's own site sits underneath all of
+  it. If you touch this, test all four: script working, script blocked,
+  a client-side navigation between the two pages, and JavaScript off.
 
 The theme choice is kept whatever the answer, on the same footing: the
 visitor asked for it by clicking the switch.

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { getSiteCopy } from "@/lib/site-copy"
 import { makeT, makeS } from "@/components/notion-text"
+import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
 import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
@@ -18,6 +19,7 @@ export default async function SponsorsPage() {
   const copy = await getSiteCopy()
   const T = makeT(copy)
   const S = makeS(copy)
+  const Cta = makeCta(copy)
 
   return (
     <PageShell
@@ -86,9 +88,11 @@ export default async function SponsorsPage() {
 
       <Section title={<T k="sponsors.contact.title" />}>
         <p className="prose-wzd font-body"><T k="sponsors.contact.body" /></p>
-        <a href={`mailto:${EVENT.email}`} className="btn btn-primary mt-6">
-          Email {EVENT.email}
-        </a>
+        <Cta
+          k="sponsors.contact.cta"
+          href={`mailto:${EVENT.email}`}
+          className="btn btn-primary mt-6"
+        />
       </Section>
     </PageShell>
   )

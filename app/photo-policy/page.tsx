@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { getSiteCopy } from "@/lib/site-copy"
 import { Photo } from "@/components/photo"
 import { makeT, makeS } from "@/components/notion-text"
+import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
 import { photo, allPhotos } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
@@ -19,6 +19,7 @@ export default async function PhotoPolicyPage() {
   const copy = await getSiteCopy()
   const T = makeT(copy)
   const S = makeS(copy)
+  const Cta = makeCta(copy)
 
   // One entry per photographer, in first-appearance order.
   const photographers = [...new Map(allPhotos().map((p) => [p.credit, p])).values()]
@@ -105,12 +106,12 @@ export default async function PhotoPolicyPage() {
       <Section title={<T k="photo.press.title" />}>
         <p className="prose-wzd font-body"><T k="photo.press.body" /></p>
         <div className="mt-6 flex flex-wrap gap-3">
-          <Link href="/press" className="btn btn-primary">
-            <T k="photo.press.cta" />
-          </Link>
-          <a href={`mailto:${EVENT.email}`} className="btn btn-secondary">
-            Email the team
-          </a>
+          <Cta k="photo.press.cta" href="/press" className="btn btn-primary" />
+          <Cta
+            k="photo.press.email"
+            href={`mailto:${EVENT.email}`}
+            className="btn btn-secondary"
+          />
         </div>
       </Section>
     </PageShell>
