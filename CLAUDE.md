@@ -304,6 +304,18 @@ owner's instruction:
   treated differently. `/privacy` says this in as many words: **change one
   and change the other.**
 
+  **Zeffy does not come alone.** Their embed loads Stripe, hCaptcha and
+  Google Pay, which a form taking a payment genuinely needs, and also
+  HubSpot, Microsoft Clarity, Google/DoubleClick and LinkedIn, which are
+  Zeffy's own analytics and advertising and are not necessary to take a
+  booking by any reading. None of that is in our code; all of it appears
+  on our two pages, without consent, because the embed is ungated.
+  `privacy.cookies.body` names every one of them and says plainly which
+  are needed and which are not, because a visitor cannot judge what they
+  are not told. If that list ever changes, or the embed is gated after
+  all, that copy has to change with it. The honest fix is upstream: ask
+  Zeffy to turn the marketing trackers off for the account.
+
 - `lib/consent.ts` holds the answer in localStorage and broadcasts changes
   on a window event. Storing the answer itself needs no consent: it is the
   choice, and the alternative is asking on every page.
