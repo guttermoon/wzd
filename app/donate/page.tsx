@@ -53,19 +53,26 @@ export default async function DonatePage() {
             celebrating horror and outsider creativity and that is a
             photograph of exactly that.
 
-            The form is below the grid rather than in it: squeezed into
-            seven of twelve columns it would be a worse form, and it is
-            what the page is for. */}
+            The form sits in the text column, under the copy that argues
+            for it, and takes that column's width. It used to run the full
+            width below the grid, which left a hole the height of the
+            photograph between the list and the form — the panel is
+            sticky and taller than the copy beside it, so the space under
+            the text was simply empty. */}
         <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-7">
-            <P k="register.cause.body" className="prose-wzd font-body" />
-            <P k="register.cause.donation" className="prose-wzd mt-4 font-body" />
+            <P k="donate.cause.body" className="prose-wzd font-body" />
+            <P k="donate.cause.donation" className="prose-wzd mt-4 font-body" />
             <ul className="prose-wzd mt-4 list-disc space-y-2 pl-5 font-body">
-              {WORK.filter((n) => has(`register.cause.work.${n}`)).map((n) => (
-                <li key={n}><T k={`register.cause.work.${n}`} /></li>
+              {WORK.filter((n) => has(`donate.cause.work.${n}`)).map((n) => (
+                <li key={n}><T k={`donate.cause.work.${n}`} /></li>
               ))}
             </ul>
-            <P k="register.cause.thanks" className="prose-wzd mt-4 font-body" />
+            <P k="donate.cause.thanks" className="prose-wzd mt-4 font-body" />
+
+            <div className="mt-8">
+              <ZeffyEmbed form="donation" />
+            </div>
           </div>
 
           {/* 5/6 with the crop held to the top takes exactly the bottom
@@ -82,10 +89,6 @@ export default async function DonatePage() {
             sizes="(min-width: 64rem) 22rem, 100vw"
             className="lg:col-span-5 lg:sticky lg:top-24 lg:self-start"
           />
-        </div>
-
-        <div className="mt-8">
-          <ZeffyEmbed form="donation" />
         </div>
 
         <p className="mt-6 font-body">
