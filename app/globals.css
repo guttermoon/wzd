@@ -180,6 +180,61 @@
     margin-inline: 0 auto !important;
   }
 
+  /* ── The Dead Good Club's lock-up, as a link ───────────────────────
+     Their mark is raster line art on transparency, so it cannot take
+     `currentColor` the way our own SVG wordmark does. The hover colour is
+     a second layer instead: a flat field of --accent, masked by the
+     artwork's own alpha, faded in over the top. The drawing underneath is
+     never touched — no filter, no hue rotation, nothing that could
+     misrepresent someone else's mark in its resting state.
+
+     Two masks, not one: the lock-up was drawn twice and the alpha differs
+     between the grounds (38% of pixels), because the letterforms are
+     filled in one and knocked out in the other. Each ground gets its own.
+
+     The tint is inert to the pointer so the anchor underneath keeps every
+     click. */
+  .dgc-mark {
+    position: relative;
+    display: block;
+  }
+
+  .dgc-mark-tint {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background-color: var(--accent);
+    transition: opacity 160ms var(--ease-cut);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+  }
+
+  .dgc-mark-tint-light {
+    -webkit-mask-image: url("/brand/dgc-light-bg.webp");
+    mask-image: url("/brand/dgc-light-bg.webp");
+  }
+
+  .dgc-mark-tint-dark {
+    -webkit-mask-image: url("/brand/dgc-dark-bg.webp");
+    mask-image: url("/brand/dgc-dark-bg.webp");
+  }
+
+  a:hover .dgc-mark-tint,
+  a:focus-visible .dgc-mark-tint {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dgc-mark-tint {
+      transition: none;
+    }
+  }
+
   /* Display type: Grandstander, always caps, tight and heavy. */
   .display {
     font-family: var(--font-display), "Arial Black", Impact, sans-serif;

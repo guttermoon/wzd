@@ -90,13 +90,13 @@ export default async function PressPage() {
             grounds and one for dark. */}
         <p className="mt-6 flex flex-wrap gap-3">
           <a href="/brand/wordmark-light-bg.png" download className="btn btn-secondary">
-            Wordmark (PNG)
+            <T k="press.logo.download.light" />
           </a>
           <a href="/brand/wordmark-dark-bg.png" download className="btn btn-secondary">
-            Wordmark for dark backgrounds (PNG)
+            <T k="press.logo.download.dark" />
           </a>
           <a href="/brand/brain.png" download className="btn btn-secondary">
-            Brain mark (PNG)
+            <T k="press.logo.download.brain" />
           </a>
         </p>
       </Section>

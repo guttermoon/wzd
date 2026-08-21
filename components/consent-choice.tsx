@@ -13,7 +13,17 @@ import { useConsent, writeConsent } from "@/lib/consent"
  * It cannot reach back into a script that is already running in this tab,
  * which is why the wording says what it says.
  */
-export function ConsentChoice() {
+/** Passed in from /privacy, which is a server component and has the copy. */
+export type ConsentChoiceCopy = {
+  accepted: string
+  declined: string
+  unanswered: string
+  accept: string
+  withdraw: string
+  note: string
+}
+
+export function ConsentChoice({ copy }: { copy: ConsentChoiceCopy }) {
   const consent = useConsent()
 
   if (consent === undefined) {
@@ -24,10 +34,10 @@ export function ConsentChoice() {
 
   const state =
     consent === "granted"
-      ? "You have accepted. Analytics and the registration form can store things on your device."
+      ? copy.accepted
       : consent === "denied"
-        ? "You have declined. Nothing is being stored on your device, and analytics are not running."
-        : "You have not answered yet, so nothing is being stored on your device."
+        ? copy.declined
+        : copy.unanswered
 
   return (
     <div className="cut-panel mt-4 p-6">
@@ -39,7 +49,7 @@ export function ConsentChoice() {
             onClick={() => writeConsent("granted")}
             className="btn btn-primary"
           >
-            Accept
+            {copy.accept}
           </button>
         ) : null}
         {consent !== "denied" ? (
@@ -48,15 +58,13 @@ export function ConsentChoice() {
             onClick={() => writeConsent("denied")}
             className="btn btn-secondary"
           >
-            Withdraw
+            {copy.withdraw}
           </button>
         ) : null}
       </div>
       {consent === "granted" ? (
         <p className="prose-wzd mt-4 font-body text-sm text-muted">
-          Withdrawing stops anything further loading. Anything already running
-          in this tab stops when you reload the page, and you can clear what is
-          stored through your browser at any time.
+          {copy.note}
         </p>
       ) : null}
     </div>

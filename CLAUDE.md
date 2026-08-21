@@ -83,6 +83,21 @@ zero on every route. The one deliberate exception is the newsletter's
 otherwise the slot renders empty. And add a matching Notion row, or the
 owner can't edit it.
 
+**Client components take their words as props.** `getSiteCopy` is
+server-only, so the consent dialog, the newsletter form, the Zeffy
+fallback line and the consent panel on `/privacy` are handed their strings
+by the server component that renders them — `app/layout.tsx`,
+`components/footer.tsx`, and the two pages. They are `site.consent.*`,
+`site.newsletter.*` and `site.form.*`, and they are as editable as
+anything else. A string typed straight into a client component is not.
+
+Three kinds of string stay in the code deliberately, because they are
+contracts rather than copy: the `(opens in a new tab)` announcement, which
+`check:links` asserts on word for word; the landmark and control labels
+(`aria-label="Primary"`, the theme toggle); and the masthead's accessible
+name. Making those editable would let a copy edit break the link check or
+the accessibility of a control.
+
 ### Buttons: the words and the link both come from the row
 
 Every button on the site that goes somewhere is a `<Cta>`

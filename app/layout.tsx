@@ -134,7 +134,15 @@ export default async function RootLayout({
           <Analytics />
           <VhsFilter />
           {/* Last in the layout, so it is last in the tab order. */}
-          <ConsentBanner />
+          <ConsentBanner
+            copy={{
+              title: copy["site.consent.title"] ?? "",
+              body: copy["site.consent.body"] ?? "",
+              link: copy["site.consent.link"] ?? "",
+              accept: copy["site.consent.accept"] ?? "",
+              reject: copy["site.consent.reject"] ?? "",
+            }}
+          />
         </ThemeProvider>
       </body>
     </html>

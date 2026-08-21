@@ -3,7 +3,7 @@ import { getSiteCopy } from "@/lib/site-copy"
 import { makeT, makeS, makeHas, makeAny, makeP } from "@/components/notion-text"
 import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
-import { Photo } from "@/components/photo"
+import { Photo, Graphic } from "@/components/photo"
 import { ZeffyEmbed } from "@/components/zeffy-embed"
 import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
@@ -53,19 +53,30 @@ export default async function DonatePage() {
             celebrating horror and outsider creativity and that is a
             photograph of exactly that.
 
-            The form is below the grid rather than in it: squeezed into
-            seven of twelve columns it would be a worse form, and it is
-            what the page is for. */}
+            The form sits in the text column, under the copy that argues
+            for it, and takes that column's width. It used to run the full
+            width below the grid, which left a hole the height of the
+            photograph between the list and the form — the panel is
+            sticky and taller than the copy beside it, so the space under
+            the text was simply empty. */}
         <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
           <div className="lg:col-span-7">
-            <P k="register.cause.body" className="prose-wzd font-body" />
-            <P k="register.cause.donation" className="prose-wzd mt-4 font-body" />
+            <P k="donate.cause.body" className="prose-wzd font-body" />
+            <P k="donate.cause.donation" className="prose-wzd mt-4 font-body" />
             <ul className="prose-wzd mt-4 list-disc space-y-2 pl-5 font-body">
-              {WORK.filter((n) => has(`register.cause.work.${n}`)).map((n) => (
-                <li key={n}><T k={`register.cause.work.${n}`} /></li>
+              {WORK.filter((n) => has(`donate.cause.work.${n}`)).map((n) => (
+                <li key={n}><T k={`donate.cause.work.${n}`} /></li>
               ))}
             </ul>
-            <P k="register.cause.thanks" className="prose-wzd mt-4 font-body" />
+            <P k="donate.cause.thanks" className="prose-wzd mt-4 font-body" />
+
+            <div className="mt-8">
+              <ZeffyEmbed
+                form="donation"
+                trouble={S("site.form.trouble")}
+                troubleCta={S("site.form.trouble.cta")}
+              />
+            </div>
           </div>
 
           {/* 5/6 with the crop held to the top takes exactly the bottom
@@ -84,19 +95,67 @@ export default async function DonatePage() {
           />
         </div>
 
-        <div className="mt-8">
-          <ZeffyEmbed form="donation" />
-        </div>
+      </Section>
 
-        <p className="mt-6 font-body">
-          <ExternalLink className="link" href={EVENT.cause.url}>
-            {EVENT.cause.name}
-          </ExternalLink>{" "}
-          &middot;{" "}
-          <ExternalLink className="link" href={EVENT.cause.donateUrl}>
-            {EVENT.cause.donateLabel}
-          </ExternalLink>
-        </p>
+      {/* Who the money actually goes to, in their words rather than ours.
+          This replaced a bare pair of links, which asked someone who had
+          just read about the cause to go and find out what it was
+          somewhere else.
+
+          Their lock-up was drawn twice, once for each ground, so the
+          right one is shown and the other is not rendered at all rather
+          than hidden and downloaded anyway — `dark:` on the wrapper,
+          which is how the theme is switched everywhere else. It carries
+          no alt: the heading beside it already says the name, and a
+          second announcement of it is noise. */}
+      <Section title={<T k="donate.about.title" />}>
+        <div className="grid items-start gap-8 lg:grid-cols-12 lg:gap-10">
+          {/* The lock-up links to the club, and takes the accent colour
+              on hover and on keyboard focus — see .dgc-mark in
+              globals.css. It carries the name rather than an empty alt:
+              it is a link now, and a link with nothing to announce is a
+              link nobody can follow. Only one of the two is ever
+              displayed, so the name is never said twice. */}
+          <div className="lg:col-span-4">
+            <ExternalLink
+              href={EVENT.cause.url}
+              className="mx-auto block w-full max-w-[14rem] lg:mx-0"
+            >
+              <span className="dgc-mark dark:hidden">
+                <Graphic
+                  src="/brand/dgc-light-bg.webp"
+                  alt={EVENT.cause.name}
+                  width={1083}
+                  height={1536}
+                  frame={false}
+                  sizes="(min-width: 64rem) 14rem, 55vw"
+                />
+                <span className="dgc-mark-tint dgc-mark-tint-light" aria-hidden="true" />
+              </span>
+              <span className="dgc-mark hidden dark:block">
+                <Graphic
+                  src="/brand/dgc-dark-bg.webp"
+                  alt={EVENT.cause.name}
+                  width={1083}
+                  height={1536}
+                  frame={false}
+                  sizes="(min-width: 64rem) 14rem, 55vw"
+                />
+                <span className="dgc-mark-tint dgc-mark-tint-dark" aria-hidden="true" />
+              </span>
+            </ExternalLink>
+          </div>
+
+          <div className="lg:col-span-8">
+            <P k="donate.about.body1" className="prose-wzd font-body" />
+            <P k="donate.about.body2" className="prose-wzd mt-4 font-body" />
+            <Cta
+              k="donate.about.cta"
+              href={EVENT.cause.manifestoUrl}
+              className="btn btn-secondary mt-6"
+            />
+          </div>
+        </div>
       </Section>
 
       <Section title={<T k="donate.other.title" />}>

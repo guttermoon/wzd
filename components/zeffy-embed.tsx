@@ -83,8 +83,13 @@ const FORMS = {
 
 export function ZeffyEmbed({
   form = "ticketing",
+  trouble,
+  troubleCta,
 }: {
   form?: keyof typeof FORMS
+  /** Passed in from the page: this is a client component. */
+  trouble?: string
+  troubleCta?: string
 }) {
   const { path, title, away, height } = FORMS[form]
   const host = useRef<HTMLDivElement>(null)
@@ -213,9 +218,9 @@ export function ZeffyEmbed({
           through that is not an embed at all. It is not in anyone's way
           when the form is there. */}
       <p className="mt-4 font-body text-sm text-muted">
-        Trouble with the form?{" "}
+        {trouble}{" "}
         <ExternalLink className="link" href={away}>
-          Open it on Zeffy
+          {troubleCta}
         </ExternalLink>
       </p>
     </div>

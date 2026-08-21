@@ -45,7 +45,18 @@ export function Footer({ copy }: { copy: SiteCopy }) {
             <T k="footer.tagline" />
           </p>
           <div className="mt-8">
-            <EmailSignup />
+            <EmailSignup
+              copy={{
+                label: copy["site.newsletter.label"] ?? "",
+                placeholder: copy["site.newsletter.placeholder"] ?? "",
+                submit: copy["site.newsletter.submit"] ?? "",
+                sending: copy["site.newsletter.sending"] ?? "",
+                done: copy["site.newsletter.done"] ?? "",
+                bademail: copy["site.newsletter.bademail"] ?? "",
+                failed: copy["site.newsletter.failed"] ?? "",
+                failedCta: copy["site.newsletter.failed.cta"] ?? "",
+              }}
+            />
           </div>
         </div>
 

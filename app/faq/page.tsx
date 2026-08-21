@@ -1,7 +1,9 @@
 import type { Metadata } from "next"
 import { getSiteCopy } from "@/lib/site-copy"
 import { makeT, makeS, makeHas, makeAny, makeP } from "@/components/notion-text"
+import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
+import { EVENT } from "@/lib/event"
 import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
 
@@ -19,6 +21,7 @@ export default async function FaqPage() {
   const copy = await getSiteCopy()
   const T = makeT(copy)
   const S = makeS(copy)
+  const Cta = makeCta(copy)
   const has = makeHas(copy)
   const any = makeAny(copy)
   const P = makeP(copy)
@@ -90,9 +93,12 @@ export default async function FaqPage() {
       </div>
 
       <Section title={<T k="faq.more.title" />}>
-        <p className="prose-wzd font-body">
-          <T k="faq.more.body" />
-        </p>
+        <P k="faq.more.body" className="prose-wzd font-body" />
+        <Cta
+          k="faq.more.cta"
+          href={EVENT.discordUrl}
+          className="btn btn-primary mt-6"
+        />
       </Section>
     </PageShell>
   )
