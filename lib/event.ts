@@ -17,6 +17,13 @@ export const EVENT = {
   country: "GB",
   email: "info@worldzombieday.co.uk",
   /**
+   * Photograph submissions go to Megan rather than the general address:
+   * she is the one who sorts them, credits them and answers about them.
+   * The owner's instruction, and it is the address the form's own help
+   * text asks people to share their folders with.
+   */
+  photoSubmissions: "megan@worldzombieday.co.uk",
+  /**
    * Who the event raises money for. The Dead Good Club is a Community
    * Interest Company, so this is a community fundraising event and the
    * site must never describe it as a charity.
@@ -87,6 +94,7 @@ export const FOOTER_NAV = [
   { name: "Become a sponsor", href: "/become-a-sponsor" },
   { name: "Press kit", href: "/press" },
   { name: "Photo policy", href: "/photo-policy" },
+  { name: "Submit photos", href: "/submit-photos" },
 ] as const
 
 /** Small print, set in the footer's bottom rule rather than the nav list. */

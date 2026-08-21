@@ -32,6 +32,7 @@ const ROUTES = [
   "/donate",
   "/press",
   "/photo-policy",
+  "/submit-photos",
   "/privacy",
 ]
 

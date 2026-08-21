@@ -393,5 +393,15 @@ to another application rather than opening a page.
   needs no consent. The endpoint is public and lives in the route;
   `PAAGE_SIGNUP_URL`, `PAAGE_SIGNUP_FIELD` and `PAAGE_SIGNUP_FORMAT`
   override it if paa.ge changes anything.
+- **Photograph submissions** (`/submit-photos`) post to
+  `POST /api/photo-submissions`, which emails them to
+  `EVENT.photoSubmissions` — Megan, not the general address, because she
+  is the one who credits them. Sending needs `BREVO_API_KEY`; without it
+  the route returns 503 `unconfigured` and the form hands the visitor a
+  `mailto:` with everything they typed already in it. That fallback is
+  the point, not a nicety: someone who has just written out where their
+  folder lives and how to get into it must never lose it to a missing
+  environment variable. `PHOTO_SUBMISSIONS_TO`, `_FROM` and `_URL`
+  override the destination, sender and endpoint.
 - 301 photographs are still on the old WordPress site and could not be
   fetched from this environment. See `docs/IMAGES.md`.
