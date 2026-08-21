@@ -16,7 +16,7 @@
   "site.newsletter.placeholder": "you@example.com",
   "site.newsletter.submit": "Sign up",
   "site.newsletter.sending": "Signing up",
-  "site.newsletter.done": "You are on the list. Watch your inbox.",
+  "site.newsletter.done": "Almost there. We have sent you an email with a link to confirm. Click it and you are on the list.",
   "site.newsletter.bademail": "That does not look like an email address.",
   "site.newsletter.failed": "That did not go through.",
   "site.newsletter.failed.cta": "Email us to be added",

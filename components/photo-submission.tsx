@@ -96,6 +96,19 @@ export function PhotoSubmission({
 
   const field = "min-h-[44px] w-full border-2 border-rule bg-bg px-4 py-3 font-body text-text placeholder:text-muted"
 
+  /**
+   * Both textareas start one line high, the same as the credit field, and
+   * grow to fit what is in them. Somewhere to paste half a dozen links
+   * should not be a tall empty box before anyone has typed anything, and
+   * it should not be a one-line slot to scroll around in afterwards.
+   * Height is reset before it is read, or the box could only ever get
+   * taller.
+   */
+  const grow = (el: HTMLTextAreaElement) => {
+    el.style.height = "auto"
+    el.style.height = `${el.scrollHeight}px`
+  }
+
   return (
     <form onSubmit={onSubmit} className="mt-8 max-w-[42rem]">
       <div>
@@ -138,12 +151,13 @@ export function PhotoSubmission({
           id="submit-links"
           name="links"
           required
-          rows={4}
+          rows={1}
           maxLength={4000}
           value={links}
           aria-describedby="submit-links-help"
           onChange={(e) => {
             setLinks(e.target.value)
+            grow(e.target)
             if (state !== "idle") setState("idle")
           }}
           className={`mt-3 ${field}`}
@@ -160,12 +174,13 @@ export function PhotoSubmission({
         <textarea
           id="submit-notes"
           name="notes"
-          rows={3}
+          rows={1}
           maxLength={4000}
           value={notes}
           aria-describedby="submit-notes-help"
           onChange={(e) => {
             setNotes(e.target.value)
+            grow(e.target)
             if (state !== "idle") setState("idle")
           }}
           className={`mt-3 ${field}`}

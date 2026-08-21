@@ -406,14 +406,32 @@ to another application rather than opening a page.
   needs no consent, and that stayed true when the list moved from paa.ge:
   only the route changed, the form did not.
 
-  It calls the contacts API rather than the address Brevo's embed posts
-  to, because that one answers with a redirect and a page of HTML and a
-  server cannot tell from it whether the address was added. The API
-  answers 201 created or 204 updated, which is worth checking.
-  `updateEnabled` is on so re-subscribing works rather than reading as an
-  error. `BREVO_API_KEY` (shared with photo submissions), `BREVO_LIST_ID`
-  and `BREVO_CONTACTS_URL` configure it; with no key the route answers
-  503 and the form offers a `mailto:` instead of losing the signup.
+  It calls the API rather than the address Brevo's embed posts to, because
+  that one answers with a redirect and a page of HTML and a server cannot
+  tell from it whether anything happened.
+
+  **Nobody is added to the list by this route.** It calls
+  `contacts/doubleOptinConfirmation`, which sends a confirmation email;
+  the address joins the list only when the person clicks the link in it.
+  That is the difference between someone typing an address and someone
+  consenting to be written to. The confirmation template has to contain
+  Brevo's `{{ doubleoptin }}` link or there is nothing to click, so
+  `BREVO_DOI_TEMPLATE_ID` defaults to **14**, the walk's own copy, which
+  sends from `megan@worldzombieday.co.uk` as World Zombie Day: London.
+  Not 1, Brevo's default: that one is The Dead Good Club's, and a
+  confirmation from a name the reader does not recognise is a
+  confirmation nobody clicks. `BREVO_DOI_REDIRECT` is where clicking it
+  lands them.
+
+  Someone already on the list gets no second confirmation and Brevo says
+  so with a duplicate error; from where they are standing they have
+  subscribed, so the form is told it worked rather than shown a failure.
+  `BREVO_API_KEY` (shared with photo submissions), `BREVO_LIST_ID` and
+  `BREVO_CONTACTS_URL` do the rest; with no key the route answers 503 and
+  the form offers a `mailto:` instead of losing the signup.
+
+  The success message has to match: it says a link is on its way, not that
+  they are subscribed, because until they click they are not.
 - **Photograph submissions** (`/submit-photos`) post to
   `POST /api/photo-submissions`, which emails them to
   `EVENT.photoSubmissions` — Megan, not the general address, because she
