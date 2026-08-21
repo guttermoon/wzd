@@ -11,10 +11,11 @@
  *   wordmark-light-bg.png / wordmark-dark-bg.png / brain.png
  *                  the press kit's downloads, copied straight from
  *                  public/logos as supplied. Renamed, never resized.
- *   dgc-light-bg.webp / dgc-dark-bg.webp
- *                  The Dead Good Club's lock-up, one per ground,
- *                  re-encoded from the supplied PNGs. Same drawing, same
- *                  proportions, a fraction of the bytes.
+ *   dgc-light-bg.webp / dgc-dark-bg.webp / dgc-hover.webp
+ *                  The Dead Good Club's lock-up: one per ground, plus the
+ *                  supplied hover state. Re-encoded from the supplied
+ *                  PNGs — same drawing, same proportions, a fraction of
+ *                  the bytes.
  * and app/icon.svg, the favicon.
  *
  * Two sources, because they are different kinds of thing:
@@ -100,6 +101,18 @@ const COPIES = [
   ["public/logos/LOGOWZD light background .png", "wordmark-light-bg.png"],
   ["public/logos/LOGOWZD dark background.png", "wordmark-dark-bg.png"],
   ["public/logos/zombie brain no background.png", "brain.png"],
+  // The Dead Good Club's lock-up as PNG, for the press kit's downloads.
+  // The WebP versions beside them are what the pages display; these are
+  // what a journalist saves.
+  ["public/logos/dgc stacked official.png", "dgc-light-bg.png"],
+  ["public/logos/dgc stacked official dark.png", "dgc-dark-bg.png"],
+  // The donation QR, in the four grounds it was supplied for. Renamed
+  // only: one of the originals has a space in its filename, and a space
+  // in a download URL is a trap nobody needs.
+  ["public/donate_wzd.png", "qr-donate.png"],
+  ["public/donate_wzd transparent background.png", "qr-donate-transparent.png"],
+  ["public/donate_wzd_red.png", "qr-donate-red.png"],
+  ["public/donate_wzd_white.png", "qr-donate-white.png"],
 ]
 for (const [from, to] of COPIES) {
   copyFileSync(from, `${OUT}/${to}`)
@@ -110,7 +123,10 @@ for (const [from, to] of COPIES) {
 // Not our mark: it belongs to the cause we fundraise for, and it is
 // reproduced as supplied. Two files because it was drawn twice, one for
 // each ground — on the dark variant the lettering is white, which is why
-// it looks almost empty against a white preview.
+// it looks almost empty against a white preview. The third is their own
+// hover state, red lettering with the ghost and the gravestone left
+// alone, which is why the hover is a swap to their artwork rather than
+// anything of ours painted over the top.
 //
 // Served as WebP rather than the supplied PNG. These are line artwork on
 // transparency at 1083x1536, which PNG stores badly; WebP carries the
@@ -121,6 +137,7 @@ for (const [from, to] of COPIES) {
 const CAUSE = [
   ["public/logos/dgc stacked official.png", "dgc-light-bg.webp"],
   ["public/logos/dgc stacked official dark.png", "dgc-dark-bg.webp"],
+  ["public/logos/dgc stacked official hover.png", "dgc-hover.webp"],
 ]
 const causeSizes = []
 for (const [from, to] of CAUSE) {

@@ -131,9 +131,14 @@ Two things follow from this that are easy to get wrong:
 The `URL` value is filed in the copy map under `url:<key>` (`urlKey()`).
 A copy key never contains a colon, so the two cannot collide.
 
-Buttons that download a file out of `public/` — the logo PNGs on `/press`
-— are deliberately *not* wired this way: those files are built by
+Buttons that download a file out of `public/` — the logos, the Dead Good
+Club's lock-up and the donation QR on `/press` — are deliberately *not*
+wired this way: those files are assembled into `public/brand/` by
 `npm run logos` and their paths belong to the build, not to the owner.
+The words on them are still Notion rows; only the destination is fixed.
+That script is also where a supplied file gets a usable name — one of the
+QR originals has a space in its filename, and a space in a download URL
+is a trap nobody needs.
 
 Revalidation is 60s. `POST /api/revalidate` with the secret to force it.
 
@@ -388,5 +393,15 @@ to another application rather than opening a page.
   needs no consent. The endpoint is public and lives in the route;
   `PAAGE_SIGNUP_URL`, `PAAGE_SIGNUP_FIELD` and `PAAGE_SIGNUP_FORMAT`
   override it if paa.ge changes anything.
+- **Photograph submissions** (`/submit-photos`) post to
+  `POST /api/photo-submissions`, which emails them to
+  `EVENT.photoSubmissions` — Megan, not the general address, because she
+  is the one who credits them. Sending needs `BREVO_API_KEY`; without it
+  the route returns 503 `unconfigured` and the form hands the visitor a
+  `mailto:` with everything they typed already in it. That fallback is
+  the point, not a nicety: someone who has just written out where their
+  folder lives and how to get into it must never lose it to a missing
+  environment variable. `PHOTO_SUBMISSIONS_TO`, `_FROM` and `_URL`
+  override the destination, sender and endpoint.
 - 301 photographs are still on the old WordPress site and could not be
   fetched from this environment. See `docs/IMAGES.md`.

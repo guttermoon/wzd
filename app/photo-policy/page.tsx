@@ -115,6 +115,15 @@ export default async function PhotoPolicyPage() {
         </ul>
       </Section>
 
+      {/* Directly under the names, because it is addressed to the people
+          who might join them: the way in for a photographer who has just
+          read the terms and wants to act on them. */}
+      <Section title={<T k="photo.submit.title" />}>
+        <P k="photo.submit.body1" className="prose-wzd font-body" />
+        <P k="photo.submit.body2" className="prose-wzd mt-4 font-body" />
+        <Cta k="photo.submit.cta" href="/submit-photos" className="btn btn-primary mt-6" />
+      </Section>
+
       <Section title={<T k="photo.press.title" />}>
         <P k="photo.press.body" className="prose-wzd font-body" />
         <div className="mt-6 flex flex-wrap gap-3">
