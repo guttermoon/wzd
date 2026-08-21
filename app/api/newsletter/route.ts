@@ -44,9 +44,14 @@ import { SITE_URL } from "@/lib/site"
  *
  * `BREVO_DOI_TEMPLATE_ID` is the confirmation email, and it has to be a
  * template containing Brevo's `{{ doubleoptin }}` link or the recipient
- * has nothing to click. It defaults to 1, their "Double opt-in
- * confirmation" template. `BREVO_DOI_REDIRECT` is where clicking it lands
- * them, and defaults to the site root.
+ * has nothing to click. It defaults to 14, the walk's own copy of that
+ * template, which goes out from megan@worldzombieday.co.uk as World
+ * Zombie Day: London. Not 1, Brevo's default: that one is The Dead Good
+ * Club's, and a confirmation from a name the reader does not recognise is
+ * a confirmation nobody clicks.
+ *
+ * `BREVO_DOI_REDIRECT` is where clicking it lands them, and defaults to
+ * the site root.
  */
 export const runtime = "nodejs"
 export const preferredRegion = "lhr1"
@@ -55,7 +60,7 @@ const ENDPOINT =
   process.env.BREVO_CONTACTS_URL ||
   "https://api.brevo.com/v3/contacts/doubleOptinConfirmation"
 const LIST_ID = Number(process.env.BREVO_LIST_ID || 7)
-const TEMPLATE_ID = Number(process.env.BREVO_DOI_TEMPLATE_ID || 1)
+const TEMPLATE_ID = Number(process.env.BREVO_DOI_TEMPLATE_ID || 14)
 const REDIRECT = process.env.BREVO_DOI_REDIRECT || SITE_URL
 
 /**

@@ -416,8 +416,12 @@ to another application rather than opening a page.
   That is the difference between someone typing an address and someone
   consenting to be written to. The confirmation template has to contain
   Brevo's `{{ doubleoptin }}` link or there is nothing to click, so
-  `BREVO_DOI_TEMPLATE_ID` defaults to 1, their own opt-in template, and
-  `BREVO_DOI_REDIRECT` is where clicking it lands them.
+  `BREVO_DOI_TEMPLATE_ID` defaults to **14**, the walk's own copy, which
+  sends from `megan@worldzombieday.co.uk` as World Zombie Day: London.
+  Not 1, Brevo's default: that one is The Dead Good Club's, and a
+  confirmation from a name the reader does not recognise is a
+  confirmation nobody clicks. `BREVO_DOI_REDIRECT` is where clicking it
+  lands them.
 
   Someone already on the list gets no second confirmation and Brevo says
   so with a duplicate error; from where they are standing they have
