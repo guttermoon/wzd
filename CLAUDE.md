@@ -318,6 +318,20 @@ to another application rather than opening a page.
 
 ## Gotchas
 
+- **Nothing read at request time may throw.** `components/wordmark.tsx` and
+  `components/brain-mark.tsx` inline SVGs off disk through
+  `lib/brand-art.ts`, and the masthead is on every page. `public/` is
+  served as static assets and is *not* in the serverless bundle, and Next
+  cannot see through `join(process.cwd(), …)`, so the read worked in the
+  build and threw ENOENT in the lambda. Every ISR regeneration died with
+  it, Next kept serving the last HTML that had built, and the site froze:
+  no Notion edit could appear and no cache-clearing helped, because
+  nothing was being rebuilt. Two things keep it fixed and both are needed
+  — `experimental.outputFileTracingIncludes` in `next.config.mjs` ships
+  the files, and `brandSvg()` catches and returns "" so a missing asset
+  costs a logo rather than the site. If a copy change ever stops
+  appearing, read the runtime logs before anything else: a page that
+  cannot regenerate looks exactly like a caching problem.
 - Commit identity must be `Claude <noreply@anthropic.com>`.
 - Old WordPress URLs are redirected in `next.config.mjs`. If you rename a
   route, add a redirect — those links are in a decade of press coverage.

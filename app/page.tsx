@@ -196,10 +196,15 @@ export default async function HomePage() {
       <section className="w-full bg-surface py-14">
         <div className="edge-right items-center gap-8 lg:gap-0">
           <div className="prose-wzd px-4 sm:px-6 lg:col-start-2 lg:px-0 lg:pe-12">
+            {/* The home page's own keys, not /register's. The words
+                start out the same, but this is the trailer and that is the
+                page: they should be free to diverge, and a row for what is
+                on the home page belongs under home in the table rather
+                than filed halfway down register. */}
             <h2 className="display text-[clamp(1.75rem,4vw,2.75rem)]">
-              <T k="register.access.title" />
+              <T k="home.access.title" />
             </h2>
-            <p><T k="register.access.body" /></p>
+            <p><T k="home.access.body" /></p>
             <Cta k="home.access.cta" href="/faq" className="btn btn-secondary mt-6" />
           </div>
           <Photo
