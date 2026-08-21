@@ -181,19 +181,21 @@
   }
 
   /* ── The Dead Good Club's lock-up, as a link ───────────────────────
-     Their mark is raster line art on transparency, so it cannot take
-     `currentColor` the way our own SVG wordmark does. The hover colour is
-     a second layer instead: a flat field of --accent, masked by the
-     artwork's own alpha, faded in over the top. The drawing underneath is
-     never touched — no filter, no hue rotation, nothing that could
-     misrepresent someone else's mark in its resting state.
+     The hover state is their own artwork, supplied as a third file: the
+     lettering goes red and the ghost and the gravestone are left exactly
+     as they were drawn. It is laid over the resting logo and faded in,
+     rather than painted on top of it — an earlier version tinted the mark
+     through its own alpha, which worked but flattened the ghost and the
+     headstone into solid red shapes. Someone else's mark should not be
+     redrawn by a stylesheet when they have drawn the state themselves.
 
-     Two masks, not one: the lock-up was drawn twice and the alpha differs
-     between the grounds (38% of pixels), because the letterforms are
-     filled in one and knocked out in the other. Each ground gets its own.
+     One file covers both grounds: the red reads on paper and on ink, and
+     the ghost and headstone are white-filled, so nothing disappears
+     against the dark.
 
-     The tint is inert to the pointer so the anchor underneath keeps every
-     click. */
+     The overlay is inert to the pointer so the anchor underneath keeps
+     every click, and it is decorative — the name is carried by the
+     underlying image's alt. */
   .dgc-mark {
     position: relative;
     display: block;
@@ -204,24 +206,26 @@
     inset: 0;
     pointer-events: none;
     opacity: 0;
-    background-color: var(--accent);
+    background-image: url("/brand/dgc-hover.webp");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
     transition: opacity 160ms var(--ease-cut);
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-position: center;
-    mask-position: center;
-    -webkit-mask-size: contain;
-    mask-size: contain;
   }
 
-  .dgc-mark-tint-light {
-    -webkit-mask-image: url("/brand/dgc-light-bg.webp");
-    mask-image: url("/brand/dgc-light-bg.webp");
+  /* The resting logo goes out as the hover state comes in, rather than
+     the red simply sitting on top of it. The two drawings are not
+     pixel-identical — the red letterforms are a shade narrower than the
+     black ones — so overlaying alone left a dark fringe down the right of
+     every letter on the light ground. A crossfade has nothing to fringe
+     against. */
+  .dgc-mark img {
+    transition: opacity 160ms var(--ease-cut);
   }
 
-  .dgc-mark-tint-dark {
-    -webkit-mask-image: url("/brand/dgc-dark-bg.webp");
-    mask-image: url("/brand/dgc-dark-bg.webp");
+  a:hover .dgc-mark img,
+  a:focus-visible .dgc-mark img {
+    opacity: 0;
   }
 
   a:hover .dgc-mark-tint,
@@ -230,7 +234,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .dgc-mark-tint {
+    .dgc-mark-tint,
+    .dgc-mark img {
       transition: none;
     }
   }

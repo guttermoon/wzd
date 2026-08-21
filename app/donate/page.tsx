@@ -111,8 +111,8 @@ export default async function DonatePage() {
       <Section title={<T k="donate.about.title" />}>
         <div className="grid items-start gap-8 lg:grid-cols-12 lg:gap-10">
           {/* The lock-up links to the club, and takes the accent colour
-              on hover and on keyboard focus — see .dgc-mark in
-              globals.css. It carries the name rather than an empty alt:
+              on hover and on keyboard focus, by swapping to the hover
+              artwork they supplied — see .dgc-mark in globals.css. It carries the name rather than an empty alt:
               it is a link now, and a link with nothing to announce is a
               link nobody can follow. Only one of the two is ever
               displayed, so the name is never said twice. */}
@@ -130,7 +130,7 @@ export default async function DonatePage() {
                   frame={false}
                   sizes="(min-width: 64rem) 14rem, 55vw"
                 />
-                <span className="dgc-mark-tint dgc-mark-tint-light" aria-hidden="true" />
+                <span className="dgc-mark-tint" aria-hidden="true" />
               </span>
               <span className="dgc-mark hidden dark:block">
                 <Graphic
@@ -141,7 +141,7 @@ export default async function DonatePage() {
                   frame={false}
                   sizes="(min-width: 64rem) 14rem, 55vw"
                 />
-                <span className="dgc-mark-tint dgc-mark-tint-dark" aria-hidden="true" />
+                <span className="dgc-mark-tint" aria-hidden="true" />
               </span>
             </ExternalLink>
           </div>

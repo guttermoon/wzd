@@ -50,6 +50,15 @@ export const EVENT = {
   },
   hashtags: ["#WZD2026", "#WorldZombieDay"],
   /**
+   * The two typefaces, for the press kit. Crackhouse is the style guide's
+   * display face and is not shipped — the lock-up carries its letterforms
+   * as paths — so these are the two a journalist can actually get.
+   */
+  fonts: {
+    display: "https://fonts.google.com/specimen/Grandstander",
+    text: "https://fonts.google.com/specimen/Raleway",
+  },
+  /**
    * The community. It is in `social` below as well, because it is one of
    * the four icons in the footer; named here because /faq sends people to
    * it as the first place to ask a question, and one address should not
