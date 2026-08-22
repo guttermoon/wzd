@@ -211,6 +211,8 @@ export function Photo({
 export function Graphic({
   src,
   still,
+  narrowStill,
+  narrowUpTo = "48rem",
   alt,
   width,
   height,
@@ -221,6 +223,17 @@ export function Graphic({
   src: string
   /** A single frame, served instead when the visitor asks for less motion. */
   still?: string
+  /**
+   * A static image served in place of the animation on narrow screens.
+   *
+   * An animated poster is several megabytes, and over a phone connection
+   * it frequently never finishes arriving: the visitor is left looking at
+   * the top third of it, which reads as a broken image rather than as a
+   * slow one. A still that lands beats an animation that does not.
+   */
+  narrowStill?: string
+  /** The width below which `narrowStill` is used. */
+  narrowUpTo?: string
   /** Empty when the graphic says nothing the surrounding copy does not. */
   alt: string
   width: number
@@ -241,9 +254,15 @@ export function Graphic({
     <div className={className}>
       <div className={mat}>
         <span className="block">
+          {/* The browser takes the first source that matches, so reduced
+              motion is asked first: someone who has asked for less motion
+              gets a still whatever the width of their screen. */}
           <picture>
             {still ? (
               <source media="(prefers-reduced-motion: reduce)" srcSet={still} />
+            ) : null}
+            {narrowStill ? (
+              <source media={`(max-width: ${narrowUpTo})`} srcSet={narrowStill} />
             ) : null}
             <img
               src={src}
