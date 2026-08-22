@@ -114,7 +114,11 @@ export default async function RegisterPage() {
           lib/event.ts; the words around them are editable in Notion. */}
       <Section title={<T k="party.title" />}>
         <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-7">
+          {/* The poster leads on a phone and sits beside the copy on a wide
+              screen. Only the visual order changes: the artwork is
+              decorative and carries an empty alt, so nothing is read out of
+              turn by moving it. */}
+          <div className="order-2 lg:order-1 lg:col-span-7">
             <P k="party.body1" className="prose-wzd font-body" />
             <P k="party.body2" className="prose-wzd mt-4 font-body" />
             <P k="party.doors" className="prose-wzd mt-4 font-body" />
@@ -158,11 +162,12 @@ export default async function RegisterPage() {
           <Graphic
             src="/After_Party_WZD.gif"
             still="/After_Party_WZD-still.webp"
+            narrowStill="/After_Party_WZD-flyer.webp"
             alt=""
             width={1190}
             height={1683}
             sizes="(min-width: 64rem) 24rem, 100vw"
-            className="lg:col-span-5 lg:sticky lg:top-24 lg:self-start"
+            className="order-1 lg:order-2 lg:col-span-5 lg:sticky lg:top-24 lg:self-start"
           />
         </div>
       </Section>

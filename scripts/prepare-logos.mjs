@@ -147,9 +147,31 @@ for (const [from, to] of CAUSE) {
   causeSizes.push(`${to} ${(after / 1024).toFixed(1)}KB (from ${(before / 1024).toFixed(1)}KB PNG)`)
 }
 
+// ── The after-party poster, as a still ───────────────────────────────
+//
+// The poster on /register is a 150-frame GIF at 3.8MB. On a phone it
+// frequently never finishes arriving, and a poster that half-loads reads
+// as a broken image rather than a slow one, so narrow screens are served
+// this instead and never ask for the GIF at all.
+//
+// It is built from the print artwork rather than by grabbing a frame:
+// the print file is the poster as it was drawn, and it is the version
+// worth showing when only one image is going to be seen. Resized to the
+// GIF's own 1190px so the two are interchangeable and neither shifts the
+// layout. It lands beside the GIF in public/ rather than in public/brand,
+// because it belongs to that poster and not to the marks.
+//
+// Renamed on the way through, like the QR codes above: the supplied file
+// has spaces and brackets in its name, which have no business in a URL.
+const POSTER_IN = "public/After_Party_WZD (Flyer for print).png"
+const POSTER_OUT = "public/After_Party_WZD-flyer.webp"
+await sharp(POSTER_IN).resize({ width: 1190 }).webp({ quality: 78, effort: 6 }).toFile(POSTER_OUT)
+const posterLine = `${POSTER_OUT.split("/").pop()} ${(statSync(POSTER_OUT).size / 1024).toFixed(1)}KB (from ${(statSync(POSTER_IN).size / 1024).toFixed(1)}KB PNG)`
+
 const kb = (s) => (Buffer.byteLength(s) / 1024).toFixed(1)
 console.log(`brain.svg    ${kb(brainFull)}KB   (full detail)`)
 console.log(`app/icon.svg ${kb(brainSmall)}KB   (favicon + masthead)`)
 console.log(`wordmark.svg ${kb(wordmark)}KB   (${letterPaths} lettering paths → currentColor)`)
 console.log(`PNGs         ${COPIES.map(([, to]) => to).join(", ")} (copied as supplied)`)
 for (const line of causeSizes) console.log(`cause        ${line}`)
+console.log(`poster       ${posterLine}`)
