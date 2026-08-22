@@ -44,7 +44,20 @@ export default async function RegisterPage() {
         />
       }
     >
-      <div className="mt-10 grid gap-10 lg:grid-cols-2 lg:gap-14">
+      {/* The form first, at the owner's instruction. Someone who opens this
+          page has come to register; the two columns below are the detail
+          they can read once they have their place. It keeps its heading,
+          because a form arriving straight under the standfirst with nothing
+          naming it reads as an advertisement rather than the thing they
+          came for. */}
+      <Section title={<T k="register.status.title" />}>
+        <ZeffyEmbed
+          trouble={S("site.form.trouble")}
+          troubleCta={S("site.form.trouble.cta")}
+        />
+      </Section>
+
+      <div className="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-14">
         <Section title={<T k="register.why.title" />} className="mt-0">
           <P k="register.why.body" className="prose-wzd font-body" />
         </Section>
@@ -152,15 +165,6 @@ export default async function RegisterPage() {
             className="lg:col-span-5 lg:sticky lg:top-24 lg:self-start"
           />
         </div>
-      </Section>
-
-      {/* The form sits at the end, after everything someone needs to know
-          before they fill it in. */}
-      <Section title={<T k="register.status.title" />}>
-        <ZeffyEmbed
-                trouble={S("site.form.trouble")}
-                troubleCta={S("site.form.trouble.cta")}
-              />
       </Section>
 
       <Section>
