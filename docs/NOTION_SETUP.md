@@ -18,10 +18,24 @@ Notion only overrides what's already there.
 ## 2. Share the database with it
 
 1. Open the **wzd-pages** database in Notion.
-2. Top right → **Share** → **Invite** → pick your integration → **Edit**.
+2. Top right → **Share** → **Invite** → pick your integration.
 
 Without this step the integration can see nothing, and the site quietly
 falls back to its built-in copy.
+
+**Give the site's integration read access, not edit.** The site only ever
+reads: one `databases.query` per regeneration and nothing else, ever. A
+token that can also write is a token that can rewrite every word on the
+site if it ever leaks out of Vercel — and an environment variable is not a
+secret in the way a password is: it is visible to anything running in the
+deployment, and it is one paste away from a log or a screenshot. Set the
+integration's capabilities to **Read content** only, at
+<https://www.notion.so/my-integrations> → your integration → Capabilities.
+
+`scripts/seed-notion.mjs` does need write access, because it creates the
+rows. Run it once, from your own machine, with a second integration that
+has write capability — or grant write, seed, and set it back to read. What
+matters is that the token sitting in Vercel is the read-only one.
 
 ## 3. Set the environment variables
 
@@ -55,7 +69,10 @@ differently. A row counts as live if:
 
 This database uses **`Status` = Done**. Any other column you add — `Image`,
 `slug`, `Title`, `Publication Date` — is ignored by the site, so the
-database is safe to use for your own notes and workflow.
+database is safe to use for your own notes and workflow. Two exceptions
+worth knowing: a column named `URL` sets where a button points (see
+below), and a second status-like column is *not* a second gate — see
+"Only `Status` decides what is public".
 
 ## 4a. Fill the database
 
@@ -65,7 +82,7 @@ Once those two properties exist:
 NOTION_TOKEN=ntn_… npm run seed:notion
 ```
 
-That creates one row per key in `content/site-copy.json` — currently 192 —
+That creates one row per key in `content/site-copy.json` — currently 314 —
 pre-filled with the copy that ships in the code and ticked as Published, so
 the database and the site say the same thing on day one.
 
@@ -80,7 +97,7 @@ NOTION_TOKEN=ntn_… node scripts/seed-notion.mjs --dry-run
 ## 5. Editing
 
 - Find the row whose `Name` is the slot you want, change `Text`, and make
-  sure `Published` is ticked.
+  sure **`Status` is `Done`** — that is the column the site reads.
 - Changes appear within 60 seconds. To publish immediately:
 
   ```bash
@@ -90,7 +107,33 @@ NOTION_TOKEN=ntn_… node scripts/seed-notion.mjs --dry-run
   ```
 
 - **Moving a row off `Done` doesn't blank the slot** — it falls back to the
-  built-in copy in the repo. To show nothing, you'd have to change the code.
+  built-in copy in the repo. **To take a line off the site, clear the
+  `Text` cell** on a row that is still `Done`: an empty cell on a live row
+  means empty, and the surrounding bullet, paragraph or heading goes with
+  it rather than leaving a gap.
+
+### Only `Status` decides what is public
+
+This database has two columns that look like they control publishing:
+
+| Column | Values | Read by the site? |
+|---|---|---|
+| `Status` | Not started / In progress / **Done** | **Yes — this is the gate** |
+| `Status 1` | Draft / In review / Published | No. Ignored entirely. |
+
+Today almost every row reads `Status 1 = Draft` while being live on the
+site, because `Status = Done` is what counts. Nothing is wrong with the
+site; the second column is just misleading, and dangerously so in one
+direction: **marking a row `Draft` does not take it off the site.** If you
+write something unfinished into `Text` and set `Status 1` to `Draft`
+believing it is hidden, it is public within 60 seconds.
+
+The fix is to delete `Status 1` — along with `Text 1`, `Text 2`, `Title`
+and `slug` if you are not using them for your own notes. The site ignores
+all of them; they are only there to be confused with the columns that
+matter. The site logs which gate it is using on every cold start
+(`site copy: live/draft gate is "Status".`) so this can be checked rather
+than assumed.
 - Line breaks in `Text` become line breaks on the page.
 - Rows whose `Name` isn't a dotted key (e.g. `Notes to self`) are ignored,
   so you can keep working notes in the database safely.

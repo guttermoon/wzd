@@ -82,6 +82,21 @@ export const getSiteCopy = cache(async (): Promise<SiteCopy> => {
 
   if (!NOTION_DATABASE_ID || !NOTION_TOKEN) return copy
 
+  /**
+   * The overrides are collected here and merged only if every page came
+   * back, so a query that dies halfway cannot leave the site in a state
+   * that is part edited and part built-in.
+   *
+   * That mixture is worse than either end of it. Which keys made it would
+   * depend on where the failure landed, so two visitors could be reading
+   * different versions of the same page, and a row the owner had
+   * deliberately cleared would come back as its built-in words only if
+   * the failure happened to fall before it. All or nothing is at least a
+   * state someone can reason about, and the built-in layer is complete on
+   * its own — that is the whole point of it.
+   */
+  const overrides: SiteCopy = {}
+
   try {
     let cursor: string | undefined = undefined
     let pages = 0
@@ -112,24 +127,27 @@ export const getSiteCopy = cache(async (): Promise<SiteCopy> => {
         // The base layer is untouched by this: with no Notion at all
         // there are no rows, so nothing is cleared and the site renders
         // complete.
-        copy[key] = extractPlainText(properties.Text?.rich_text || []).trim()
+        overrides[key] = extractPlainText(properties.Text?.rich_text || []).trim()
 
         // The link is separate, and an empty one is left alone: pointing a
         // button somewhere new without rewording it is a normal thing to
         // want, and so is the reverse.
         const url = linkOf(properties)
-        if (url) copy[urlKey(key)] = url
+        if (url) overrides[urlKey(key)] = url
       }
       cursor = response.has_more ? response.next_cursor : undefined
       pages += 1
       if (cursor && pages >= MAX_PAGES) {
-        console.warn(
-          `site copy: stopped after ${MAX_PAGES} pages with more to fetch. ` +
-            `Some rows were not read; the built-in copy stands for those keys.`,
+        // Deliberately not a partial merge: see `overrides` above.
+        throw new Error(
+          `more than ${MAX_PAGES} pages of rows — refusing to apply a ` +
+            `partial read of the copy database`,
         )
-        break
       }
     } while (cursor)
+
+    // Only now, with every page in hand.
+    Object.assign(copy, overrides)
   } catch (error) {
     // A Notion outage must never take the site down — fall back to built-ins.
     console.error("Error fetching site copy from Notion:", error)
@@ -150,7 +168,17 @@ export const getSiteCopy = cache(async (): Promise<SiteCopy> => {
  * looks like a path — is dropped and the button's built-in link stands.
  */
 function linkOf(properties: Record<string, any>): string {
-  const prop: any = Object.values(properties).find((p: any) => p?.type === "url")
+  // By name first, by type second. Finding it by type alone was ambiguous
+  // the moment the database had two url columns — and it invites exactly
+  // that, because docs/NOTION_SETUP.md promises the owner that any other
+  // column they add is ignored by the site. A column literally called
+  // `URL` is the one the setup guide asks for, so it wins; a renamed one
+  // still works, which is why the fallback stays.
+  const named = properties.URL
+  const prop: any =
+    named?.type === "url"
+      ? named
+      : Object.values(properties).find((p: any) => p?.type === "url")
   const raw = (prop?.url ?? "").trim()
   return isSafeHref(raw) ? raw : ""
 }
@@ -158,14 +186,62 @@ function linkOf(properties: Record<string, any>): string {
 /** Statuses that mean "ready to show", case-insensitively. */
 const DONE = new Set(["done", "published", "live", "complete", "completed"])
 
+/**
+ * Said once per instance, because a gate nobody can see is a gate nobody
+ * can trust.
+ *
+ * There is nothing in Notion that tells the owner which column decides
+ * whether a row is on the site. If the database has more than one
+ * candidate — and this one does: a `Status` of Done/In progress/Not
+ * started *and* a `Status 1` of Published/In review/Draft — then a row
+ * can read "Draft" in the column with the publishing words in it while
+ * being live on the site, because the code takes `Status`. Someone who
+ * marks a row Draft expecting it to come off the site has not taken it
+ * off the site.
+ *
+ * The gate is not made stricter here to fix that: requiring every status
+ * column to agree would take every row that says Draft off the site at
+ * once, which is a worse surprise than the one it prevents. It is said
+ * out loud instead, and docs/NOTION_SETUP.md says which column to keep.
+ */
+let gateAnnounced = false
+
+function announceGate(gate: string, alternatives: string[]) {
+  if (gateAnnounced) return
+  gateAnnounced = true
+  const also = alternatives.length
+    ? ` Other columns that look like gates and are NOT read: ${alternatives.join(", ")}.`
+    : ""
+  console.info(`site copy: live/draft gate is "${gate}".${also}`)
+}
+
+/** Columns that look like a gate, so the log can name the ones ignored. */
+function gateLikeNames(properties: Record<string, any>): string[] {
+  return Object.entries(properties)
+    .filter(([, p]: [string, any]) => p?.type === "status" || p?.type === "checkbox")
+    .map(([name]) => name)
+}
+
 function isLive(properties: Record<string, any>): boolean {
+  const others = gateLikeNames(properties)
+
   const published = properties.Published
-  if (published?.type === "checkbox") return published.checkbox === true
+  if (published?.type === "checkbox") {
+    announceGate("Published", others.filter((n) => n !== "Published"))
+    return published.checkbox === true
+  }
 
   const status = properties.Status
-  if (status?.type === "status") return DONE.has(status.status?.name?.toLowerCase() ?? "")
-  if (status?.type === "select") return DONE.has(status.select?.name?.toLowerCase() ?? "")
+  if (status?.type === "status") {
+    announceGate("Status", others.filter((n) => n !== "Status"))
+    return DONE.has(status.status?.name?.toLowerCase() ?? "")
+  }
+  if (status?.type === "select") {
+    announceGate("Status", others.filter((n) => n !== "Status"))
+    return DONE.has(status.select?.name?.toLowerCase() ?? "")
+  }
 
   // No gate configured: everything in the database is live.
+  announceGate("none — every row is live", others)
   return true
 }

@@ -23,11 +23,15 @@ Two layers, and the first one is complete on its own:
    key from here to "move it to Notion"; Notion overrides, it doesn't own.
 2. **Notion database `wzd-pages`** (`NOTION_DATABASE_ID`,
    `3c16f6ccb2c180e087a4da55703d5792`) — rows with `Name` = the key and
-   `Text` = the copy and `URL` = where it goes, if it is a button. 257
-   rows, of which 231 are keys the site renders and the rest are left over
-   from copy that has since been cut. Fetched in one
-   paginated query by `lib/site-copy.ts`; rows whose title isn't a dotted
-   key are ignored.
+   `Text` = the copy and `URL` = where it goes, if it is a button. 338
+   rows, of which 314 are live and are exactly the keys the site renders;
+   the other 24 sit at `Status = Not started` and are left over from copy
+   that has since been cut. Fetched in one paginated query by
+   `lib/site-copy.ts`; rows whose title isn't a dotted key are ignored.
+   The overrides are merged only once every page of the query has come
+   back — a read that dies halfway applies nothing, because a site that is
+   part edited and part built-in depends on where the failure landed and
+   is a state nobody can reason about.
    An `Order` number column carries the reading order, and the table view
    sorts on it, so the rows run down the page the way a visitor runs
    through the site: `site.` first, then home, register and the after
@@ -42,6 +46,18 @@ Two layers, and the first one is complete on its own:
    else a `Status` of Done/Published/Live/Complete, else everything is
    live. This database uses `Status`. Don't hard-code one property name —
    the owner configures the database, not us.
+
+   **The database also has a `Status 1` of Draft/In review/Published, and
+   nothing reads it.** 313 of the 314 live rows say `Draft` in it. That is
+   harmless until someone believes it: marking a row `Draft` does not take
+   it off the site, so unfinished copy written under that belief goes
+   public. Do not "fix" this by requiring every status column to agree —
+   that would take all 313 rows off at once, which is the worse surprise.
+   `isLive()` logs which gate it actually used, once per instance, so the
+   answer is discoverable; `docs/NOTION_SETUP.md` asks the owner to delete
+   the column. The `URL` property is looked up by that name first and by
+   type only as a fallback, for the same reason: found by type alone, a
+   second url column would silently take over every button on the site.
 
 Keys are dotted and lowercase (`home.hero.title`, `faq.q3`,
 `sponsors.onsite.amount`), namespaced per page: `site.` `home.` `register.`
