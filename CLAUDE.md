@@ -6,11 +6,16 @@ London**, migrated off WordPress. None of the blog template remains.
 
 ## What the site is
 
-- Next.js 14 (app router) + Tailwind, deployed on Vercel. Eight static
-  routes, no database, no blog.
-- `/` `/register` `/rules` `/faq` `/sponsors` `/press` `/photo-policy`
-  `/privacy`. Primary nav is the first five
-  (`NAV` in `lib/event.ts`); the rest sit in the footer (`FOOTER_NAV`).
+- Next.js 14 (app router) + Tailwind, deployed on Vercel. Ten static
+  routes plus three API routes, no database, no blog.
+- `/` `/register` `/survival` `/faq` `/donate` `/become-a-sponsor`
+  `/press` `/photo-policy` `/submit-photos` `/privacy`. Primary nav is
+  `NAV` in `lib/event.ts`; the rest sit in the footer (`FOOTER_NAV`) and
+  `LEGAL_NAV`. `/rules` and `/sponsors` are **not** routes — they are
+  redirects to `/survival` and `/become-a-sponsor`, which are the live
+  URLs and are named that way because the old WordPress site was. The
+  copy keys still say `rules.` and `sponsors.`, which is why this is easy
+  to get backwards.
 - Every route is a server component that does
   `const T = makeT(await getSiteCopy())` and renders `<T k="…" />`.
 
@@ -239,7 +244,7 @@ everywhere at once.
   colour is the *panel* on that ground — Greige in light, Black in dark —
   and Greige is also the ink in dark mode.
 - **Zombie Red is a display colour, not a text colour.** It measures
-  3.78:1 on paper and 3.16:1 on Greige — fine for large type (3:1), short
+  3.78:1 on paper and 3.19:1 on Greige — fine for large type (3:1), short
   of the 4.5:1 body text needs. So `--accent` is Zombie Red for fills,
   rules and large headings; `--accent-text` is a tuned red for links and
   small text; `--accent-strong` backs buttons because white on Zombie Red

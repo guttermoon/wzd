@@ -19,7 +19,7 @@ cannot reach a page. `npm run check:credits` verifies it.
 - **Paul Carrano** — 1 photo (groaning-group)
 - **Pierre François Docquir** — 1 photo (family-kerb)
 - **Raymond Charter** — 1 photo (kissing-booth)
-- **charterphotography.co.uk** — 1 photo (leicester-square-banner)
+- **Chris Harvey** — 1 photo (leicester-square-banner) — *credit needs confirming, see below*
 
 ## The set
 
@@ -27,7 +27,7 @@ cannot reach a page. `npm run check:credits` verifies it.
 |---|---|---|---|
 | `bridge-horde` | Chris Williams | home hero | `14. Chris Williams.jpeg` |
 | `the-horde` | Bartosz Chomiak | home scale / press | `photo by zero.jpg` |
-| `leicester-square-banner` | charterphotography.co.uk | home — what happens on the day | `3_PHOTO_CREDIT_www.charterphotography.co.uk.jpg` |
+| `leicester-square-banner` | Chris Harvey | home — what happens on the day | `3_PHOTO_CREDIT_www.charterphotography.co.uk.jpg` |
 | `family-kerb` | Pierre François Docquir | home — everyone's welcome | `Photo Pierre Fr Docquir 58.jpg` |
 | `leake-street-crowd` | Alex Lane Photography | register | `2_PHOTO_CREDIT_ALEX_LANE.jpg` |
 | `steward-crossing` | Andy Halliday | rules of conduct | `5_ANDY HALLIDAY.jpg` |
@@ -47,6 +47,7 @@ cannot reach a page. `npm run check:credits` verifies it.
 ### Credits needing confirmation
 
 - **`the-horde`** — Filename says "photo by zero"; the image carries a © ChomiakBartosz watermark. Credit shown follows the watermark — confirm with the photographer.
+- **`leicester-square-banner`** — `content/photos.json` credits **Chris Harvey**, and that is the name the site publishes. The supplied filename reads `3_PHOTO_CREDIT_www.charterphotography.co.uk.jpg`, and this manifest credited the studio rather than a person until the two were noticed to disagree. Both may be right — a photographer and their studio — but one name goes under the photograph, so confirm which.
 
 ## Renditions
 

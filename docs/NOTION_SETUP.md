@@ -143,19 +143,26 @@ than assumed.
 Keys are namespaced by page. To find the key for something on screen,
 search `content/site-copy.json` for the words you can see.
 
-| Prefix | Page |
-|---|---|
-| `site.` | name, tagline, meta description |
-| `home.` | the homepage, including `home.essentials.*` and `home.broadcast.*` |
-| `register.` | `/register` |
-| `rules.` | `/rules` — `rules.1` … `rules.8` are the numbered rules |
-| `faq.` | `/faq` — `faq.q1`/`faq.a1` … `faq.q8`/`faq.a8` |
-| `sponsors.` | `/sponsors` |
-| `gallery.` | `/gallery` |
-| `press.` | `/press` — boilerplate, key facts, usage terms |
-| `photo.` | `/photo-policy` |
-| `privacy.` | `/privacy` |
-| `footer.` | the footer on every page |
+Note that three prefixes do not match their page's URL. The routes were
+named after the old WordPress ones; the keys were not renamed to match.
+
+| Prefix | Page | Keys |
+|---|---|---|
+| `site.` | every page — name, tagline, meta, cookie dialog, newsletter, form fallbacks | 23 |
+| `home.` | `/` — including `home.essentials.*` | 35 |
+| `register.` | `/register` | 19 |
+| `party.` | `/register` — the after party | 12 |
+| `rules.` | **`/survival`** — `rules.1` … are the numbered rules | 13 |
+| `faq.` | `/faq` — `faq.q1`/`faq.a1` … | 21 |
+| `sponsors.` | **`/become-a-sponsor`** | 23 |
+| `donate.` | `/donate` | 18 |
+| `press.` | `/press` — boilerplate, key facts, usage terms | 61 |
+| `photo.` | **`/photo-policy`** | 35 |
+| `submit.` | `/submit-photos` | 21 |
+| `privacy.` | `/privacy` | 28 |
+| `footer.` | the footer on every page | 5 |
+
+There is no `gallery.` — `/gallery` redirects to `/press`.
 
 ### Things that are not editable in Notion
 
