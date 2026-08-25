@@ -12,7 +12,37 @@ import defaults from "@/content/site-copy.json"
 const NOTION_TOKEN = process.env.NOTION_TOKEN
 const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID
 
-const notion = new Client({ auth: NOTION_TOKEN })
+/**
+ * How long one page of the query gets before it is given up on.
+ *
+ * The SDK's own default is 60 seconds *per request*, and this paginates —
+ * three requests for a table this size — so a Notion that accepts
+ * connections and then stalls could hold a render for three minutes. The
+ * catch below means that ends in the built-in copy rather than an error,
+ * which is the right outcome; the problem is purely how long it takes to
+ * get there. Every page of the site reads this, so that time is the time
+ * to first byte, and on a regeneration it is time the platform may not
+ * allow before killing the function — and a page that cannot finish
+ * regenerating is the failure that freezes the site on its last good
+ * render. See the note in lib/brand-art.ts.
+ *
+ * Eight seconds is the same budget the Brevo calls get. Copy that is a
+ * minute stale is invisible; a page that takes a minute is not.
+ */
+const NOTION_TIMEOUT_MS = 8000
+
+const notion = new Client({ auth: NOTION_TOKEN, timeoutMs: NOTION_TIMEOUT_MS })
+
+/**
+ * A stop on the pagination loop.
+ *
+ * `has_more` and `next_cursor` come from the other end, and this loop
+ * continues on them. Ten pages is a thousand rows against a table of
+ * about 257, so it is not a limit anyone will meet by adding copy — it is
+ * there so that a cursor that never resolves ends the loop rather than
+ * the request.
+ */
+const MAX_PAGES = 10
 
 /**
  * Every string on the site, keyed — and, under `url:`-prefixed keys, the
@@ -54,6 +84,7 @@ export const getSiteCopy = cache(async (): Promise<SiteCopy> => {
 
   try {
     let cursor: string | undefined = undefined
+    let pages = 0
     do {
       // No server-side filter: the gate property differs per database, so
       // the decision is made below. The whole table is one small query.
@@ -90,6 +121,14 @@ export const getSiteCopy = cache(async (): Promise<SiteCopy> => {
         if (url) copy[urlKey(key)] = url
       }
       cursor = response.has_more ? response.next_cursor : undefined
+      pages += 1
+      if (cursor && pages >= MAX_PAGES) {
+        console.warn(
+          `site copy: stopped after ${MAX_PAGES} pages with more to fetch. ` +
+            `Some rows were not read; the built-in copy stands for those keys.`,
+        )
+        break
+      }
     } while (cursor)
   } catch (error) {
     // A Notion outage must never take the site down — fall back to built-ins.

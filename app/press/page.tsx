@@ -6,6 +6,7 @@ import { makeT, makeS, makeHas, makeAny, makeP } from "@/components/notion-text"
 import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
 import { EVENT } from "@/lib/event"
+import { hrefKind } from "@/lib/href"
 import { BrandKit } from "@/components/brand-kit"
 
 export const revalidate = 60
@@ -33,11 +34,15 @@ export default async function PressPage() {
   // as text before there was a URL field. The field wins; the row still
   // works, so nothing the owner has already pasted stops working.
   //
-  // Only http(s) is honoured, so a malformed or half-typed value leaves
-  // the "not up yet" message in place rather than becoming a dead link.
+  // Only an outside address is honoured, so a malformed or half-typed
+  // value leaves the "not up yet" message in place rather than becoming a
+  // dead link. The `press.*.url` row is a plain Text cell rather than a
+  // `URL` one, so it never passed through the filter in lib/site-copy.ts
+  // on the way in — which is exactly why the judgement here is lib/href.ts
+  // and not a fourth regex of its own.
   const link = (key: string) => {
     const raw = (copy[urlKey(`${key}.cta`)] || copy[`${key}.url`] || "").trim()
-    return /^https?:\/\//i.test(raw) ? raw : ""
+    return hrefKind(raw) === "external" ? raw : ""
   }
   const photoFolder = link("press.photos")
   const pressRelease = link("press.release")
