@@ -3,7 +3,7 @@
   "site.tagline": "Shambling for good causes since 2011",
   "site.description": "World Zombie Day: London is a free, family-friendly Community Fundraising event: a zombie walk through central London. Saturday 10 October 2026.",
   "site.consent.title": "Cookies",
-  "site.consent.body": "This site needs your consent for third-party cookies: PostHog and Google Analytics, which tell us which pages get read. Neither loads until you say yes.",
+  "site.consent.body": "Knowing which pages people actually read helps us put the walk's time and money where they do the most good. That takes two analytics cookies, PostHog and Google Analytics, and neither one loads unless you say yes.",
   "site.consent.link": "What we collect",
   "site.consent.accept": "Okay",
   "site.consent.reject": "No thanks",

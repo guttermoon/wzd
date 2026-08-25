@@ -119,7 +119,15 @@ export function ConsentBanner({ copy }: { copy: ConsentCopy }) {
               role="dialog"
               aria-modal="true"
               aria-labelledby="consent-title"
-              className="relative w-full border-4 border-blood-text bg-blood p-6 text-blood-text sm:p-8"
+              /* The panel is the site's own surface rather than a field of
+                 blood. A full-bleed alarm colour reads as a warning, and a
+                 warning is answered defensively; this is a request, and it
+                 should look like the rest of the site. The red is still
+                 here, on the button, where it means "this is the action"
+                 instead of "something is wrong". It also buys a real
+                 hierarchy between the two answers, which a white button and
+                 a white outline on red could never have. */
+              className="relative w-full border-4 border-rule bg-surface p-6 text-text sm:p-8"
             >
               <h2
                 id="consent-title"
@@ -137,14 +145,21 @@ export function ConsentBanner({ copy }: { copy: ConsentCopy }) {
                 </Link>
               </p>
               {/* Decline first, confirm on the right, which is where a
-                  dialog's affirmative action belongs. Focus still opens on
-                  Okay rather than on whatever happens to be first in the
-                  markup, and the two are the same size either way. */}
+                  dialog's affirmative action belongs. Focus opens on Okay
+                  rather than on whatever happens to be first in the markup.
+
+                  The min-width is what actually makes the two the same
+                  size. Without it a button is only as wide as its own
+                  label, so "No thanks" came out half as wide again as
+                  "Okay" and carried 1.5x the click target — the reverse of
+                  what this dialog is for, and it would drift again the
+                  moment either label is edited in Notion. Sized to the
+                  longer of the two so neither shrinks. */}
               <div className="mt-7 flex flex-wrap gap-3 sm:justify-end">
                 <button
                   type="button"
                   onClick={() => writeConsent("denied")}
-                  className="btn border-2 border-blood-text text-blood-text"
+                  className="btn btn-secondary min-w-[9.5rem] py-4"
                 >
                   {copy.reject}
                 </button>
@@ -152,7 +167,7 @@ export function ConsentBanner({ copy }: { copy: ConsentCopy }) {
                   ref={first}
                   type="button"
                   onClick={() => writeConsent("granted")}
-                  className="btn bg-blood-text text-blood"
+                  className="btn btn-primary min-w-[9.5rem] py-4"
                 >
                   {copy.accept}
                 </button>
