@@ -70,7 +70,7 @@ and that is enforced by the code, not by convention.**
   always renders the credit in a `<figcaption>`.
 - `npm run check:credits` fails the build if any of that stops being true.
 
-Eighteen photographs by thirteen photographers are currently in the repo.
+Eighteen photographs by twelve photographers are currently in the repo.
 See [`docs/IMAGES.md`](docs/IMAGES.md) for the full list, the credit wording, and the
 photographs still sitting on the old WordPress site.
 
