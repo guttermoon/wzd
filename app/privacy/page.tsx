@@ -7,14 +7,15 @@ import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
 import { ConsentChoice } from "@/components/consent-choice"
 import { EVENT } from "@/lib/event"
+import { pageMetadata } from "@/lib/seo"
 
 export const revalidate = 60
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Privacy policy",
   description:
     "What World Zombie Day: London collects, why, and what you can ask us to do about it.",
-  alternates: { canonical: "/privacy" },
-}
+  path: "/privacy",
+})
 
 export default async function PrivacyPage() {
   const copy = await getSiteCopy()
@@ -29,6 +30,7 @@ export default async function PrivacyPage() {
     <PageShell
       title={<T k="privacy.title" />}
       titleText={S("privacy.title")}
+      path="/privacy"
       standfirst={<T k="privacy.standfirst" />}
       banner={
         <Photo

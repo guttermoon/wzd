@@ -21,24 +21,62 @@ const nextConfig = {
     // a plain <picture>, so there is nothing for the optimiser to do.
     unoptimized: true,
   },
+  /**
+   * Response headers the whole site gets.
+   *
+   * These are the ones that cost nothing and are missing by default. What
+   * is deliberately *not* here is a script-restricting Content-Security-
+   * Policy: /register and /donate load Zeffy's embed, which injects
+   * scripts from origins we do not control and which in turn pull in
+   * Stripe, hCaptcha and Google Pay. A `script-src` written without
+   * knowing that list in full breaks the form that takes the money, and a
+   * broken booking form is a worse outcome than a missing header. It is
+   * worth doing properly — in report-only first, with the real list read
+   * off a live /register — and it is not worth guessing at.
+   *
+   * `frame-ancestors` is safe to set on its own: it restricts who may put
+   * this site in a frame and says nothing about what may run inside it.
+   */
   async headers() {
-    // The site was on WordPress at this address for a decade, and plenty
-    // of browsers and links still remember it as http. Vercel answers
-    // those with a redirect to https, but the browser has already made
-    // the insecure request by then and shows "Not Secure" for the moment
-    // it takes. This tells it not to try http again for a year.
-    //
-    // Deliberately without `includeSubDomains`. Brevo's tracking domain
-    // is r.mail.worldzombieday.co.uk, and every link in every newsletter
-    // goes through it; forcing https across subdomains we do not serve
-    // would break those clicks the moment one of them answered on http.
-    // Same reason there is no `preload`: that is a one-way door, hard to
-    // undo, and it implies includeSubDomains.
     return [
       {
         source: "/:path*",
         headers: [
-          { key: "Strict-Transport-Security", value: "max-age=31536000" },
+          // Nothing here is meant to be reinterpreted by sniffing. Chiefly
+          // this stops a response typed as text from being run as script.
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          // Nobody else frames this site, so clickjacking has nothing to
+          // work with. Both spellings: the second is the modern one and
+          // the first is what older browsers read.
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Content-Security-Policy", value: "frame-ancestors 'self'" },
+          // Outbound links carry the origin but not the path. The path is
+          // the part that says which page someone was reading.
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          // Features this site has no use for, switched off so an embedded
+          // third party cannot ask for them either. `payment` is
+          // deliberately absent rather than set: it defaults to `self`,
+          // which is what the Zeffy form is already working under, and
+          // naming it here would mean changing that by accident.
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",
+          },
+          // The site answered on http at this address for a decade, so
+          // old links, bookmarks and autocomplete entries still reach for
+          // it that way. Vercel redirects those, but the browser has made
+          // the insecure request by then and says "Not Secure" for as
+          // long as it takes; this stops it trying.
+          //
+          // Two years, and no `includeSubDomains`. There is a concrete
+          // case, not just an unknown one: Brevo's tracking domain is
+          // r.mail.worldzombieday.co.uk and every link in every
+          // newsletter goes through it. A subdomain we do not serve that
+          // answered on http would become unreachable rather than merely
+          // insecure, and that one carries the signup confirmations. Add
+          // it once every subdomain is accounted for. No `preload`
+          // either: it is a one-way door and it implies includeSubDomains.
+          { key: "Strict-Transport-Security", value: "max-age=63072000" },
         ],
       },
     ]

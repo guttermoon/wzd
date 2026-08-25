@@ -12,6 +12,7 @@ import { Analytics } from "@/components/analytics"
 import { getSiteCopy } from "@/lib/site-copy"
 import { EVENT } from "@/lib/event"
 import { SITE_URL } from "@/lib/site"
+import { jsonLd } from "@/lib/json-ld"
 
 /**
  * Display type. Grandstander in all caps stands in for the Saul Bass hand
@@ -62,17 +63,44 @@ export const metadata: Metadata = {
     description,
     images: ["/photos/bridge-horde-1600.jpg"],
   },
+  /**
+   * Google Search Console's meta-tag verification, when it is being used.
+   *
+   * Set GOOGLE_SITE_VERIFICATION to the token out of the
+   * `<meta name="google-site-verification" content="…">` snippet Search
+   * Console offers — the content value on its own, not the whole tag.
+   * Left unset, nothing is rendered, which is the right default: an empty
+   * verification tag is worse than none.
+   *
+   * The DNS TXT method is the better one if the domain's DNS is to hand,
+   * because it verifies the whole domain rather than one deployment and
+   * survives the site being rebuilt by someone who does not know this
+   * variable exists. This is here for when it is not.
+   */
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
 }
 
 const structuredData = {
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: title,
+      description,
+      inLanguage: "en-GB",
+      publisher: { "@id": `${SITE_URL}/#organization` },
+    },
+    {
       "@type": "Organization",
       "@id": `${SITE_URL}/#organization`,
       name: title,
       url: SITE_URL,
       email: EVENT.email,
+      logo: `${SITE_URL}/brand/wordmark.svg`,
       sameAs: EVENT.social.map((s) => s.url),
     },
     {
@@ -80,9 +108,15 @@ const structuredData = {
       "@id": `${SITE_URL}/#event`,
       name: `${title} 2026`,
       description,
+      url: SITE_URL,
       startDate: EVENT.startsAt,
       eventStatus: "https://schema.org/EventScheduled",
       eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+      // No street address, and that is not an omission: the meeting point
+      // goes to people who have registered, which is the whole reason
+      // registration exists. A Place with a locality is what can honestly
+      // be published, and it is enough for Google to place the event in
+      // London.
       location: {
         "@type": "Place",
         name: "Central London",
@@ -95,7 +129,38 @@ const structuredData = {
       },
       organizer: { "@id": `${SITE_URL}/#organization` },
       isAccessibleForFree: true,
-      image: [`${SITE_URL}/photos/bridge-horde-1600.jpg`],
+      // Free, but ticketed — the walk costs nothing and still wants a
+      // registration. Spelling that out as an Offer of 0 is what makes a
+      // search result say "Free" and link to the right page; without it
+      // `isAccessibleForFree` alone is frequently ignored.
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "GBP",
+        availability: "https://schema.org/InStock",
+        url: `${SITE_URL}/register`,
+        category: "Free",
+      },
+      // The after party is a real separate event at a real address, so it
+      // can carry the one thing the walk cannot: somewhere to go.
+      subEvent: {
+        "@type": "Event",
+        name: `${EVENT.afterParty.venue} after party`,
+        startDate: EVENT.afterParty.startsAt,
+        eventStatus: "https://schema.org/EventScheduled",
+        eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+        url: `${SITE_URL}/register`,
+        location: {
+          "@type": "Place",
+          name: EVENT.afterParty.venue,
+          address: EVENT.afterParty.address,
+        },
+        organizer: { "@id": `${SITE_URL}/#organization` },
+      },
+      image: [
+        `${SITE_URL}/photos/bridge-horde-1600.jpg`,
+        `${SITE_URL}/photos/the-horde-1600.jpg`,
+      ],
     },
   ],
 }
@@ -119,7 +184,7 @@ export default async function RootLayout({
       <body className="font-body">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+          dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }}
         />
         <ThemeProvider>
           <a

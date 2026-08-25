@@ -1,6 +1,8 @@
 import type React from "react"
 import { Reveal } from "@/components/reveal"
 import { Swipe } from "@/components/swipe"
+import { breadcrumbLd } from "@/lib/seo"
+import { jsonLd } from "@/lib/json-ld"
 
 /**
  * The masthead every inner page shares: a big cut-paper title block over a
@@ -11,6 +13,7 @@ export function PageShell({
   titleText,
   standfirst,
   banner,
+  path,
   children,
 }: {
   title: React.ReactNode
@@ -27,10 +30,25 @@ export function PageShell({
    * better without one, and the prop is left off there.
    */
   banner?: React.ReactNode
+  /**
+   * The page's own path, e.g. `/register`. Only used to emit the
+   * BreadcrumbList that lets a search result read
+   * "worldzombieday.co.uk › Register" rather than a bare URL. There is no
+   * breadcrumb trail in the design and there should not be — the site is
+   * two levels deep — so this is the machine-readable version only, and
+   * it takes its label from the heading the page actually shows.
+   */
+  path?: string
   children: React.ReactNode
 }) {
   return (
     <div className="mx-auto w-full max-w-page px-4 py-10 sm:px-6 sm:py-14">
+      {path && titleText ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumbLd(titleText, path)) }}
+        />
+      ) : null}
       {/* The title card, played once: a panel wipes off the heading, the
           rule drives in from the left, the standfirst follows, 90ms apart,
           which is the middle of the 80-120ms house stagger.

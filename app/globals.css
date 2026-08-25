@@ -14,7 +14,7 @@
 :root {
   /* ── The World Zombie Day palette ───────────────────────────────────
      Taken from the style guide: Zombie Red #E74C3C, Dark Grey #404040,
-     Black #333333, Greige #F5E9DA.
+     Black #333333, Greige #F7E7D8.
 
      One deliberate departure. Zombie Red measures 3.19:1 on Greige and
      3.31:1 on Black — fine for large display type (the 3:1 bar) but short
@@ -71,7 +71,7 @@
      Ratios below are measured against #1a1a1a. */
   --bg: var(--ink);
   --surface: var(--ink);
-  --text: var(--greige); /* 14.4:1 */
+  --text: var(--greige); /* 14.55:1 */
   --muted: #bfb4a6; /* 8.53:1 */
   --accent: var(--zombie-red); /* 4.56:1 here, but still display only:
     light mode is 3.78:1 and the rule has to hold in both */

@@ -1,9 +1,48 @@
 import { cache } from "react"
 import { Client } from "@notionhq/client"
-import { config } from "./config"
+import { isSafeHref } from "./href"
 import defaults from "@/content/site-copy.json"
 
-const notion = new Client({ auth: config.notion.token })
+/**
+ * Neither is required. With no credentials the site renders every page
+ * from the built-in copy, which is the whole contract of the base layer —
+ * so a missing value here is a configuration to note, not an error to
+ * raise, and nothing on this path may throw.
+ */
+const NOTION_TOKEN = process.env.NOTION_TOKEN
+const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID
+
+/**
+ * How long one page of the query gets before it is given up on.
+ *
+ * The SDK's own default is 60 seconds *per request*, and this paginates —
+ * three requests for a table this size — so a Notion that accepts
+ * connections and then stalls could hold a render for three minutes. The
+ * catch below means that ends in the built-in copy rather than an error,
+ * which is the right outcome; the problem is purely how long it takes to
+ * get there. Every page of the site reads this, so that time is the time
+ * to first byte, and on a regeneration it is time the platform may not
+ * allow before killing the function — and a page that cannot finish
+ * regenerating is the failure that freezes the site on its last good
+ * render. See the note in lib/brand-art.ts.
+ *
+ * Eight seconds is the same budget the Brevo calls get. Copy that is a
+ * minute stale is invisible; a page that takes a minute is not.
+ */
+const NOTION_TIMEOUT_MS = 8000
+
+const notion = new Client({ auth: NOTION_TOKEN, timeoutMs: NOTION_TIMEOUT_MS })
+
+/**
+ * A stop on the pagination loop.
+ *
+ * `has_more` and `next_cursor` come from the other end, and this loop
+ * continues on them. Ten pages is a thousand rows against a table of
+ * about 257, so it is not a limit anyone will meet by adding copy — it is
+ * there so that a cursor that never resolves ends the loop rather than
+ * the request.
+ */
+const MAX_PAGES = 10
 
 /**
  * Every string on the site, keyed — and, under `url:`-prefixed keys, the
@@ -41,16 +80,31 @@ function extractPlainText(richText: any[]): string {
 export const getSiteCopy = cache(async (): Promise<SiteCopy> => {
   const copy: SiteCopy = { ...(defaults as SiteCopy) }
 
-  const { databaseId, token } = config.notion
-  if (!databaseId || !token) return copy
+  if (!NOTION_DATABASE_ID || !NOTION_TOKEN) return copy
+
+  /**
+   * The overrides are collected here and merged only if every page came
+   * back, so a query that dies halfway cannot leave the site in a state
+   * that is part edited and part built-in.
+   *
+   * That mixture is worse than either end of it. Which keys made it would
+   * depend on where the failure landed, so two visitors could be reading
+   * different versions of the same page, and a row the owner had
+   * deliberately cleared would come back as its built-in words only if
+   * the failure happened to fall before it. All or nothing is at least a
+   * state someone can reason about, and the built-in layer is complete on
+   * its own — that is the whole point of it.
+   */
+  const overrides: SiteCopy = {}
 
   try {
     let cursor: string | undefined = undefined
+    let pages = 0
     do {
       // No server-side filter: the gate property differs per database, so
       // the decision is made below. The whole table is one small query.
       const response: any = await notion.databases.query({
-        database_id: databaseId,
+        database_id: NOTION_DATABASE_ID,
         start_cursor: cursor,
         page_size: 100,
       })
@@ -73,16 +127,27 @@ export const getSiteCopy = cache(async (): Promise<SiteCopy> => {
         // The base layer is untouched by this: with no Notion at all
         // there are no rows, so nothing is cleared and the site renders
         // complete.
-        copy[key] = extractPlainText(properties.Text?.rich_text || []).trim()
+        overrides[key] = extractPlainText(properties.Text?.rich_text || []).trim()
 
         // The link is separate, and an empty one is left alone: pointing a
         // button somewhere new without rewording it is a normal thing to
         // want, and so is the reverse.
         const url = linkOf(properties)
-        if (url) copy[urlKey(key)] = url
+        if (url) overrides[urlKey(key)] = url
       }
       cursor = response.has_more ? response.next_cursor : undefined
+      pages += 1
+      if (cursor && pages >= MAX_PAGES) {
+        // Deliberately not a partial merge: see `overrides` above.
+        throw new Error(
+          `more than ${MAX_PAGES} pages of rows — refusing to apply a ` +
+            `partial read of the copy database`,
+        )
+      }
     } while (cursor)
+
+    // Only now, with every page in hand.
+    Object.assign(copy, overrides)
   } catch (error) {
     // A Notion outage must never take the site down — fall back to built-ins.
     console.error("Error fetching site copy from Notion:", error)
@@ -96,24 +161,24 @@ export const getSiteCopy = cache(async (): Promise<SiteCopy> => {
  * same way the live/draft gate is: the owner configures the database, and
  * a property they renamed should still work.
  *
- * Four kinds of value are honoured: an http(s) address, a `mailto:` or
- * `tel:`, and a path beginning `/`, which repoints a button at another
- * page of this site. The value is typed into Notion by hand and lands in
- * an `href`, so anything else — `javascript:`, `data:`, a half-finished
- * address — is dropped and the button's built-in link stands.
+ * Which values are honoured, and which are dropped, is lib/href.ts: an
+ * http(s) address, a `mailto:` or `tel:`, or a path on this site. The
+ * value is typed into Notion by hand and lands in an `href`, so anything
+ * else — `javascript:`, `data:`, a protocol-relative `//host` that only
+ * looks like a path — is dropped and the button's built-in link stands.
  */
-const SAFE_LINK = /^(https?:|mailto:|tel:|\/)/i
-
-/**
- * Whether a value is fit to become an `href`. Exported because the check
- * belongs in two places: here, where a link enters from Notion, and in
- * components/cta.tsx, which is the last thing between a value and the DOM.
- * One gate is a gate someone can walk around.
- */
-export const isSafeHref = (value: string) => SAFE_LINK.test(value.trim())
-
 function linkOf(properties: Record<string, any>): string {
-  const prop: any = Object.values(properties).find((p: any) => p?.type === "url")
+  // By name first, by type second. Finding it by type alone was ambiguous
+  // the moment the database had two url columns — and it invites exactly
+  // that, because docs/NOTION_SETUP.md promises the owner that any other
+  // column they add is ignored by the site. A column literally called
+  // `URL` is the one the setup guide asks for, so it wins; a renamed one
+  // still works, which is why the fallback stays.
+  const named = properties.URL
+  const prop: any =
+    named?.type === "url"
+      ? named
+      : Object.values(properties).find((p: any) => p?.type === "url")
   const raw = (prop?.url ?? "").trim()
   return isSafeHref(raw) ? raw : ""
 }
@@ -121,14 +186,62 @@ function linkOf(properties: Record<string, any>): string {
 /** Statuses that mean "ready to show", case-insensitively. */
 const DONE = new Set(["done", "published", "live", "complete", "completed"])
 
+/**
+ * Said once per instance, because a gate nobody can see is a gate nobody
+ * can trust.
+ *
+ * There is nothing in Notion that tells the owner which column decides
+ * whether a row is on the site. If the database has more than one
+ * candidate — and this one does: a `Status` of Done/In progress/Not
+ * started *and* a `Status 1` of Published/In review/Draft — then a row
+ * can read "Draft" in the column with the publishing words in it while
+ * being live on the site, because the code takes `Status`. Someone who
+ * marks a row Draft expecting it to come off the site has not taken it
+ * off the site.
+ *
+ * The gate is not made stricter here to fix that: requiring every status
+ * column to agree would take every row that says Draft off the site at
+ * once, which is a worse surprise than the one it prevents. It is said
+ * out loud instead, and docs/NOTION_SETUP.md says which column to keep.
+ */
+let gateAnnounced = false
+
+function announceGate(gate: string, alternatives: string[]) {
+  if (gateAnnounced) return
+  gateAnnounced = true
+  const also = alternatives.length
+    ? ` Other columns that look like gates and are NOT read: ${alternatives.join(", ")}.`
+    : ""
+  console.info(`site copy: live/draft gate is "${gate}".${also}`)
+}
+
+/** Columns that look like a gate, so the log can name the ones ignored. */
+function gateLikeNames(properties: Record<string, any>): string[] {
+  return Object.entries(properties)
+    .filter(([, p]: [string, any]) => p?.type === "status" || p?.type === "checkbox")
+    .map(([name]) => name)
+}
+
 function isLive(properties: Record<string, any>): boolean {
+  const others = gateLikeNames(properties)
+
   const published = properties.Published
-  if (published?.type === "checkbox") return published.checkbox === true
+  if (published?.type === "checkbox") {
+    announceGate("Published", others.filter((n) => n !== "Published"))
+    return published.checkbox === true
+  }
 
   const status = properties.Status
-  if (status?.type === "status") return DONE.has(status.status?.name?.toLowerCase() ?? "")
-  if (status?.type === "select") return DONE.has(status.select?.name?.toLowerCase() ?? "")
+  if (status?.type === "status") {
+    announceGate("Status", others.filter((n) => n !== "Status"))
+    return DONE.has(status.status?.name?.toLowerCase() ?? "")
+  }
+  if (status?.type === "select") {
+    announceGate("Status", others.filter((n) => n !== "Status"))
+    return DONE.has(status.select?.name?.toLowerCase() ?? "")
+  }
 
   // No gate configured: everything in the database is live.
+  announceGate("none — every row is live", others)
   return true
 }
