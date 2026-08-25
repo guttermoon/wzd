@@ -90,7 +90,7 @@ lib/          site-copy.ts (Notion) · href.ts (what may be an href)
               json-ld.ts (script-safe JSON) · brevo.ts · rate-limit.ts
               photos.ts (registry) · event.ts (dates, links)
 docs/         IMAGES.md (photo manifest) · NOTION_SETUP.md
-scripts/      image pipeline, Notion seeding, the four check scripts
+scripts/      image pipeline, Notion seeding, the check scripts
 public/photos/  responsive renditions, built — do not edit by hand
 public/press/   press-resolution downloads, plus the hand-drawn wordmark.svg
 assets/originals/  photographers' full-size files (gitignored, ~31MB)
@@ -122,6 +122,7 @@ copy from Notion.
 | `npm run check:a11y` | Runs axe-core over every route in both themes, plus keyboard checks. Start the server first. |
 | `npm run check:links` | Verifies every outbound link opens in a new tab, says so, and carries `rel="noopener noreferrer"` — and that no internal link does. Start the server first. |
 | `npm run check:css` | Verifies every class the components rely on survived into the built CSS. Start the server first. |
+| `npm run check:headings` | Prints each route's heading outline and fails on a second `h1`, a skipped level or an empty heading. Start the server first. |
 | `npm run seed:notion` | Creates/updates one Notion row per copy key, pre-filled and live. Needs a **write-capable** `NOTION_TOKEN`. Safe to re-run. |
 | `npm run check:notion` | Checks what the Notion token is actually allowed to do: the copy query must succeed, and a write must be refused. Needs `NOTION_TOKEN`. |
 | `node scripts/extract-wp-content.mjs <wxr.xml>` | Re-derives the original WordPress text, for auditing the migration. A one-off kept for reference. |
@@ -131,14 +132,21 @@ currently reports zero warnings. It is deliberately *not* wired into
 `next build` — see `eslint.ignoreDuringBuilds` in `next.config.mjs` — so a
 lint warning can never block a deploy; run it yourself, or in CI.
 
-The four `check:` scripts are the test suite. There is no unit-test runner;
+The `check:` scripts are the test suite. There is no unit-test runner;
 these run against a real build, which for a site of this shape catches more
 than unit tests would:
 
 ```bash
 npm run build && npx next start &
-npm run check:credits && npm run check:links && npm run check:css && npm run check:a11y
+npm run check:credits && npm run check:links && npm run check:css \
+  && npm run check:headings && npm run check:a11y
 ```
+
+`check:headings` overlaps `check:a11y` deliberately but does not duplicate
+it: axe reports a skipped heading level, and is content with a page having
+*two* h1 elements. That is the easy mistake — a section heading typed as
+h1 because it should look big — and it flattens the outline for anyone
+navigating by heading.
 
 ## Deployment
 

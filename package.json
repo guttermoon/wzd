@@ -14,7 +14,8 @@
     "check:notion": "node scripts/check-notion-access.mjs",
     "logos": "node scripts/prepare-logos.mjs",
     "check:css": "node scripts/check-css.mjs",
-    "check:links": "node scripts/check-links.mjs"
+    "check:links": "node scripts/check-links.mjs",
+    "check:headings": "node scripts/check-headings.mjs"
   },
   "dependencies": {
     "@notionhq/client": "^4.0.1",
