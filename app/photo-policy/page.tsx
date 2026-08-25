@@ -6,14 +6,15 @@ import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
 import { photo, allPhotos } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
+import { pageMetadata } from "@/lib/seo"
 
 export const revalidate = 60
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Photo policy",
   description:
     "Photography and filming at World Zombie Day: London: consent, the schedule, commercial restrictions, and how to credit.",
-  alternates: { canonical: "/photo-policy" },
-}
+  path: "/photo-policy",
+})
 
 export default async function PhotoPolicyPage() {
   const copy = await getSiteCopy()
@@ -31,6 +32,7 @@ export default async function PhotoPolicyPage() {
     <PageShell
       title={<T k="photo.title" />}
       titleText={S("photo.title")}
+      path="/photo-policy"
       standfirst={<T k="photo.standfirst" />}
       banner={
         <Photo

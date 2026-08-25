@@ -6,14 +6,15 @@ import { PageShell, Section } from "@/components/page-shell"
 import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
+import { pageMetadata } from "@/lib/seo"
 
 export const revalidate = 60
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Become a sponsor",
   description:
     "Sponsorship options for World Zombie Day: London: on-site promotion and online prize giveaways, raising funds for a good cause.",
-  alternates: { canonical: "/become-a-sponsor" },
-}
+  path: "/become-a-sponsor",
+})
 
 export default async function SponsorsPage() {
   const copy = await getSiteCopy()
@@ -28,6 +29,7 @@ export default async function SponsorsPage() {
     <PageShell
       title={<T k="sponsors.title" />}
       titleText={S("sponsors.title")}
+      path="/become-a-sponsor"
       standfirst={<T k="sponsors.standfirst" />}
       banner={
         <Photo

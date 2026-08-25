@@ -4,14 +4,15 @@ import { makeT, makeS, makeHas, makeAny, makeP } from "@/components/notion-text"
 import { PageShell, Section } from "@/components/page-shell"
 import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
+import { pageMetadata } from "@/lib/seo"
 
 export const revalidate = 60
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Rules of conduct",
   description:
     "The zombie rules of conduct for World Zombie Day: London: safety, costumes, crossings and behaviour on the day.",
-  alternates: { canonical: "/survival" },
-}
+  path: "/survival",
+})
 
 const RULES = ["1", "2", "3", "4", "5", "6", "7", "8"]
 
@@ -27,6 +28,7 @@ export default async function RulesPage() {
     <PageShell
       title={<T k="rules.title" />}
       titleText={S("rules.title")}
+      path="/survival"
       standfirst={<T k="rules.standfirst" />}
       banner={
         <Photo

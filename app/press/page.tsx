@@ -7,15 +7,16 @@ import { makeCta } from "@/components/cta"
 import { PageShell, Section } from "@/components/page-shell"
 import { EVENT } from "@/lib/event"
 import { hrefKind } from "@/lib/href"
+import { pageMetadata } from "@/lib/seo"
 import { BrandKit } from "@/components/brand-kit"
 
 export const revalidate = 60
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Press kit",
   description:
     "Boilerplate, key facts, logos and credited photography for journalists covering World Zombie Day: London.",
-  alternates: { canonical: "/press" },
-}
+  path: "/press",
+})
 
 const FACTS = ["date", "place", "cost", "cause", "scale", "origin", "tags"]
 
@@ -51,6 +52,7 @@ export default async function PressPage() {
     <PageShell
       title={<T k="press.title" />}
       titleText={S("press.title")}
+      path="/press"
       standfirst={<T k="press.standfirst" />}
       banner={
         <Photo

@@ -7,14 +7,15 @@ import { EVENT } from "@/lib/event"
 import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
 import { jsonLd } from "@/lib/json-ld"
+import { pageMetadata } from "@/lib/seo"
 
 export const revalidate = 60
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "FAQ",
   description:
     "When is World Zombie Day: London, where does it start, is it family-friendly, are dogs allowed, and what should you wear?",
-  alternates: { canonical: "/faq" },
-}
+  path: "/faq",
+})
 
 const QUESTIONS = ["1", "2", "3", "4", "5", "6", "7", "8"]
 
@@ -42,6 +43,7 @@ export default async function FaqPage() {
     <PageShell
       title={<T k="faq.title" />}
       titleText={S("faq.title")}
+      path="/faq"
       standfirst={<T k="faq.standfirst" />}
       banner={
         <Photo
