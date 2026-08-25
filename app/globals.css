@@ -707,7 +707,11 @@
   }
 
   .consent-string {
-    /* Tapered: a touch heavier where it takes the weight. */
+    /* Tapered: a touch heavier where it takes the weight. Stays white in
+       both themes: it hangs over the scrim, which is black at 70% either
+       way, not over the panel it carries. --blood-text is white and is
+       declared once rather than per theme, which is why it is the token
+       here even though the panel below is no longer blood. */
     background-image: linear-gradient(
       to bottom,
       var(--blood-text) 0%,
