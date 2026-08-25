@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
 import { EVENT } from "@/lib/event"
+import { brevoPost } from "@/lib/brevo"
+import { callerKey, rateLimit } from "@/lib/rate-limit"
 
 /**
  * Photograph submissions, posted from the site's own form and delivered
@@ -22,6 +24,14 @@ import { EVENT } from "@/lib/event"
  * Brevo because it is the transactional sender this project already has
  * an account with. `PHOTO_SUBMISSIONS_URL` and `PHOTO_SUBMISSIONS_FROM`
  * override the endpoint and the from-address if that ever changes.
+ *
+ * ── Why it is rate limited ──────────────────────────────────────────
+ *
+ * It sends mail on the owner's account, to the owner's inbox, for anyone
+ * who can reach the URL. Capped, an abusive caller wastes their own time;
+ * uncapped, they bury a real submission under a thousand fakes and spend
+ * the sending quota that the newsletter shares. See lib/rate-limit.ts for
+ * how much the cap is actually worth.
  */
 export const runtime = "nodejs"
 export const preferredRegion = "lhr1"
@@ -54,30 +64,51 @@ const LIMITS = { credit: 300, links: 4000, notes: 4000 } as const
 const text = (value: unknown, max: number): string =>
   typeof value === "string" ? value.trim().slice(0, max) : ""
 
+/**
+ * A subject line is one line.
+ *
+ * The credit is typed by a stranger and goes into the `subject` field, and
+ * a subject is a mail header wherever this ends up — Brevo's API takes it
+ * as JSON, but what it writes is SMTP, and a header that contains a
+ * newline is two headers. Nothing here relies on Brevo rejecting it: the
+ * line breaks and control characters come out before it is sent, and the
+ * whole credit is in the body anyway, where it can say what it likes.
+ */
+const oneLine = (value: string): string =>
+  // eslint-disable-next-line no-control-regex
+  value.replace(/[\u0000-\u001f\u007f]+/g, " ").trim()
+
 export async function POST(request: Request) {
-  let body: any
+  const limit = rateLimit(callerKey(request, "photo-submissions"), {
+    limit: 5,
+    windowMs: 10 * 60 * 1000,
+  })
+  if (!limit.ok) {
+    return NextResponse.json(
+      { error: "rate-limited" },
+      { status: 429, headers: { "retry-after": String(limit.retryAfter) } },
+    )
+  }
+
+  let body: unknown
   try {
     body = await request.json()
   } catch {
     return NextResponse.json({ error: "Expected JSON" }, { status: 400 })
   }
 
-  const credit = text(body?.credit, LIMITS.credit)
-  const links = text(body?.links, LIMITS.links)
-  const notes = text(body?.notes, LIMITS.notes)
+  const fields = (body ?? {}) as Record<string, unknown>
+  const credit = text(fields.credit, LIMITS.credit)
+  const links = text(fields.links, LIMITS.links)
+  const notes = text(fields.notes, LIMITS.notes)
   // Whether they confirmed the folder is reachable. Not required of them,
   // but the answer saves a round trip when it turns out not to be.
-  const access = body?.access === true
+  const access = fields.access === true
 
   // The two the form marks required. Checked here as well as in the page,
   // because a form is only a suggestion once it has left the browser.
   if (!credit || !links) {
     return NextResponse.json({ error: "Missing credit or links" }, { status: 400 })
-  }
-
-  const key = process.env.BREVO_API_KEY
-  if (!key) {
-    return NextResponse.json({ reason: "unconfigured" }, { status: 503 })
   }
 
   // Plain text, because that is what it is. Anything a submitter typed is
@@ -93,29 +124,31 @@ export async function POST(request: Request) {
     `Access confirmed: ${access ? "yes" : "no"}`,
   ].join("\n")
 
-  try {
-    const response = await fetch(ENDPOINT, {
-      method: "POST",
-      headers: {
-        "api-key": key,
-        "content-type": "application/json",
-        accept: "application/json",
-      },
-      body: JSON.stringify({
-        sender: { email: FROM, name: "World Zombie Day: London" },
-        to: [{ email: TO }],
-        subject: `Photo submission from ${credit}`,
-        textContent: lines,
-      }),
-    })
-    if (!response.ok) {
-      console.error("Photo submission failed:", response.status, await response.text())
-      return NextResponse.json({ error: "Upstream refused" }, { status: 502 })
-    }
-  } catch (error) {
-    console.error("Photo submission could not be sent:", error)
-    return NextResponse.json({ error: "Could not send" }, { status: 502 })
-  }
+  const result = await brevoPost(
+    ENDPOINT,
+    {
+      sender: { email: FROM, name: "World Zombie Day: London" },
+      to: [{ email: TO }],
+      subject: `Photo submission from ${oneLine(credit)}`,
+      textContent: lines,
+    },
+    "photo-submission",
+  )
 
-  return NextResponse.json({ ok: true })
+  switch (result.status) {
+    case "sent":
+      return NextResponse.json({ ok: true })
+
+    case "unconfigured":
+      // The form turns itself into a pre-filled mailto: rather than losing
+      // what they typed. That fallback is the point, not a nicety.
+      return NextResponse.json({ reason: "unconfigured" }, { status: 503 })
+
+    case "refused":
+      console.error(`photo-submission: upstream ${result.code} ${result.detail}`)
+      return NextResponse.json({ error: "Upstream refused" }, { status: 502 })
+
+    default:
+      return NextResponse.json({ error: "Could not send" }, { status: 502 })
+  }
 }

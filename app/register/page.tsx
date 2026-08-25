@@ -7,6 +7,7 @@ import { Photo, Graphic } from "@/components/photo"
 import { ZeffyEmbed } from "@/components/zeffy-embed"
 import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
+import { pageMetadata } from "@/lib/seo"
 import { ExternalLink } from "@/components/external-link"
 import { Reveal } from "@/components/reveal"
 
@@ -14,12 +15,12 @@ const WORK = ["1", "2", "3", "4", "5"]
 const VIP = ["1", "2", "3", "4"]
 
 export const revalidate = 60
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Register",
   description:
     "Registration for World Zombie Day: London 2026. Free to attend, with an optional pay-what-you-can donation.",
-  alternates: { canonical: "/register" },
-}
+  path: "/register",
+})
 
 export default async function RegisterPage() {
   const copy = await getSiteCopy()
@@ -34,6 +35,7 @@ export default async function RegisterPage() {
     <PageShell
       title={<T k="register.title" />}
       titleText={S("register.title")}
+      path="/register"
       standfirst={<T k="register.standfirst" />}
       banner={
         <Photo

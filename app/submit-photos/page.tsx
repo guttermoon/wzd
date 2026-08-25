@@ -7,14 +7,15 @@ import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
 import { PhotoSubmission } from "@/components/photo-submission"
 import { EVENT } from "@/lib/event"
+import { pageMetadata } from "@/lib/seo"
 
 export const revalidate = 60
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Submit your photos",
   description:
     "Send us the photographs you took at World Zombie Day: London. Every image is published with its photographer's credit.",
-  alternates: { canonical: "/submit-photos" },
-}
+  path: "/submit-photos",
+})
 
 export default async function SubmitPhotosPage() {
   const copy = await getSiteCopy()
@@ -27,6 +28,7 @@ export default async function SubmitPhotosPage() {
     <PageShell
       title={<T k="submit.title" />}
       titleText={S("submit.title")}
+      path="/submit-photos"
       standfirst={<T k="submit.standfirst" />}
       banner={
         <Photo

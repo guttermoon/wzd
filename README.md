@@ -40,8 +40,22 @@ The database is **wzd-pages**. Each row is one slot:
 
 A row is live if a `Published` checkbox is ticked, or a `Status` is set to
 Done — whichever the database has. Rows whose title isn't a dotted key are
-ignored, and so is every other column, so the database is safe to use for
-your own notes and workflow.
+ignored, so the database is safe to use for your own notes and workflow.
+
+Two columns are not ignored, and both are worth knowing about:
+
+- **`URL`** sets where a button points, so the words and the destination
+  both come from one row. Only `http(s)`, `mailto:`, `tel:` and a path on
+  this site are accepted; anything else is dropped and the built-in link
+  stands.
+- **A second status-like column is not a second gate.** This database has
+  a `Status 1` of Draft/In review/Published that nothing reads, and almost
+  every live row says `Draft` in it. Marking a row `Draft` there does *not*
+  take it off the site. See `docs/NOTION_SETUP.md`.
+
+To take a line off the site, clear its `Text` cell on a row that is still
+live: an empty cell means empty, and the bullet or paragraph around it
+disappears too rather than leaving a gap.
 
 Full setup and editing guide: [`docs/NOTION_SETUP.md`](docs/NOTION_SETUP.md).
 
@@ -56,7 +70,7 @@ and that is enforced by the code, not by convention.**
   always renders the credit in a `<figcaption>`.
 - `npm run check:credits` fails the build if any of that stops being true.
 
-Eighteen photographs by thirteen photographers are currently in the repo.
+Eighteen photographs by twelve photographers are currently in the repo.
 See [`docs/IMAGES.md`](docs/IMAGES.md) for the full list, the credit wording, and the
 photographs still sitting on the old WordPress site.
 
@@ -68,11 +82,15 @@ entry to `content/photos.json` with its credit and alt text, then run
 
 ```
 app/          one folder per route, each a server component
+app/api/      newsletter · photo-submissions · revalidate
 components/   photo.tsx is the only thing that renders an <img>
+              cta.tsx / external-link.tsx are the only ways to write a link
 content/      site-copy.json (every string) · photos.json (credits)
-lib/          site-copy.ts (Notion) · photos.ts (registry) · event.ts (dates, links)
+lib/          site-copy.ts (Notion) · href.ts (what may be an href)
+              json-ld.ts (script-safe JSON) · brevo.ts · rate-limit.ts
+              photos.ts (registry) · event.ts (dates, links)
 docs/         IMAGES.md (photo manifest) · NOTION_SETUP.md
-scripts/      image pipeline, Notion seeding, the two check scripts
+scripts/      image pipeline, Notion seeding, the check scripts
 public/photos/  responsive renditions, built — do not edit by hand
 public/press/   press-resolution downloads, plus the hand-drawn wordmark.svg
 assets/originals/  photographers' full-size files (gitignored, ~31MB)
@@ -102,23 +120,214 @@ copy from Notion.
 | `npm run logos` | Rebuilds `public/brand/` and the favicon from the official artwork in `public/logos/`. |
 | `npm run check:credits` | Verifies every photo is credited and no raw `<img>` slips past. |
 | `npm run check:a11y` | Runs axe-core over every route in both themes, plus keyboard checks. Start the server first. |
-| `npm run seed:notion` | Creates/updates one Notion row per copy key, pre-filled and live. Needs `NOTION_TOKEN`. Safe to re-run. |
-| `node scripts/extract-wp-content.mjs <wxr.xml>` | Re-derives the original WordPress text, for auditing the migration. |
+| `npm run check:links` | Verifies every outbound link opens in a new tab, says so, and carries `rel="noopener noreferrer"` — and that no internal link does. Start the server first. |
+| `npm run check:css` | Verifies every class the components rely on survived into the built CSS. Start the server first. |
+| `npm run check:headings` | Prints each route's heading outline and fails on a second `h1`, a skipped level or an empty heading. Start the server first. |
+| `npm run seed:notion` | Creates/updates one Notion row per copy key, pre-filled and live. Needs a **write-capable** `NOTION_TOKEN`. Safe to re-run. |
+| `npm run check:notion` | Checks what the Notion token is actually allowed to do: the copy query must succeed, and a write must be refused. Needs `NOTION_TOKEN`. |
+| `node scripts/extract-wp-content.mjs <wxr.xml>` | Re-derives the original WordPress text, for auditing the migration. A one-off kept for reference. |
+
+`npm run lint` runs ESLint over the whole repo (`next/core-web-vitals`) and
+currently reports zero warnings. It is deliberately *not* wired into
+`next build` — see `eslint.ignoreDuringBuilds` in `next.config.mjs` — so a
+lint warning can never block a deploy; run it yourself, or in CI.
+
+The `check:` scripts are the test suite. There is no unit-test runner;
+these run against a real build, which for a site of this shape catches more
+than unit tests would:
+
+```bash
+npm run build && npx next start &
+npm run check:credits && npm run check:links && npm run check:css \
+  && npm run check:headings && npm run check:a11y
+```
+
+`check:headings` overlaps `check:a11y` deliberately but does not duplicate
+it: axe reports a skipped heading level, and is content with a page having
+*two* h1 elements. That is the easy mistake — a section heading typed as
+h1 because it should look big — and it flattens the outline for anyone
+navigating by heading.
 
 ## Deployment
 
-Set these in Vercel:
+Set these in Vercel. `.env.example` documents every one of them with the
+reasoning; this is the short version.
 
-| Variable | Value |
-|---|---|
-| `NOTION_TOKEN` | the internal integration token |
-| `NOTION_DATABASE_ID` | `3c16f6ccb2c180e087a4da55703d5792` |
-| `NEXT_PUBLIC_SITE_URL` | `https://worldzombieday.co.uk` |
-| `REVALIDATION_SECRET` | any long random string (optional) |
+| Variable | Needed for | If unset |
+|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | canonical URLs, sitemap, structured data | falls back to the Vercel deployment URL |
+| `NOTION_TOKEN` | editing copy in Notion | built-in copy only — the site is complete without it |
+| `NOTION_DATABASE_ID` | `3c16f6ccb2c180e087a4da55703d5792` | as above |
+| `BREVO_API_KEY` | **the newsletter *and* photograph submissions** | both routes answer 503 and their forms offer a `mailto:` instead |
+| `BREVO_LIST_ID` | which list to subscribe to | defaults to 7, the walk's own |
+| `BREVO_DOI_TEMPLATE_ID` | the confirmation email | defaults to 14, the walk's own |
+| `BREVO_DOI_REDIRECT` | where the confirmation link lands | defaults to the site root |
+| `REVALIDATION_SECRET` | forcing a re-fetch before the 60s window | `/api/revalidate` refuses every request with 503 |
+| `NEXT_PUBLIC_POSTHOG_KEY` | PostHog | analytics never load |
+| `NEXT_PUBLIC_GA_ID` | Google Analytics 4 | analytics never load |
 
-The old WordPress URLs (`/survival`, `/become-a-sponsor`, `/about-2`, the
-blog, …) are redirected in `next.config.mjs`, so a decade of press links
-keep working.
+`NOTION_TOKEN` should be a **read-only** integration. The site only ever
+reads, and a token that can also write can rewrite every word on the site
+if it leaks. The seeding script is the only thing that needs write access;
+run that from your own machine. See `docs/NOTION_SETUP.md`.
+
+Notion's settings page shows the capability but not what it means in
+practice, so check it against the API rather than the checkbox:
+
+```bash
+NOTION_TOKEN=ntn_… npm run check:notion
+```
+
+It should say the read succeeded and the write was **refused**. The write
+probe is the least destructive one available — it writes a single row's
+`Text` back with the value it already has, so a token that turns out to
+still be writable changes nothing by being tested.
+
+Nothing here is required to *deploy* — with an empty environment the site
+builds and renders every page from its built-in copy, with the forms
+falling back to `mailto:` and no analytics. That is deliberate, so a
+preview deployment is never a half-broken one.
+
+`/survival` and `/become-a-sponsor` are live routes, not redirects — they
+carry the URLs the WordPress site used, which is why they are named that
+way while their copy keys still read `rules.` and `sponsors.`. The URLs
+that *are* redirected in `next.config.mjs` are the ones that have gone:
+`/rules`, `/sponsors`, `/about-2`, `/gallery`, `/map`, the blog and the
+rest. A decade of press links keeps working, so if you rename a route,
+add a redirect for the old one.
+
+## Forms, and what they talk to
+
+Three API routes, and no database anywhere.
+
+**`POST /api/newsletter`** — the signup in the footer. Our own form in our
+own type, posting to our own origin, which is why it needs no cookie
+consent: nothing third party runs in the page. It hands the address to
+Brevo server-side and asks for a **double opt-in** confirmation, so
+*nobody is added to the list by this route* — they join when they click
+the link in the email. The success message says a link is on its way, not
+that they are subscribed, because until they click they are not.
+
+**`POST /api/photo-submissions`** — `/submit-photos`. Emails the
+submission to whoever credits the photographs. If the key is missing the
+form turns itself into a pre-filled `mailto:` carrying everything the
+visitor typed. That fallback is the point, not a nicety: someone who has
+just written out where their folder lives should never lose it to an
+unset environment variable.
+
+**`POST /api/revalidate`** — forces a re-fetch of the Notion copy without
+waiting for the 60-second window. Requires `REVALIDATION_SECRET`; refuses
+everything with 503 if it is unset, and compares the secret in constant
+time.
+
+Both mail-sending routes are rate limited to 5 per caller per 10 minutes.
+The counter lives in one serverless instance's memory, so it is a brake on
+the obvious abuse rather than a gate — read the note in `lib/rate-limit.ts`
+before relying on it. Uncapped, `/api/newsletter` would send Brevo mail to
+any address handed to it.
+
+## Cookies, analytics and the ticketing form
+
+**The analytics do not load until the visitor has answered the cookie
+dialog.** UK PECR wants consent *before* the storage, not after it, so
+PostHog and GA4 are never fetched rather than merely configured to behave
+once running. Rejecting is the same size and weight as accepting, and the
+answer can be withdrawn on `/privacy` as easily as it was given.
+
+Two things are deliberately *not* behind that gate:
+
+- The **newsletter**, because it is our own form and there is nothing
+  third party in the page to gate.
+- The **Zeffy ticketing form** on `/register` and `/donate`, which loads on
+  sight and sets its own cookies as soon as either page opens. The case
+  that it is strictly necessary to the service the visitor came for is
+  strong for a ticketing form and weak for analytics. Zeffy's embed also
+  pulls in HubSpot, Microsoft Clarity, Google/DoubleClick and LinkedIn,
+  which are its own marketing trackers and are not necessary to take a
+  booking. `/privacy` names every one of them. **If that list changes, or
+  the embed is ever gated, that copy has to change with it.**
+
+## Security
+
+The decisions worth knowing before changing anything:
+
+- **`lib/href.ts` is the only module that decides what may be an `href`**
+  and whether a link is external. A pasted Notion value is not trusted:
+  `javascript:` is dropped, and so is a protocol-relative `//host`, which
+  looks like a path but leaves the site.
+- **Anything that ends up inside a `<script>` goes through `jsonLd()`**
+  (`lib/json-ld.ts`), never `JSON.stringify`. `/faq` mirrors Notion copy
+  into structured data, and `JSON.stringify` leaves `<` alone — a cell
+  containing `</script>` would otherwise close the block and turn the rest
+  into live markup.
+- **Security headers** are set in `next.config.mjs`. There is deliberately
+  no script-restricting CSP: Zeffy injects scripts from origins we don't
+  control, and a guessed `script-src` breaks the form that takes the money.
+- `npm audit` reports two advisories in the `postcss` bundled inside Next.
+  They are build-time only and clearing them needs a Next major upgrade.
+
+## SEO and discoverability
+
+`/sitemap.xml` and `/robots.txt` are generated by `app/sitemap.ts` and
+`app/robots.ts`. The sitemap's routes come from the same `NAV` /
+`FOOTER_NAV` / `LEGAL_NAV` arrays the site renders and `/api/revalidate`
+accepts, so a page cannot be added to the site and forgotten in the
+sitemap — there is one list, not three.
+
+**`NEXT_PUBLIC_SITE_URL` must be set at build time**, not just at runtime.
+Next inlines it during the build, so a deploy without it produces a
+sitemap, canonicals and Open Graph URLs pointing at the Vercel preview
+domain rather than worldzombieday.co.uk — valid XML full of the wrong
+addresses, which is worse than none. On Vercel it is a **Config** (not
+Secret) variable: it ships to the browser by definition, and marking it
+secret only hides it from the people who need to read it.
+
+A trailing slash on that value is stripped (`lib/site.ts`). Everything
+downstream joins onto the origin with a slash of its own, so
+`https://worldzombieday.co.uk/` would otherwise give
+`https://worldzombieday.co.uk//sitemap.xml` in robots.txt and a doubled
+slash on every canonical, Open Graph URL and structured-data image —
+none of which fails a build or a check, because it only shows up in the
+files a crawler reads.
+
+### Submitting to Google Search Console
+
+1. Add the property at <https://search.google.com/search-console>. Prefer
+   the **Domain** property with the DNS TXT record: it covers every
+   subdomain and survives a rebuild by someone who has never heard of the
+   variable below.
+2. If DNS isn't to hand, use the URL-prefix property and its meta tag —
+   set `GOOGLE_SITE_VERIFICATION` to the `content` value alone and
+   redeploy. Unset, no tag is rendered at all.
+3. Submit `https://worldzombieday.co.uk/sitemap.xml` under **Sitemaps**.
+4. Ignore `/api/*` if it ever appears in coverage reports — `robots.txt`
+   excludes it, because those routes only answer POST and have nothing to
+   index.
+
+### Structured data
+
+`app/layout.tsx` emits a `@graph` of `WebSite`, `Organization` and the
+`Event` on every page; `/faq` adds a `FAQPage`, and `PageShell` adds a
+`BreadcrumbList` on each inner page. All of it goes through `jsonLd()` —
+never `JSON.stringify` — because the FAQ mirrors Notion copy into a script
+tag. See the Security section.
+
+The `Event` is the one that earns rich results, and two things about it
+are deliberate:
+
+- **No street address.** The meeting point goes to people who have
+  registered, which is what registration is for. A `Place` with a locality
+  is what can honestly be published.
+- **`offers` at price 0.** The walk is free *and* ticketed; spelling that
+  out as an Offer is what makes a result say "Free" and link to
+  `/register`. `isAccessibleForFree` on its own is often ignored.
+
+`endDate` is deliberately absent — nobody has said when the walk finishes,
+and inventing a time would put a fact on the page that isn't one. Add it
+to `EVENT` when it's known; Google recommends it.
+
+Check changes with the [Rich Results Test](https://search.google.com/test/rich-results)
+against a deployed URL, not localhost.
 
 ## Design
 
@@ -127,7 +336,7 @@ following the site's own 2016 design. Dark is the default; there's a light
 theme, and a first-time visitor whose system asks for light gets light.
 
 Palette, type and tone follow the World Zombie Day style guide: Zombie Red
-`#E74C3C`, Dark Grey `#404040`, Black `#333333`, Greige `#F5E9DA`.
+`#E74C3C`, Dark Grey `#404040`, Black `#333333`, Greige `#F7E7D8`.
 
 Display type is **Grandstander**, body is **Raleway**, both from Google
 Fonts and self-hosted by `next/font`.
@@ -137,11 +346,15 @@ found, so the font is not shipped and not used for headings. It survives
 where it belongs — in the logo — by being traced to vector paths, so the
 letterforms are on the page without the font itself ever being served.
 
-One deliberate departure from the guide: Zombie Red can't carry body-size
-text. It measures 3.19:1 on Greige and 3.31:1 on Black, and white on it is
-3.82:1 — all fine for large display type, all short of the 4.5:1 that body
-text and links need. So the brand red does headlines, rules and fills,
-and a tuned red of the same family does links, small text and buttons.
+Two deliberate departures from the guide. Neither ground is the guide's:
+light is paper `#FEFEFC` and dark is ink `#1A1A1A`, with the guide's own
+Greige and Black serving as the panel tint on each. And Zombie Red can't
+carry body-size text — it measures 3.78:1 on paper, 3.19:1 on Greige and
+3.31:1 on Black, and white on it is 3.82:1: all fine for large display
+type, all short of the 4.5:1 that body text and links need. So the brand
+red does headlines, rules and fills (`--accent`), and a tuned red of the
+same family does links and small text (`--accent-text`) and backs buttons
+(`--accent-strong`). Don't collapse the three into one.
 
 The 2016 site set its headlines in **Hitchcock**. We do not ship it:
 

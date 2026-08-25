@@ -7,15 +7,16 @@ import { Photo, Graphic } from "@/components/photo"
 import { ZeffyEmbed } from "@/components/zeffy-embed"
 import { photo } from "@/lib/photos"
 import { EVENT } from "@/lib/event"
+import { pageMetadata } from "@/lib/seo"
 import { ExternalLink } from "@/components/external-link"
 
 export const revalidate = 60
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Donate",
   description:
     "Give to The Dead Good Club, the Community Interest Company World Zombie Day: London raises money for. The walk itself is free to join.",
-  alternates: { canonical: "/donate" },
-}
+  path: "/donate",
+})
 
 const WORK = ["1", "2", "3", "4", "5"]
 
@@ -32,6 +33,7 @@ export default async function DonatePage() {
     <PageShell
       title={<T k="donate.title" />}
       titleText={S("donate.title")}
+      path="/donate"
       standfirst={<T k="donate.standfirst" />}
       banner={
         <Photo

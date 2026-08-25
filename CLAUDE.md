@@ -6,11 +6,16 @@ London**, migrated off WordPress. None of the blog template remains.
 
 ## What the site is
 
-- Next.js 14 (app router) + Tailwind, deployed on Vercel. Eight static
-  routes, no database, no blog.
-- `/` `/register` `/rules` `/faq` `/sponsors` `/press` `/photo-policy`
-  `/privacy`. Primary nav is the first five
-  (`NAV` in `lib/event.ts`); the rest sit in the footer (`FOOTER_NAV`).
+- Next.js 14 (app router) + Tailwind, deployed on Vercel. Ten static
+  routes plus three API routes, no database, no blog.
+- `/` `/register` `/survival` `/faq` `/donate` `/become-a-sponsor`
+  `/press` `/photo-policy` `/submit-photos` `/privacy`. Primary nav is
+  `NAV` in `lib/event.ts`; the rest sit in the footer (`FOOTER_NAV`) and
+  `LEGAL_NAV`. `/rules` and `/sponsors` are **not** routes — they are
+  redirects to `/survival` and `/become-a-sponsor`, which are the live
+  URLs and are named that way because the old WordPress site was. The
+  copy keys still say `rules.` and `sponsors.`, which is why this is easy
+  to get backwards.
 - Every route is a server component that does
   `const T = makeT(await getSiteCopy())` and renders `<T k="…" />`.
 
@@ -23,11 +28,15 @@ Two layers, and the first one is complete on its own:
    key from here to "move it to Notion"; Notion overrides, it doesn't own.
 2. **Notion database `wzd-pages`** (`NOTION_DATABASE_ID`,
    `3c16f6ccb2c180e087a4da55703d5792`) — rows with `Name` = the key and
-   `Text` = the copy and `URL` = where it goes, if it is a button. 257
-   rows, of which 231 are keys the site renders and the rest are left over
-   from copy that has since been cut. Fetched in one
-   paginated query by `lib/site-copy.ts`; rows whose title isn't a dotted
-   key are ignored.
+   `Text` = the copy and `URL` = where it goes, if it is a button. 338
+   rows, of which 314 are live and are exactly the keys the site renders;
+   the other 24 sit at `Status = Not started` and are left over from copy
+   that has since been cut. Fetched in one paginated query by
+   `lib/site-copy.ts`; rows whose title isn't a dotted key are ignored.
+   The overrides are merged only once every page of the query has come
+   back — a read that dies halfway applies nothing, because a site that is
+   part edited and part built-in depends on where the failure landed and
+   is a state nobody can reason about.
    An `Order` number column carries the reading order, and the table view
    sorts on it, so the rows run down the page the way a visitor runs
    through the site: `site.` first, then home, register and the after
@@ -42,6 +51,18 @@ Two layers, and the first one is complete on its own:
    else a `Status` of Done/Published/Live/Complete, else everything is
    live. This database uses `Status`. Don't hard-code one property name —
    the owner configures the database, not us.
+
+   **The database also has a `Status 1` of Draft/In review/Published, and
+   nothing reads it.** 313 of the 314 live rows say `Draft` in it. That is
+   harmless until someone believes it: marking a row `Draft` does not take
+   it off the site, so unfinished copy written under that belief goes
+   public. Do not "fix" this by requiring every status column to agree —
+   that would take all 313 rows off at once, which is the worse surprise.
+   `isLive()` logs which gate it actually used, once per instance, so the
+   answer is discoverable; `docs/NOTION_SETUP.md` asks the owner to delete
+   the column. The `URL` property is looked up by that name first and by
+   type only as a fallback, for the same reason: found by type alone, a
+   second url column would silently take over every button on the site.
 
 Keys are dotted and lowercase (`home.hero.title`, `faq.q3`,
 `sponsors.onsite.amount`), namespaced per page: `site.` `home.` `register.`
@@ -83,6 +104,18 @@ zero on every route. The one deliberate exception is the newsletter's
 otherwise the slot renders empty. And add a matching Notion row, or the
 owner can't edit it.
 
+**Copy that ends up inside a `<script>` goes through `jsonLd()`**
+(`lib/json-ld.ts`), never `JSON.stringify`. `/faq` mirrors its questions
+and answers into a `FAQPage` graph, and those come from Notion cells.
+`JSON.stringify` escapes quotes and leaves `<` alone, so a cell containing
+`</script>` closes the block early and everything after it becomes live
+markup — a stored XSS with the copy system as the delivery route.
+`jsonLd()` escapes `<`, `>`, `&` and the U+2028/U+2029 line separators as
+`\uXXXX`, which every JSON parser reads back unchanged, so the structured
+data a search engine sees is identical. `app/layout.tsx` uses it too,
+even though its graph is all constants today: the next value added to it
+may not be.
+
 **Client components take their words as props.** `getSiteCopy` is
 server-only, so the consent dialog, the newsletter form, the Zeffy
 fallback line and the consent panel on `/privacy` are handed their strings
@@ -122,11 +155,25 @@ Two things follow from this that are easy to get wrong:
   reason this is one component — the owner can repoint a button at an
   outside address long after the code was written, and `check:links` has
   to keep passing without anyone remembering to change the markup.
-- **A pasted value is not trusted.** `isSafeHref` (`lib/site-copy.ts`)
-  allows `http(s)`, `mailto:`, `tel:` and a leading `/`, and anything else
-  — `javascript:` above all — is dropped and the built-in link stands. It
-  is checked twice on purpose: once as the value enters from Notion, and
-  again in `Cta`, which is the last thing between it and the DOM.
+- **A pasted value is not trusted.** `lib/href.ts` is the only place that
+  decides both questions — whether a value may be an `href` at all
+  (`isSafeHref`) and which of the three ways it renders (`hrefKind`).
+  `http(s)://`, `mailto:`, `tel:` and a path on this site are allowed;
+  anything else — `javascript:` above all — is dropped and the built-in
+  link stands. It is checked twice on purpose: once as the value enters
+  from Notion, and again in `Cta`, which is the last thing between it and
+  the DOM.
+
+  A path is a single leading `/` **not followed by another `/` or a `\`**.
+  `//evil.example` is a protocol-relative URL: the browser reads it as
+  `https://evil.example` and leaves the site, but it starts with a slash,
+  so a check that only looks at the first character calls it internal and
+  hands it to `next/link` — same tab, no `rel="noopener"`, none of the
+  announcement, and `check:links` agreeing it was internal all along.
+  Browsers normalise `/\evil.example` to the same thing. Both are
+  rejected. This is also why the two questions live in one module: when
+  `Cta` kept its own scheme regexes, "is it safe" and "is it external"
+  were two lists that had to agree, and they did not.
 
 The `URL` value is filed in the copy map under `url:<key>` (`urlKey()`).
 A copy key never contains a colon, so the two cannot collide.
@@ -197,7 +244,7 @@ everywhere at once.
   colour is the *panel* on that ground — Greige in light, Black in dark —
   and Greige is also the ink in dark mode.
 - **Zombie Red is a display colour, not a text colour.** It measures
-  3.78:1 on paper and 3.16:1 on Greige — fine for large type (3:1), short
+  3.78:1 on paper and 3.19:1 on Greige — fine for large type (3:1), short
   of the 4.5:1 body text needs. So `--accent` is Zombie Red for fills,
   rules and large headings; `--accent-text` is a tuned red for links and
   small text; `--accent-strong` backs buttons because white on Zombie Red
@@ -397,6 +444,24 @@ to another application rather than opening a page.
   route, add a redirect — those links are in a decade of press coverage.
 - `POST /api/revalidate` requires `REVALIDATION_SECRET`; it returns 503 if
   unset. (The template's version skipped the check when no secret was sent.)
+  The secret is compared with `timingSafeEqual`, not `!==`: a comparison
+  that stops at the first wrong character times how much of the secret is
+  right.
+- **The two routes that send mail are rate limited** (`lib/rate-limit.ts`),
+  5 per caller per 10 minutes each. `/api/newsletter` will ask Brevo to
+  send to any address handed to it — uncapped, that is someone else's
+  inbox filled in the walk's name and the account's sending quota spent,
+  with no flaw required. Read the note in that file before trusting it
+  too far: the counter is per serverless instance, so it is a brake on the
+  obvious version of the abuse and not a gate. A real one needs shared
+  state.
+- **Security headers are set in `next.config.mjs`** (`headers()`). There is
+  deliberately no script-restricting CSP: Zeffy's embed injects scripts
+  from origins we don't control, which pull in Stripe, hCaptcha and Google
+  Pay, and a guessed `script-src` breaks the form that takes the money.
+  `frame-ancestors` is set on its own because it restricts only framing.
+  `Permissions-Policy` deliberately omits `payment` — it defaults to
+  `self`, which is what Zeffy already works under.
 - The newsletter signup is **our own form** (`components/email-signup.tsx`)
   posting to `POST /api/newsletter`, which adds the address to **Brevo**
   server-side, to list **7, `WZDNewsletter`** (not 2, `DGCNewsletter`,
