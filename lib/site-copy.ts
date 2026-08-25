@@ -1,9 +1,18 @@
 import { cache } from "react"
 import { Client } from "@notionhq/client"
-import { config } from "./config"
+import { isSafeHref } from "./href"
 import defaults from "@/content/site-copy.json"
 
-const notion = new Client({ auth: config.notion.token })
+/**
+ * Neither is required. With no credentials the site renders every page
+ * from the built-in copy, which is the whole contract of the base layer —
+ * so a missing value here is a configuration to note, not an error to
+ * raise, and nothing on this path may throw.
+ */
+const NOTION_TOKEN = process.env.NOTION_TOKEN
+const NOTION_DATABASE_ID = process.env.NOTION_DATABASE_ID
+
+const notion = new Client({ auth: NOTION_TOKEN })
 
 /**
  * Every string on the site, keyed — and, under `url:`-prefixed keys, the
@@ -41,8 +50,7 @@ function extractPlainText(richText: any[]): string {
 export const getSiteCopy = cache(async (): Promise<SiteCopy> => {
   const copy: SiteCopy = { ...(defaults as SiteCopy) }
 
-  const { databaseId, token } = config.notion
-  if (!databaseId || !token) return copy
+  if (!NOTION_DATABASE_ID || !NOTION_TOKEN) return copy
 
   try {
     let cursor: string | undefined = undefined
@@ -50,7 +58,7 @@ export const getSiteCopy = cache(async (): Promise<SiteCopy> => {
       // No server-side filter: the gate property differs per database, so
       // the decision is made below. The whole table is one small query.
       const response: any = await notion.databases.query({
-        database_id: databaseId,
+        database_id: NOTION_DATABASE_ID,
         start_cursor: cursor,
         page_size: 100,
       })
@@ -96,22 +104,12 @@ export const getSiteCopy = cache(async (): Promise<SiteCopy> => {
  * same way the live/draft gate is: the owner configures the database, and
  * a property they renamed should still work.
  *
- * Four kinds of value are honoured: an http(s) address, a `mailto:` or
- * `tel:`, and a path beginning `/`, which repoints a button at another
- * page of this site. The value is typed into Notion by hand and lands in
- * an `href`, so anything else — `javascript:`, `data:`, a half-finished
- * address — is dropped and the button's built-in link stands.
+ * Which values are honoured, and which are dropped, is lib/href.ts: an
+ * http(s) address, a `mailto:` or `tel:`, or a path on this site. The
+ * value is typed into Notion by hand and lands in an `href`, so anything
+ * else — `javascript:`, `data:`, a protocol-relative `//host` that only
+ * looks like a path — is dropped and the button's built-in link stands.
  */
-const SAFE_LINK = /^(https?:|mailto:|tel:|\/)/i
-
-/**
- * Whether a value is fit to become an `href`. Exported because the check
- * belongs in two places: here, where a link enters from Notion, and in
- * components/cta.tsx, which is the last thing between a value and the DOM.
- * One gate is a gate someone can walk around.
- */
-export const isSafeHref = (value: string) => SAFE_LINK.test(value.trim())
-
 function linkOf(properties: Record<string, any>): string {
   const prop: any = Object.values(properties).find((p: any) => p?.type === "url")
   const raw = (prop?.url ?? "").trim()

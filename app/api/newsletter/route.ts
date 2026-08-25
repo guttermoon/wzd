@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
 import { SITE_URL } from "@/lib/site"
+import { brevoPost } from "@/lib/brevo"
+import { callerKey, rateLimit } from "@/lib/rate-limit"
 
 /**
  * The newsletter signup, posted from our own form.
@@ -52,6 +54,15 @@ import { SITE_URL } from "@/lib/site"
  *
  * `BREVO_DOI_REDIRECT` is where clicking it lands them, and defaults to
  * the site root.
+ *
+ * ── Why it is rate limited ──────────────────────────────────────────
+ *
+ * This route will ask Brevo to send mail to any address handed to it, and
+ * it is open to the internet with nothing to solve. Called in a loop it
+ * fills someone else's inbox with confirmations in the walk's name and
+ * spends the account's sending quota doing it — no flaw required, just the
+ * route working as designed. The cap in lib/rate-limit.ts is a brake on
+ * that; read the note there for what it is and is not worth.
  */
 export const runtime = "nodejs"
 export const preferredRegion = "lhr1"
@@ -77,6 +88,19 @@ function looksLikeAnAddress(value: unknown): value is string {
 }
 
 export async function POST(request: Request) {
+  // Before the body is even read: an abusive caller should cost as little
+  // as possible, and there is nothing in the body that changes the answer.
+  const limit = rateLimit(callerKey(request, "newsletter"), {
+    limit: 5,
+    windowMs: 10 * 60 * 1000,
+  })
+  if (!limit.ok) {
+    return NextResponse.json(
+      { error: "rate-limited" },
+      { status: 429, headers: { "retry-after": String(limit.retryAfter) } },
+    )
+  }
+
   let email: unknown
   try {
     email = (await request.json())?.email
@@ -88,49 +112,38 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "bad-email" }, { status: 400 })
   }
 
-  const key = process.env.BREVO_API_KEY
-  if (!key) {
-    console.error("newsletter: BREVO_API_KEY is not set")
-    return NextResponse.json({ reason: "unconfigured" }, { status: 503 })
-  }
+  const result = await brevoPost(
+    ENDPOINT,
+    {
+      email,
+      includeListIds: [LIST_ID],
+      templateId: TEMPLATE_ID,
+      redirectionUrl: REDIRECT,
+    },
+    "newsletter",
+  )
 
-  try {
-    const response = await fetch(ENDPOINT, {
-      method: "POST",
-      headers: {
-        "api-key": key,
-        "content-type": "application/json",
-        accept: "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        includeListIds: [LIST_ID],
-        templateId: TEMPLATE_ID,
-        redirectionUrl: REDIRECT,
-      }),
-      signal: AbortSignal.timeout(8000),
-    })
+  switch (result.status) {
+    case "sent":
+      return NextResponse.json({ ok: true })
 
-    // 204 when the confirmation is on its way.
-    if (!response.ok) {
-      const detail = (await response.text()).slice(0, 200)
+    case "unconfigured":
+      // The form offers a mailto: rather than losing the signup.
+      return NextResponse.json({ reason: "unconfigured" }, { status: 503 })
 
-      // Someone who is already on the list gets no second confirmation,
-      // and Brevo says so with a duplicate error. From where they are
-      // standing they have subscribed, which is what the form should tell
-      // them: this is not a failure to report back.
-      if (response.status === 400 && /duplicate|already/i.test(detail)) {
-        console.warn(`newsletter: already subscribed (${detail})`)
+    case "refused":
+      // Someone already on the list gets no second confirmation, and Brevo
+      // says so with a duplicate error. From where they are standing they
+      // have subscribed, which is what the form should tell them: this is
+      // not a failure to report back.
+      if (result.code === 400 && /duplicate|already/i.test(result.detail)) {
+        console.warn(`newsletter: already subscribed (${result.detail})`)
         return NextResponse.json({ ok: true })
       }
-
-      console.error(`newsletter: upstream ${response.status} ${detail}`)
+      console.error(`newsletter: upstream ${result.code} ${result.detail}`)
       return NextResponse.json({ error: "upstream" }, { status: 502 })
-    }
-  } catch (error) {
-    console.error("newsletter: upstream unreachable", error)
-    return NextResponse.json({ error: "upstream" }, { status: 502 })
-  }
 
-  return NextResponse.json({ ok: true })
+    default:
+      return NextResponse.json({ error: "upstream" }, { status: 502 })
+  }
 }

@@ -12,6 +12,7 @@ import { Analytics } from "@/components/analytics"
 import { getSiteCopy } from "@/lib/site-copy"
 import { EVENT } from "@/lib/event"
 import { SITE_URL } from "@/lib/site"
+import { jsonLd } from "@/lib/json-ld"
 
 /**
  * Display type. Grandstander in all caps stands in for the Saul Bass hand
@@ -119,7 +120,7 @@ export default async function RootLayout({
       <body className="font-body">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+          dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }}
         />
         <ThemeProvider>
           <a

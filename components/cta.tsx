@@ -1,6 +1,7 @@
 import type React from "react"
 import Link from "next/link"
-import { urlKey, isSafeHref, type SiteCopy } from "@/lib/site-copy"
+import { urlKey, type SiteCopy } from "@/lib/site-copy"
+import { hrefKind } from "@/lib/href"
 import { ExternalLink } from "@/components/external-link"
 
 /**
@@ -51,29 +52,32 @@ export function makeCta(copy: SiteCopy) {
     // component is what actually writes the attribute and it should not
     // depend on having been handed something clean.
     const override = copy[urlKey(k)] ?? ""
-    const target = isSafeHref(override) ? override.trim() : href
+    const target = hrefKind(override) ? override.trim() : href
     const label = children ?? copy[k] ?? ""
 
-    if (/^(mailto:|tel:)/i.test(target)) {
-      return (
-        <a href={target} className={className}>
-          {label}
-        </a>
-      )
+    // How it renders follows from where it actually points, decided by the
+    // one classifier rather than by a second opinion kept here. A built-in
+    // href is trusted, but it is read the same way: a link is external
+    // because of its address, not because of who wrote it.
+    switch (hrefKind(target)) {
+      case "handoff":
+        return (
+          <a href={target} className={className}>
+            {label}
+          </a>
+        )
+      case "external":
+        return (
+          <ExternalLink href={target} className={className}>
+            {label}
+          </ExternalLink>
+        )
+      default:
+        return (
+          <Link href={target} className={className}>
+            {label}
+          </Link>
+        )
     }
-
-    if (/^https?:\/\//i.test(target)) {
-      return (
-        <ExternalLink href={target} className={className}>
-          {label}
-        </ExternalLink>
-      )
-    }
-
-    return (
-      <Link href={target} className={className}>
-        {label}
-      </Link>
-    )
   }
 }

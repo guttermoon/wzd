@@ -6,6 +6,7 @@ import { PageShell, Section } from "@/components/page-shell"
 import { EVENT } from "@/lib/event"
 import { Photo } from "@/components/photo"
 import { photo } from "@/lib/photos"
+import { jsonLd } from "@/lib/json-ld"
 
 export const revalidate = 60
 export const metadata: Metadata = {
@@ -54,7 +55,7 @@ export default async function FaqPage() {
     >
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(faqSchema) }}
       />
 
       {/* The questions and the dog run side by side: a wedge down the right
