@@ -62,11 +62,20 @@ const nextConfig = {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",
           },
-          // Two years, and no `includeSubDomains`: subdomains of
-          // worldzombieday.co.uk are not all known from in here, and a
-          // subdomain still served over http would become unreachable
-          // rather than merely insecure. Add it once they are accounted
-          // for.
+          // The site answered on http at this address for a decade, so
+          // old links, bookmarks and autocomplete entries still reach for
+          // it that way. Vercel redirects those, but the browser has made
+          // the insecure request by then and says "Not Secure" for as
+          // long as it takes; this stops it trying.
+          //
+          // Two years, and no `includeSubDomains`. There is a concrete
+          // case, not just an unknown one: Brevo's tracking domain is
+          // r.mail.worldzombieday.co.uk and every link in every
+          // newsletter goes through it. A subdomain we do not serve that
+          // answered on http would become unreachable rather than merely
+          // insecure, and that one carries the signup confirmations. Add
+          // it once every subdomain is accounted for. No `preload`
+          // either: it is a one-way door and it implies includeSubDomains.
           { key: "Strict-Transport-Security", value: "max-age=63072000" },
         ],
       },
