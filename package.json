@@ -11,6 +11,7 @@
     "check:credits": "node scripts/check-credits.mjs",
     "check:a11y": "node scripts/check-a11y.mjs",
     "seed:notion": "node scripts/seed-notion.mjs",
+    "check:notion": "node scripts/check-notion-access.mjs",
     "logos": "node scripts/prepare-logos.mjs",
     "check:css": "node scripts/check-css.mjs",
     "check:links": "node scripts/check-links.mjs"

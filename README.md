@@ -123,6 +123,7 @@ copy from Notion.
 | `npm run check:links` | Verifies every outbound link opens in a new tab, says so, and carries `rel="noopener noreferrer"` — and that no internal link does. Start the server first. |
 | `npm run check:css` | Verifies every class the components rely on survived into the built CSS. Start the server first. |
 | `npm run seed:notion` | Creates/updates one Notion row per copy key, pre-filled and live. Needs a **write-capable** `NOTION_TOKEN`. Safe to re-run. |
+| `npm run check:notion` | Checks what the Notion token is actually allowed to do: the copy query must succeed, and a write must be refused. Needs `NOTION_TOKEN`. |
 | `node scripts/extract-wp-content.mjs <wxr.xml>` | Re-derives the original WordPress text, for auditing the migration. A one-off kept for reference. |
 
 `npm run lint` runs ESLint over the whole repo (`next/core-web-vitals`) and
@@ -161,6 +162,18 @@ reasoning; this is the short version.
 reads, and a token that can also write can rewrite every word on the site
 if it leaks. The seeding script is the only thing that needs write access;
 run that from your own machine. See `docs/NOTION_SETUP.md`.
+
+Notion's settings page shows the capability but not what it means in
+practice, so check it against the API rather than the checkbox:
+
+```bash
+NOTION_TOKEN=ntn_… npm run check:notion
+```
+
+It should say the read succeeded and the write was **refused**. The write
+probe is the least destructive one available — it writes a single row's
+`Text` back with the value it already has, so a token that turns out to
+still be writable changes nothing by being tested.
 
 Nothing here is required to *deploy* — with an empty environment the site
 builds and renders every page from its built-in copy, with the forms

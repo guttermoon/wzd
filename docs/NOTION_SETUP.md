@@ -37,6 +37,19 @@ rows. Run it once, from your own machine, with a second integration that
 has write capability — or grant write, seed, and set it back to read. What
 matters is that the token sitting in Vercel is the read-only one.
 
+To confirm it took effect — the settings page shows the capability, not
+what the API will actually allow:
+
+```bash
+NOTION_TOKEN=ntn_… npm run check:notion
+```
+
+`READ ✓` and `WRITE ✓ REFUSED` is the answer you want. Note this tests
+the *integration token*, which is a different thing from your own Notion
+login and from any AI connector you have authorised: making the
+integration read-only does not, and should not, stop you editing the
+database yourself.
+
 ## 3. Set the environment variables
 
 Locally, in `.env.local`; on Vercel, in Project → Settings → Environment
