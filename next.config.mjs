@@ -21,6 +21,28 @@ const nextConfig = {
     // a plain <picture>, so there is nothing for the optimiser to do.
     unoptimized: true,
   },
+  async headers() {
+    // The site was on WordPress at this address for a decade, and plenty
+    // of browsers and links still remember it as http. Vercel answers
+    // those with a redirect to https, but the browser has already made
+    // the insecure request by then and shows "Not Secure" for the moment
+    // it takes. This tells it not to try http again for a year.
+    //
+    // Deliberately without `includeSubDomains`. Brevo's tracking domain
+    // is r.mail.worldzombieday.co.uk, and every link in every newsletter
+    // goes through it; forcing https across subdomains we do not serve
+    // would break those clicks the moment one of them answered on http.
+    // Same reason there is no `preload`: that is a one-way door, hard to
+    // undo, and it implies includeSubDomains.
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "Strict-Transport-Security", value: "max-age=31536000" },
+        ],
+      },
+    ]
+  },
   async redirects() {
     // The old WordPress URLs — these are indexed and linked from a decade
     // of press coverage, so none of them should 404.
