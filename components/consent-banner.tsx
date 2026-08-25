@@ -137,14 +137,21 @@ export function ConsentBanner({ copy }: { copy: ConsentCopy }) {
                 </Link>
               </p>
               {/* Decline first, confirm on the right, which is where a
-                  dialog's affirmative action belongs. Focus still opens on
-                  Okay rather than on whatever happens to be first in the
-                  markup, and the two are the same size either way. */}
+                  dialog's affirmative action belongs. Focus opens on Okay
+                  rather than on whatever happens to be first in the markup.
+
+                  The min-width is what actually makes the two the same
+                  size. Without it a button is only as wide as its own
+                  label, so "No thanks" came out half as wide again as
+                  "Okay" and carried 1.5x the click target — the reverse of
+                  what this dialog is for, and it would drift again the
+                  moment either label is edited in Notion. Sized to the
+                  longer of the two so neither shrinks. */}
               <div className="mt-7 flex flex-wrap gap-3 sm:justify-end">
                 <button
                   type="button"
                   onClick={() => writeConsent("denied")}
-                  className="btn border-2 border-blood-text text-blood-text"
+                  className="btn min-w-[8.5rem] border-2 border-blood-text text-blood-text"
                 >
                   {copy.reject}
                 </button>
@@ -152,7 +159,7 @@ export function ConsentBanner({ copy }: { copy: ConsentCopy }) {
                   ref={first}
                   type="button"
                   onClick={() => writeConsent("granted")}
-                  className="btn bg-blood-text text-blood"
+                  className="btn min-w-[8.5rem] bg-blood-text text-blood"
                 >
                   {copy.accept}
                 </button>
