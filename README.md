@@ -278,7 +278,17 @@ sitemap — there is one list, not three.
 Next inlines it during the build, so a deploy without it produces a
 sitemap, canonicals and Open Graph URLs pointing at the Vercel preview
 domain rather than worldzombieday.co.uk — valid XML full of the wrong
-addresses, which is worse than none.
+addresses, which is worse than none. On Vercel it is a **Config** (not
+Secret) variable: it ships to the browser by definition, and marking it
+secret only hides it from the people who need to read it.
+
+A trailing slash on that value is stripped (`lib/site.ts`). Everything
+downstream joins onto the origin with a slash of its own, so
+`https://worldzombieday.co.uk/` would otherwise give
+`https://worldzombieday.co.uk//sitemap.xml` in robots.txt and a doubled
+slash on every canonical, Open Graph URL and structured-data image —
+none of which fails a build or a check, because it only shows up in the
+files a crawler reads.
 
 ### Submitting to Google Search Console
 
