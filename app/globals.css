@@ -706,12 +706,29 @@
     animation: consent-swing 1200ms ease-in-out 320ms both;
   }
 
+  /* The focus ring on the blood field.
+
+     --focus is a blue tuned against paper and ink, and there is no blue
+     anywhere else in this palette; on red it reads as something the
+     browser put there rather than something we drew. The panel is the
+     one place on the site with a ground of its own, so it gets a ring of
+     its own: white, which is the field's own ink and measures 6.02:1
+     against it, comfortably past the 3:1 a focus indicator needs.
+
+     Set as the variable rather than as an outline rule so it applies to
+     the two buttons and the link alike, and so :focus-visible in base
+     stays the single place that decides what a focus ring looks like.
+     The ring is never removed, only recoloured. */
+  .consent-panel {
+    --focus: var(--blood-text);
+  }
+
   .consent-string {
     /* Tapered: a touch heavier where it takes the weight. Stays white in
        both themes: it hangs over the scrim, which is black at 70% either
-       way, not over the panel it carries. --blood-text is white and is
-       declared once rather than per theme, which is why it is the token
-       here even though the panel below is no longer blood. */
+       way, not over the panel it carries, so it takes the panel's own
+       white rather than a theme token. --blood-text is declared once
+       rather than per theme, which is what makes it the right one. */
     background-image: linear-gradient(
       to bottom,
       var(--blood-text) 0%,

@@ -119,15 +119,7 @@ export function ConsentBanner({ copy }: { copy: ConsentCopy }) {
               role="dialog"
               aria-modal="true"
               aria-labelledby="consent-title"
-              /* The panel is the site's own surface rather than a field of
-                 blood. A full-bleed alarm colour reads as a warning, and a
-                 warning is answered defensively; this is a request, and it
-                 should look like the rest of the site. The red is still
-                 here, on the button, where it means "this is the action"
-                 instead of "something is wrong". It also buys a real
-                 hierarchy between the two answers, which a white button and
-                 a white outline on red could never have. */
-              className="relative w-full border-4 border-rule bg-surface p-6 text-text sm:p-8"
+              className="consent-panel relative w-full border-4 border-blood-text bg-blood p-6 text-blood-text sm:p-8"
             >
               <h2
                 id="consent-title"
@@ -159,7 +151,7 @@ export function ConsentBanner({ copy }: { copy: ConsentCopy }) {
                 <button
                   type="button"
                   onClick={() => writeConsent("denied")}
-                  className="btn btn-secondary min-w-[9.5rem] py-4"
+                  className="btn min-w-[9.5rem] border-2 border-blood-text text-blood-text"
                 >
                   {copy.reject}
                 </button>
@@ -167,7 +159,7 @@ export function ConsentBanner({ copy }: { copy: ConsentCopy }) {
                   ref={first}
                   type="button"
                   onClick={() => writeConsent("granted")}
-                  className="btn btn-primary min-w-[9.5rem] py-4"
+                  className="btn min-w-[9.5rem] bg-blood-text text-blood"
                 >
                   {copy.accept}
                 </button>
