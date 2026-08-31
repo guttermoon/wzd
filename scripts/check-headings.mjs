@@ -23,7 +23,7 @@ const base = process.env.BASE_URL ?? "http://localhost:3000"
 
 const ROUTES = [
   "/", "/register", "/survival", "/faq", "/donate",
-  "/become-a-sponsor", "/press", "/photo-policy", "/submit-photos", "/privacy",
+  "/become-a-sponsor", "/press", "/photo-policy", "/submit-photos", "/privacy", "/confirmed",
 ]
 
 /** Headings carry markup — <br>, the per-word spans the Swipe animation adds. */
