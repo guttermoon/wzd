@@ -72,7 +72,39 @@ const ENDPOINT =
   "https://api.brevo.com/v3/contacts/doubleOptinConfirmation"
 const LIST_ID = Number(process.env.BREVO_LIST_ID || 7)
 const TEMPLATE_ID = Number(process.env.BREVO_DOI_TEMPLATE_ID || 14)
-const REDIRECT = process.env.BREVO_DOI_REDIRECT || SITE_URL
+/**
+ * Where Brevo sends them after they click the confirmation link.
+ *
+ * `BREVO_DOI_REDIRECT_URL` is accepted as well as the canonical name, and
+ * not out of indulgence: the value is a URL, so that is the name a person
+ * reaches for, and getting it wrong costs nothing visible. The variable is
+ * simply not found, the site root is used instead, and someone who has
+ * just confirmed their subscription lands on the homepage with no sign
+ * anything happened. There is no error, no failing check and nothing in a
+ * log — the only way to notice is to complete a signup yourself and pay
+ * attention to where you end up.
+ *
+ * A second accepted spelling is a cheaper fix than a person rediscovering
+ * that. The canonical name still wins where both are set, and the alias
+ * says so on the way past, so this does not quietly become two variables
+ * that disagree.
+ */
+function doiRedirect(): string {
+  const canonical = process.env.BREVO_DOI_REDIRECT
+  const alias = process.env.BREVO_DOI_REDIRECT_URL
+
+  if (canonical) return canonical
+  if (alias) {
+    console.warn(
+      "newsletter: using BREVO_DOI_REDIRECT_URL. The name this expects is " +
+        "BREVO_DOI_REDIRECT; both work, but renaming it keeps one spelling.",
+    )
+    return alias
+  }
+  return SITE_URL
+}
+
+const REDIRECT = doiRedirect()
 
 /**
  * Deliberately loose. The only test that means anything is whether the

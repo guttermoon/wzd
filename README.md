@@ -161,7 +161,7 @@ reasoning; this is the short version.
 | `BREVO_API_KEY` | **the newsletter *and* photograph submissions** | both routes answer 503 and their forms offer a `mailto:` instead |
 | `BREVO_LIST_ID` | which list to subscribe to | defaults to 7, the walk's own |
 | `BREVO_DOI_TEMPLATE_ID` | the confirmation email | defaults to 14, the walk's own |
-| `BREVO_DOI_REDIRECT` | where the confirmation link lands — set it to `https://worldzombieday.co.uk/confirmed` | defaults to the site root, so a confirmed subscriber lands on the homepage with no acknowledgement |
+| `BREVO_DOI_REDIRECT` | where the confirmation link lands — set it to `https://worldzombieday.co.uk/confirmed`. `BREVO_DOI_REDIRECT_URL` also works | defaults to the site root, so a confirmed subscriber lands on the homepage with no acknowledgement |
 | `REVALIDATION_SECRET` | forcing a re-fetch before the 60s window | `/api/revalidate` refuses every request with 503 |
 | `NEXT_PUBLIC_POSTHOG_KEY` | PostHog | analytics never load |
 | `NEXT_PUBLIC_GA_ID` | Google Analytics 4 | analytics never load |

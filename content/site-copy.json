@@ -317,6 +317,6 @@
   "confirmed.standfirst": "Your email address is confirmed.",
   "confirmed.body": "Thank you for signing up for the World Zombie Day: London newsletter. We'll be in touch with news about the walk, the after party and how to get involved.",
   "confirmed.notice.title": "This is not a registration for the event",
-  "confirmed.notice.body": "Signing up to the newsletter does not register you for the walk. If you are planning to attend, please register separately — it is free, and it is how we send you the meeting point.",
+  "confirmed.notice.body": "Signing up to the newsletter does not register you for the walk. If you are planning to attend, please register separately. It is free, and it is how we send you the meeting point.",
   "confirmed.notice.cta": "Register for the walk"
 }
