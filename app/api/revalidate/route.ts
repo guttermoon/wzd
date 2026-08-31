@@ -2,7 +2,7 @@ import { timingSafeEqual } from "node:crypto"
 import { revalidatePath } from "next/cache"
 import { NextRequest, NextResponse } from "next/server"
 
-import { NAV, FOOTER_NAV, LEGAL_NAV } from "@/lib/event"
+import { NAV, FOOTER_NAV, LEGAL_NAV, UNLISTED_NAV } from "@/lib/event"
 
 /**
  * Forces a re-fetch of the Notion copy without waiting for the 60s window.
@@ -55,8 +55,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: "Invalid secret" }, { status: 401 })
   }
 
+  // UNLISTED_NAV as well as the three nav arrays: a page nobody links to
+  // is still a page whose copy can need pushing out in a hurry.
   const known = new Set<string>(
-    [...NAV, ...FOOTER_NAV, ...LEGAL_NAV].map((item) => item.href),
+    [...NAV, ...FOOTER_NAV, ...LEGAL_NAV, ...UNLISTED_NAV].map((i) => i.href),
   )
 
   if (body.path) {

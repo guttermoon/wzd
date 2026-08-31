@@ -312,5 +312,11 @@
   "party.vip.4": "Exclusive bar access",
   "party.vip.limit": "Strictly limited to 75 undead.",
   "party.proceeds": "Proceeds from VIP sales help fund The Dead Good Club in their mission to help people reclaim their brain and stop the rot.",
-  "party.thanks": "Made possible with the support of BLOODSport by MEATliquor and Harbour Brewing Co."
+  "party.thanks": "Made possible with the support of BLOODSport by MEATliquor and Harbour Brewing Co.",
+  "confirmed.title": "You're on the list",
+  "confirmed.standfirst": "Your email address is confirmed.",
+  "confirmed.body": "Thank you for signing up for the World Zombie Day: London newsletter. We'll be in touch with news about the walk, the after party and how to get involved.",
+  "confirmed.notice.title": "This is not a registration for the event",
+  "confirmed.notice.body": "Signing up to the newsletter does not register you for the walk. If you are planning to attend, please register separately — it is free, and it is how we send you the meeting point.",
+  "confirmed.notice.cta": "Register for the walk"
 }

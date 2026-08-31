@@ -33,7 +33,7 @@ const ROUTES = [
   "/press",
   "/photo-policy",
   "/submit-photos",
-  "/privacy",
+  "/privacy", "/confirmed",
 ]
 
 let failures = 0

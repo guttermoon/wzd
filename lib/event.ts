@@ -99,3 +99,19 @@ export const FOOTER_NAV = [
 
 /** Small print, set in the footer's bottom rule rather than the nav list. */
 export const LEGAL_NAV = [{ name: "Privacy", href: "/privacy" }] as const
+
+/**
+ * Routes that exist but are deliberately not linked from anywhere.
+ *
+ * /confirmed is the far end of the link in the newsletter's confirmation
+ * email; it is reached from an inbox, never from the site, so it is in no
+ * nav and — being noindex — in no sitemap either.
+ *
+ * It is still listed, because POST /api/revalidate only accepts paths it
+ * can find in one of these arrays. Left out, the one page whose copy the
+ * owner might want to fix in a hurry would be the one page they could not
+ * push through ahead of the 60-second window.
+ */
+export const UNLISTED_NAV = [
+  { name: "Newsletter confirmed", href: "/confirmed" },
+] as const

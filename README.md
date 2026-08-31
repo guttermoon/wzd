@@ -161,7 +161,7 @@ reasoning; this is the short version.
 | `BREVO_API_KEY` | **the newsletter *and* photograph submissions** | both routes answer 503 and their forms offer a `mailto:` instead |
 | `BREVO_LIST_ID` | which list to subscribe to | defaults to 7, the walk's own |
 | `BREVO_DOI_TEMPLATE_ID` | the confirmation email | defaults to 14, the walk's own |
-| `BREVO_DOI_REDIRECT` | where the confirmation link lands | defaults to the site root |
+| `BREVO_DOI_REDIRECT` | where the confirmation link lands — set it to `https://worldzombieday.co.uk/confirmed` | defaults to the site root, so a confirmed subscriber lands on the homepage with no acknowledgement |
 | `REVALIDATION_SECRET` | forcing a re-fetch before the 60s window | `/api/revalidate` refuses every request with 503 |
 | `NEXT_PUBLIC_POSTHOG_KEY` | PostHog | analytics never load |
 | `NEXT_PUBLIC_GA_ID` | Google Analytics 4 | analytics never load |
@@ -207,6 +207,15 @@ Brevo server-side and asks for a **double opt-in** confirmation, so
 *nobody is added to the list by this route* — they join when they click
 the link in the email. The success message says a link is on its way, not
 that they are subscribed, because until they click they are not.
+
+The double opt-in link lands on **`/confirmed`**, which thanks them and
+then says plainly that the newsletter is not a registration for the walk,
+with a link to `/register`. The walk is free and the newsletter is a
+mailing list, and it is easy to finish one believing you have done the
+other — a mistake otherwise discovered on the day, by someone who turned
+up without a meeting point. The page is `noindex` and in no nav or
+sitemap: it is the far end of a link in an email and means nothing to
+anyone arriving cold.
 
 **`POST /api/photo-submissions`** — `/submit-photos`. Emails the
 submission to whoever credits the photographs. If the key is missing the
