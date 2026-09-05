@@ -59,7 +59,12 @@ const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM_PATH || undefined,
 })
 const context = await browser.newContext()
-await context.addCookies([{ name, value, domain: "localhost", path: "/" }])
+// Scoped by the URL the run is actually against, not a hard-coded
+// localhost. `[baseUrl]` is a documented argument, so pointing it at
+// 127.0.0.1 is supported usage — and a cookie pinned to localhost would
+// not be sent, the page would render locked, and the failure would
+// surface below as "the map is not on the page", which blames the map.
+await context.addCookies([{ name, value, url: base }])
 // Light, explicitly. The print sheet forces it anyway, but a PDF built
 // from a dark page would depend on that working rather than prove it.
 await context.addInitScript(() => {
@@ -84,7 +89,11 @@ await page.evaluate(async () => {
 })
 
 if (!(await page.locator("svg.wzdmap").count())) {
-  console.error("The map is not on the page — it printed locked.")
+  console.error(
+    "The page rendered locked — the map is not on it, so there is nothing " +
+      "worth printing. The session cookie did not survive the trip to " +
+      `${base}; check that it is the same origin the server is serving.`,
+  )
   process.exit(1)
 }
 
