@@ -218,3 +218,23 @@ The six **Google Maps links**, one per leg, are in `EVENT.route` in
 leg without a deploy, put the new address in the `URL` field of that
 leg's own row — `route.walk2.cta` and so on. The row's URL wins; with it
 empty the built-in one stands.
+
+### The PDF goes stale
+
+`/the-route` offers the running order as a PDF. It is **not** a live
+render: `content/route.pdf` is built by
+
+```
+ROUTE_PASSWORD=… npx next start &
+ROUTE_PASSWORD=… npm run route:pdf
+```
+
+and committed. Printing a page to PDF needs a browser, and a serverless
+function has no business carrying one, so the file is a photograph rather
+than a mirror — **a copy edit in Notion changes the page and not the
+PDF.** Re-run that after any edit worth reprinting.
+
+It is served by `app/the-route/download/route.ts`, behind the same cookie
+as the page, and it is deliberately not in `public/`: anything there is
+served with no code in front of it, so a copy of this file under `public/`
+would hand the meeting point to anyone who guessed the filename.

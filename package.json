@@ -15,7 +15,8 @@
     "logos": "node scripts/prepare-logos.mjs",
     "check:css": "node scripts/check-css.mjs",
     "check:links": "node scripts/check-links.mjs",
-    "check:headings": "node scripts/check-headings.mjs"
+    "check:headings": "node scripts/check-headings.mjs",
+    "route:pdf": "node scripts/make-route-pdf.mjs"
   },
   "dependencies": {
     "@notionhq/client": "^4.0.1",

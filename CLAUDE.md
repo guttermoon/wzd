@@ -226,6 +226,17 @@ answered. There is no client-side check to step over.
   need a correction on the morning of the walk must not be the one page
   that cannot get one.
 
+The page offers itself as a PDF, and that file is **not in `public/`** —
+`content/route.pdf`, served by `app/the-route/download/route.ts` behind
+the same cookie. Anything under `public/` is served with no code in front
+of it, so a copy there would be the meeting point, downloadable, beside
+the lock that exists to protect it. It is built by `npm run route:pdf`
+against a local server and committed, because printing a page needs a
+browser and a lambda has no business carrying one; the cost is that it is
+a photograph rather than a mirror, so re-run the script after a copy edit
+worth reprinting. Printing is also forced to the light theme — see the
+print sheet at the end of `app/globals.css`.
+
 The map is `components/route-map.tsx` — inline SVG, generated from real
 latitudes and longitudes, taking its colours from the theme's own
 variables. **Everything on it and on the page comes from what the owner

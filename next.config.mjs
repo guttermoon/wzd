@@ -14,6 +14,11 @@ const nextConfig = {
     // render — see lib/brand-art.ts.
     outputFileTracingIncludes: {
       "/**": ["./public/brand/*.svg"],
+      // The route PDF is read at request time by
+      // app/the-route/download/route.ts, and it is deliberately not in
+      // public/ — see that file. Without this it is absent from the
+      // lambda and the download 404s in production while working locally.
+      "/the-route/download": ["./content/route.pdf"],
     },
   },
   images: {
