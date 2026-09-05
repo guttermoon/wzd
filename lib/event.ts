@@ -72,7 +72,7 @@ export const EVENT = {
     arrive: "https://maps.app.goo.gl/PdxBFN8gpfAZLuNz7",
     walk1: "https://maps.app.goo.gl/tZgNss8E15NzXtPj7",
     walk2: "https://maps.app.goo.gl/gdUa7zzARV4mZtEE9",
-    walk3: "https://maps.app.goo.gl/q4aAbPQdXHatEMrj9",
+    walk3: "https://maps.app.goo.gl/1wZdxgZkGZoV7Foh8",
     walk4: "https://maps.app.goo.gl/Eqgjr8UBWD6SahpL7",
     bonus: "https://maps.app.goo.gl/VKh53xof81Q8MZjz6",
   } as Record<string, string>,
