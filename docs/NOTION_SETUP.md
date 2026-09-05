@@ -234,6 +234,14 @@ function has no business carrying one, so the file is a photograph rather
 than a mirror — **a copy edit in Notion changes the page and not the
 PDF.** Re-run that after any edit worth reprinting.
 
+What it prints is `/the-route/sheet`, not `/the-route`: a second rendering
+of the same rows laid out to fill exactly one side of A4, so the running
+order can be held on a street corner. It is the same copy, so an edit
+reaches both — but the sheet has one page and no more, and the script
+fails rather than quietly producing two. If it ever does fail that way,
+a row has been edited longer than the space it has; shortening it is the
+fix.
+
 It is served by `app/the-route/download/route.ts`, behind the same cookie
 as the page, and it is deliberately not in `public/`: anything there is
 served with no code in front of it, so a copy of this file under `public/`

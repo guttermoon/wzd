@@ -237,6 +237,20 @@ a photograph rather than a mirror, so re-run the script after a copy edit
 worth reprinting. Printing is also forced to the light theme — see the
 print sheet at the end of `app/globals.css`.
 
+`/the-route/sheet` is the same running order on one side of A4, and it is
+what `npm run route:pdf` prints to `content/route.pdf`. It is a second
+rendering rather than the same page shrunk: /the-route scrolls, and set on
+A4 it ran to five sheets. It reads the same `route.*` rows, so a Notion
+edit reaches both — but only the page updates by itself; the PDF is a
+photograph until the script is run again. It is gated by the same cookie
+and `notFound()`s rather than showing a form, because nobody navigates to
+it. Its layout is `.sheet*` in `app/globals.css`, budgeted in millimetres
+against the 186x269mm A4 content block, and the script asserts the page
+count — a copy row edited three words longer fails the build step rather
+than silently becoming two sheets. The PDF is served — gated — by
+`app/the-route/download/route.ts` and is deliberately **not** in `public/`,
+which is served with no code in front of it.
+
 The map is `components/route-map.tsx` — inline SVG, generated from real
 latitudes and longitudes, taking its colours from the theme's own
 variables. **Everything on it and on the page comes from what the owner
