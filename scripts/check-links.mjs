@@ -34,6 +34,9 @@ const ROUTES = [
   "/photo-policy",
   "/submit-photos",
   "/privacy", "/confirmed",
+  // Gated: the checkers see the password form, which is a page like any
+  // other and has to pass like any other.
+  "/the-route",
 ]
 
 let failures = 0

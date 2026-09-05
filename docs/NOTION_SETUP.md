@@ -184,3 +184,37 @@ There is no `gallery.` — `/gallery` redirects to `/press`.
 - Navigation labels, the event date used in structured data, and social
   URLs live in `lib/event.ts`.
 - The wordmark is `components/wordmark.tsx`.
+
+## The route page
+
+`/the-route` carries the running order and the walking map, and it is
+behind a password because it names the meeting point — which
+`home.essentials.where.value` promises goes out to people who register
+rather than to the open web.
+
+Set **`ROUTE_PASSWORD`** in the Vercel project (and in `.env.local` for
+development) to whatever you are sending registrants. With it unset the
+page stays shut and says so: an unconfigured deploy must not be the way
+the meeting point gets out, so there is no fail-open.
+
+Changing `ROUTE_PASSWORD` signs everybody out. That is deliberate — the
+cookie people hold is signed with the password itself, so replacing it
+revokes every copy that has already been handed round, which is the whole
+reason for changing it.
+
+The route's copy lives under the `route.` prefix in
+`content/site-copy.json` like everything else, so run
+
+```
+NOTION_TOKEN=ntn_… npm run seed:notion
+```
+
+after pulling this change to add the new rows to `wzd-pages`. Until you
+do, the page renders from the built-in copy — correct, just not editable
+from Notion.
+
+The six **Google Maps links**, one per leg, are in `EVENT.route` in
+`lib/event.ts` so the page is right with no Notion at all. To repoint a
+leg without a deploy, put the new address in the `URL` field of that
+leg's own row — `route.walk2.cta` and so on. The row's URL wins; with it
+empty the built-in one stands.

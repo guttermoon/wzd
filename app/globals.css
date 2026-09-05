@@ -57,6 +57,15 @@
   --border: #847763; /* 4.33:1 — non-text UI */
   --focus: #0057d8;
 
+  /* The route map's street grid and its open ground. */
+  --road: #9c9184; /* 3.10:1 on paper — the grid carries meaning */
+  /* The route line itself. It reads as the brand's red at a glance while
+     staying far enough from --road in lightness that the two never blur
+     into each other — a line and a street have to differ by more than
+     hue, or nobody with a colour vision deficiency can follow the walk. */
+  --route: #b03a2e;
+  --open-ground: #efe3d2;
+
   --radius: 0rem;
 
   /* Sharp ease-out: quick departure, decisive stop, no overshoot of its
@@ -81,6 +90,10 @@
   --rule: var(--greige);
   --border: #8f8f8f; /* 5.38:1 */
   --focus: #7fb2ff;
+  --road: #6f6f6f; /* 3.19:1 on ink */
+  --route: #e74c3c; /* Zombie Red proper here: 4.56:1 on ink, and a
+    drawn line rather than type, so the display-only rule is satisfied */
+  --open-ground: #39352f;
 }
 
 @layer base {
@@ -137,6 +150,182 @@
 }
 
 @layer components {
+  /* ── The route map ──────────────────────────────────────────────────
+     components/route-map.tsx is inline SVG so it can take these, which
+     means one drawing serves both themes instead of two files that drift.
+
+     --road is not decorative. The street grid is what tells a reader
+     which way round Soho they are looking, so it is held at 3:1 against
+     each ground rather than dropped to a texture; --open-ground, which
+     only tints the squares a border already draws, is not held to
+     anything. Both are declared here and again under .dark, so neither
+     has its only definition inside one theme. */
+  .wzdmap {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* A halo in the page's own ground, so a name stays readable where it
+     crosses a route line. Only the labels get it: the numerals inside the
+     discs are already ground-coloured, and haloing those in the same
+     colour would erase them. */
+  .wzdmap .lbl-st,
+  .wzdmap .lbl-dist,
+  .wzdmap .lbl-stn,
+  .wzdmap .lbl-big,
+  .wzdmap .lbl-place,
+  .wzdmap .lbl-sub {
+    paint-order: stroke fill;
+    stroke: var(--bg);
+    stroke-width: 3.5px;
+    stroke-linejoin: round;
+  }
+
+  .rd-major,
+  .rd-minor {
+    fill: none;
+    stroke: var(--road);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .rd-major { stroke-width: 11; }
+  .rd-minor { stroke-width: 5; }
+
+  .grn {
+    fill: var(--open-ground);
+    stroke: var(--road);
+    stroke-width: 1.5;
+  }
+
+  .lbl-st {
+    fill: var(--muted);
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-anchor: middle;
+  }
+  .lbl-dist {
+    fill: var(--muted);
+    font-size: 16px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    font-weight: 600;
+    opacity: 0.75;
+  }
+  .lbl-stn {
+    fill: var(--muted);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+  .lbl-big {
+    fill: var(--text);
+    font-family: var(--font-display), "Arial Black", Impact, sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .lbl-place { fill: var(--text); font-size: 14px; font-weight: 600; }
+  .lbl-sub { fill: var(--muted); font-size: 13px; }
+
+  /* The casing goes down first in the page's own ground, so a leg
+     crossing a street reads as passing over it rather than merging. */
+  .leg-case {
+    fill: none;
+    stroke: var(--bg);
+    stroke-width: 14;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .leg {
+    fill: none;
+    stroke: var(--route);
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .ret {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 3;
+    stroke-dasharray: 2 7;
+    stroke-linecap: round;
+  }
+  .arw { fill: var(--route); stroke: var(--bg); stroke-width: 1.5; }
+
+  /* Walks are discs and stops are diamonds, and both carry their number.
+     Shape and number, not colour: five legs cannot be told apart by hue
+     in a palette of one red, and a map that needed you to see colour to
+     use it would fail 1.4.1 whatever the palette. */
+  .walk-disc { fill: var(--accent-strong); stroke: var(--bg); stroke-width: 3; }
+  .walk-n {
+    fill: var(--on-accent);
+    font-family: var(--font-display), "Arial Black", Impact, sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+  }
+  .stop { fill: var(--text); stroke: var(--bg); stroke-width: 3; }
+  .stop-n {
+    fill: var(--bg);
+    font-family: var(--font-display), "Arial Black", Impact, sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+  }
+  .base-star { fill: var(--text); stroke: var(--bg); stroke-width: 3; }
+  .spot { fill: var(--text); stroke: var(--bg); stroke-width: 3; }
+
+  .stn { fill: var(--bg); stroke: var(--muted); stroke-width: 3.5; }
+  .stn-bar { fill: var(--muted); }
+
+  .box { fill: var(--bg); stroke: var(--rule); stroke-width: 3; }
+  .box-in { fill: none; stroke: var(--rule); stroke-width: 1; }
+  .cart-eyebrow {
+    fill: var(--accent-text);
+    font-size: 14px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .cart-title {
+    fill: var(--text);
+    font-family: var(--font-display), "Arial Black", Impact, sans-serif;
+    font-weight: 800;
+    font-size: 48px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .cart-sub { fill: var(--muted); font-size: 15px; }
+  .key-title {
+    fill: var(--text);
+    font-family: var(--font-display), "Arial Black", Impact, sans-serif;
+    font-weight: 700;
+    font-size: 21px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .key-t { fill: var(--text); font-size: 14.5px; }
+  .scale-a { fill: var(--text); }
+  .scale-b { fill: var(--bg); stroke: var(--text); stroke-width: 1.5; }
+  .compass { fill: none; stroke: var(--muted); stroke-width: 2.5; }
+  .compass-n { fill: var(--text); }
+  .compass-t {
+    fill: var(--text);
+    font-family: var(--font-display), "Arial Black", Impact, sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+  }
+
+  /* Wide by nature. It scrolls inside its own frame so the page body
+     never does, and the frame is focusable because a region that scrolls
+     has to be reachable without a mouse. */
+  .map-frame {
+    border: 2px solid var(--rule);
+    overflow-x: auto;
+  }
+  .map-frame > div { min-width: 56rem; }
+
   /* ── Bass primitives ────────────────────────────────────────────────
      Two shapes do the work: a hard slab rule and a cut-paper panel.
      Everything else is type. The torn bar that used to sit on every
