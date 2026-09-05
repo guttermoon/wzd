@@ -47,6 +47,12 @@ import type { JSX } from "react"
  * correction. The map carries the shape and the numbers, the list carries
  * the clock, and there is one source for each.
  *
+ * Direction is stated roughly every fifth of a leg rather than once or
+ * twice per walk. Walk 1 is a loop and walk 2 retraces its own street, and
+ * on both of those a single arrow leaves most of the line ambiguous — so
+ * the arrows are frequent enough that which way round is never more than a
+ * glance away.
+ *
  * The route is carried twice over: once as this drawing, and once as the
  * running order beneath it. The drawing is `role="img"` with a title and
  * a description, and the description points at that list rather than
@@ -114,36 +120,51 @@ export function RouteMap(): JSX.Element {
     <text className="lbl-st" x="841.7" y="234.8" transform="rotate(8.3 841.7 234.8)" style={{ fontSize: "11px" }}>Carlisle St</text>
     <text className="lbl-st" x="645.7" y="274.8" transform="rotate(-4.6 645.7 274.8)" style={{ fontSize: "11px" }}>Noel St</text>
     <text className="lbl-st" x="976.7" y="460.5" transform="rotate(-10.1 976.7 460.5)" style={{ fontSize: "10px" }}>Bateman St</text>
-    <path className="arw w1" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(917.5 461.3) rotate(160.5)"/>
-    <path className="arw w1" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(720.9 309.8) rotate(-100.1)"/>
+    <path className="arw w1" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(971.7 299) rotate(72.6)"/>
+    <path className="arw w1" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(973.1 447.4) rotate(170.9)"/>
+    <path className="arw w1" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(754.7 449.6) rotate(-107.4)"/>
+    <path className="arw w1" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(725.1 328.6) rotate(-102.8)"/>
+    <path className="arw w1" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(818.7 232.9) rotate(8.3)"/>
     <circle className="walk-disc w1" cx="997.5" cy="381.4" r="16"/>
     <text className="walk-n" x="997.5" y="387.9" textAnchor="middle">1</text>
     <circle className="walk-disc w1" cx="846.6" cy="490.5" r="16"/>
     <text className="walk-n" x="846.6" y="497" textAnchor="middle">1</text>
     <circle className="walk-disc w1" cx="713.3" cy="231.2" r="16"/>
     <text className="walk-n" x="713.3" y="237.7" textAnchor="middle">1</text>
-    <path className="arw w2" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(458.2 258.6) rotate(161.2)"/>
-    <path className="arw w2" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(502.1 222.5) rotate(-7.5)"/>
+    <path className="arw w2" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(738.6 218.2) rotate(173.5)"/>
+    <path className="arw w2" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(492.4 250) rotate(172.5)"/>
+    <path className="arw w2" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(301 289.8) rotate(-22)"/>
+    <path className="arw w2" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(537.3 217.9) rotate(-7.5)"/>
+    <path className="arw w2" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(887.6 164.8) rotate(-12.8)"/>
     <circle className="walk-disc w2" cx="259.5" cy="334.5" r="16"/>
     <text className="walk-n" x="259.5" y="341" textAnchor="middle">2</text>
     <circle className="walk-disc w2" cx="730.7" cy="193" r="16"/>
     <text className="walk-n" x="730.7" y="199.5" textAnchor="middle">2</text>
-    <path className="arw w3" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(628.5 279.3) rotate(174.3)"/>
+    <path className="arw w3" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(844.2 235.6) rotate(-171.7)"/>
+    <path className="arw w3" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(691.4 273) rotate(174.3)"/>
+    <path className="arw w3" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(614.5 280.7) rotate(174.3)"/>
+    <path className="arw w3" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(629.3 428.7) rotate(81.1)"/>
     <path className="arw w3" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(653.5 493.7) rotate(9.1)"/>
+    <path className="arw w3" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(770.5 515.5) rotate(50.1)"/>
     <circle className="walk-disc w3" cx="776.8" cy="242" r="16"/>
     <text className="walk-n" x="776.8" y="248.5" textAnchor="middle">3</text>
     <circle className="walk-disc w3" cx="610.1" cy="339.4" r="16"/>
     <text className="walk-n" x="610.1" y="345.9" textAnchor="middle">3</text>
     <circle className="walk-disc w3" cx="715.9" cy="503.7" r="16"/>
     <text className="walk-n" x="715.9" y="510.2" textAnchor="middle">3</text>
-    <path className="arw w4" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(795.6 688) rotate(112.7)"/>
+    <path className="arw w4" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(812.6 578.2) rotate(62.4)"/>
+    <path className="arw w4" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(804.2 667.4) rotate(112.7)"/>
+    <path className="arw w4" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(786.5 705.3) rotate(122.1)"/>
+    <path className="arw w4" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(746.4 769.4) rotate(122.1)"/>
     <circle className="walk-disc w4" cx="820.4" cy="628.6" r="16"/>
     <text className="walk-n" x="820.4" y="635.1" textAnchor="middle">4</text>
     <circle className="walk-disc w4" cx="764.2" cy="740.9" r="16"/>
     <text className="walk-n" x="764.2" y="747.4" textAnchor="middle">4</text>
-    <path className="arw w5" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(886.8 772) rotate(-10.6)"/>
-    <path className="arw w5" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(1011.4 744.7) rotate(-21.8)"/>
-    <path className="arw w5" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(1127.7 649.4) rotate(-48.1)"/>
+    <path className="arw w5" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(778.3 787.9) rotate(-8.3)"/>
+    <path className="arw w5" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(877.8 773.5) rotate(-8.3)"/>
+    <path className="arw w5" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(1002.9 748.1) rotate(-21.8)"/>
+    <path className="arw w5" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(1101.1 680.7) rotate(-52.5)"/>
+    <path className="arw w5" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(1133.8 642.6) rotate(-48.1)"/>
     <circle className="walk-disc w5" cx="823.5" cy="781.3" r="16"/>
     <text className="walk-n" x="823.5" y="787.8" textAnchor="middle">5</text>
     <circle className="walk-disc w5" cx="945.1" cy="761.1" r="16"/>
