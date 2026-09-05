@@ -39,6 +39,14 @@ const REQUIRED = [
   "edge-left", "edge-right", "breakout", "panel-ground",
   "credit-tag", "credit-tag-right", "credit-tag-band", "on-blood", "vhs", "vhs-light", "zeffy-embed",
   "dgc-mark", "dgc-mark-tint",
+  // The one-page sheet, /the-route/sheet. These are unlayered, so Tailwind
+  // has no reason to drop them today — but they are the whole layout of
+  // the printed PDF and nothing on screen would show their loss, so the
+  // day someone tidies them into @layer components is the day to find out
+  // here rather than from a five-page print.
+  "sheet", "sheet-head", "sheet-eyebrow", "sheet-title", "sheet-sub",
+  "sheet-confid", "sheet-map", "sheet-list", "sheet-row", "sheet-row-walk",
+  "sheet-when", "sheet-what", "sheet-foot", "sheet-note",
 ]
 
 let files

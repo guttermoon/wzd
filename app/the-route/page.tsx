@@ -176,7 +176,13 @@ export default async function TheRoutePage() {
                 {has("route.pdf") ? (
                   <a
                     href="/the-route/download"
-                    download
+                    // Opens the PDF in a tab rather than downloading it: the
+                    // browser's viewer has its own save button, and a file
+                    // that lands in a downloads folder unread is no use to
+                    // someone standing in Soho Square. `data-opens-file`
+                    // tells check:links this hands off to that viewer
+                    // instead of navigating the site.
+                    data-opens-file=""
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn btn-primary"

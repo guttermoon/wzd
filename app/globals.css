@@ -1295,6 +1295,204 @@
   }
 }
 
+/* ── The one-page sheet ───────────────────────────────────────────────
+   /the-route/sheet, which is what `npm run route:pdf` prints. Unlayered
+   so it wins over the component rules without a specificity contest, and
+   before the print block so the print block still wins over it.
+
+   Everything here is in millimetres, because the thing it has to fit is
+   measured in millimetres. A4 is 297x210; the @page margin below is 14mm
+   top and bottom and 12mm each side, so the block this has to fill is
+   186mm across and 269mm down, and the budget is spent once:
+
+     header    26mm   wordmark line, title, standfirst, the confidential chip
+     map      141mm   186mm at the map's own 1240:940, so it is never scaled
+     list      92mm   eleven rows in two columns, set at 9.5pt because
+                     this is read standing up on a street corner
+     footer    10mm   the Oxford Street note and the domain
+
+   `height` rather than `min-height`, and no growth anywhere: a sheet that
+   can grow is a sheet that becomes two, and the second one carries three
+   lines and the paper cost of the first. The page count is asserted by
+   the build script, so a copy edit long enough to overflow fails there
+   rather than on someone's printer.
+
+   Type is in points because the rest of the print rules are, and because
+   a reader holding this needs 9pt to be 9pt whatever the browser's root
+   font size happens to be. */
+.sheet {
+  height: 269mm;
+  display: flex;
+  flex-direction: column;
+  color: var(--text);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+.sheet-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6mm;
+  height: 26mm;
+  border-bottom: 1.5pt solid var(--rule);
+  padding-bottom: 2mm;
+}
+
+.sheet-eyebrow {
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+  font-size: 8pt;
+  line-height: 1.1;
+  color: var(--accent-text);
+  margin: 0;
+}
+
+.sheet-title {
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-weight: 800;
+  font-size: 22pt;
+  line-height: 1.1;
+  margin: 0.5mm 0 0;
+}
+
+.sheet-sub {
+  font-size: 9pt;
+  line-height: 1.35;
+  margin: 1mm 0 0;
+  max-width: 120mm;
+  color: var(--muted);
+}
+
+/* The chip is the one thing on the sheet that has to survive being read
+   at arm's length across a table, so it is set solid rather than ruled. */
+.sheet-confid {
+  flex: none;
+  align-self: flex-start;
+  background: var(--accent-strong);
+  color: var(--on-accent);
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+  font-size: 7.5pt;
+  line-height: 1.1;
+  padding: 1.6mm 2.4mm;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* No frame and no scroller: on paper there is nowhere to scroll to, and
+   the map is drawn to this width exactly. `flex: none` so a long running
+   order cannot squeeze the drawing instead of failing the page count. */
+.sheet-map {
+  flex: none;
+  width: 100%;
+  margin: 3mm 0 0;
+}
+
+.sheet-map .wzdmap {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The map's cartouche says "World Zombie Day: London — The route — base
+   camp: Soho Square", which is the sheet's header word for word and
+   sitting 20mm under it. One of them has to go, and it is the one inside
+   the drawing: the header carries the confidential chip, and a reader
+   scanning a sheet of A4 looks at the top-left corner of the paper, not
+   the top-left corner of the picture. */
+.sheet-map .cart {
+  display: none;
+}
+
+/* Two columns, filled down then across, so the day reads in order down
+   the left and continues down the right. `break-inside: avoid` keeps a
+   time and its instruction together if this ever does spill. */
+.sheet-list {
+  flex: 1 1 auto;
+  columns: 2;
+  column-gap: 7mm;
+  column-fill: balance;
+  list-style: none;
+  margin: 4mm 0 0;
+  padding: 0;
+}
+
+.sheet-row {
+  break-inside: avoid;
+  padding: 0 0 0 3mm;
+  margin: 0 0 2.6mm;
+  border-left: 2.5pt solid var(--border);
+}
+
+/* The walks carry their own colour, set inline from --w1..--w5, so the
+   sheet and the map cannot disagree about which walk is which. The stops
+   keep the neutral rule: they are not a walk and should not read as one. */
+.sheet-row-walk {
+  border-left-width: 3.5pt;
+}
+
+.sheet-when {
+  display: block;
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 9.5pt;
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.sheet-what {
+  display: block;
+  font-size: 9.5pt;
+  line-height: 1.3;
+  margin-top: 0.4mm;
+}
+
+.sheet-foot {
+  flex: none;
+  border-top: 1pt solid var(--border);
+  padding-top: 2mm;
+  margin-top: 2mm;
+}
+
+.sheet-note {
+  font-size: 7pt;
+  line-height: 1.35;
+  color: var(--muted);
+  margin: 0;
+}
+
+.sheet-note + .sheet-note {
+  margin-top: 1mm;
+}
+
+/* On screen this page is only ever a preview of the sheet, so it is drawn
+   as one: a white plate the size of the paper, centred, with the same
+   margin around the content that @page will cut. Without this the block
+   is 269mm tall inside a full-width shell and looks nothing like what
+   comes out of the printer, which is the one thing it has to look like. */
+@media screen {
+  body:has(.sheet) main {
+    display: block;
+    padding: 8mm 0;
+  }
+  .sheet {
+    width: 186mm;
+    margin: 0 auto;
+    padding: 14mm 12mm;
+    box-sizing: content-box;
+    background: var(--paper);
+    color: var(--near-black);
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 0.12);
+  }
+}
+
 /* ── Printing ─────────────────────────────────────────────────────────
    Deliberately unlayered and last in the file, so these win over the
    component rules above without a specificity contest.
@@ -1427,8 +1625,23 @@
   *::after {
     animation: none !important;
     transition: none !important;
-    transform: none !important;
     opacity: 1 !important;
+  }
+
+  /* The transform reset is a rule of its own, and it steps around SVG.
+     `transform` on an SVG element is a presentation attribute, which any
+     author stylesheet outranks — so `* { transform: none }` does not
+     merely stop an entrance travelling, it unrotates every arrowhead on
+     the route map and drops the numerals off the walks, and the map
+     prints as a heap of shapes at the origin. Nothing in the DOM looks
+     wrong; it only shows up on paper.
+
+     Separate rather than a fourth line above so the two fail apart: a
+     browser that cannot parse the complex `:not()` drops this rule and
+     keeps the opacity reset, which is the one whose absence would print
+     a blank page. */
+  :not(svg):not(svg *) {
+    transform: none !important;
   }
 
   /* Only the masking panel, which is the ::after — .wipe itself is the

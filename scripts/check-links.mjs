@@ -71,7 +71,12 @@ for (const route of ROUTES) {
 
     const isExternal = /^https?:\/\//i.test(href)
     const opensNewTab = /\starget="_blank"/.test(anchor)
-    const isDownload = /\sdownload(?=[\s=>])/.test(anchor)
+    // A link that hands the href to the browser's own document viewer or
+    // downloader rather than navigating the site. Marked on the anchor
+    // rather than inferred, so it is a decision someone made and can be
+    // found by grep, not a shape the checker guesses at.
+    const opensFile = /\sdata-opens-file(?=[\s=>])/.test(anchor) ||
+      /\sdownload(?=[\s=>])/.test(anchor)
     const where = `${route}: ${href.slice(0, 60)}`
 
     if (isExternal) {
@@ -79,11 +84,11 @@ for (const route of ROUTES) {
       if (!opensNewTab) fail(`${where} leaves the site without target="_blank"`)
       if (!/\srel="[^"]*noopener/.test(anchor)) fail(`${where} has no rel="noopener"`)
       if (!ANNOUNCEMENT.test(anchor)) fail(`${where} does not say it opens a new tab`)
-    } else if (isDownload) {
-      // A download is a hand-off, not a navigation: the browser takes the
-      // file and the page the visitor was reading stays where it was. Same
-      // reasoning as the mailto:/tel: exemption above. It still has to say
-      // that a tab opens, because one does.
+    } else if (opensFile) {
+      // A hand-off, not a navigation: the browser opens the file in its own
+      // viewer and the page the visitor was reading stays where it was.
+      // Same reasoning as the mailto:/tel: exemption above. It still has to
+      // say that a tab opens, because one does.
       internal++
       if (opensNewTab && !ANNOUNCEMENT.test(anchor)) {
         fail(`${where} opens a tab to download without saying so`)

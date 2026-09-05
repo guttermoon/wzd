@@ -6,7 +6,10 @@ import { NextRequest, NextResponse } from "next/server"
 import { ROUTE_COOKIE, verifyToken } from "@/lib/route-access"
 
 /**
- * The running order as a PDF, behind the same lock as the page.
+ * The running order as a PDF, behind the same lock as the page. Served
+ * inline, so the link opens it in a tab rather than dropping a file in
+ * someone's downloads — the viewer that opens has a save button of its
+ * own, which is the part people actually want.
  *
  * **It is not in public/, and it must not be.** Anything under public/ is
  * served as a static asset with no code in front of it, so a route.pdf
@@ -20,6 +23,10 @@ import { ROUTE_COOKIE, verifyToken } from "@/lib/route-access"
  * serverless function has no business carrying one. The cost is that it is
  * a photograph rather than a mirror: a copy edit in Notion changes the
  * page and not the PDF. Re-run the script after an edit that matters.
+ *
+ * What it photographs is /the-route/sheet — the same running order laid
+ * out to fill one side of A4 — rather than this page, which is a web page
+ * and ran to five sheets when it was simply printed.
  */
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -49,7 +56,10 @@ export async function GET(request: NextRequest) {
   return new NextResponse(new Uint8Array(pdf), {
     headers: {
       "content-type": "application/pdf",
-      "content-disposition": 'attachment; filename="world-zombie-day-route.pdf"',
+      // inline, not attachment: the link opens the PDF in a tab so it can
+      // be read on the spot, and the browser's own viewer offers the save.
+      // `attachment` would force a download and the tab would never render.
+      "content-disposition": 'inline; filename="world-zombie-day-route.pdf"',
       // Private, and never by a shared cache: the whole point is that this
       // is not public, and a CDN copy would outlive the cookie check.
       "cache-control": "private, no-store",

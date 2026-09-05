@@ -191,12 +191,19 @@ export function RouteMap(): JSX.Element {
     <text className="lbl-big" x="1152" y="599" textAnchor="end">To BloodSport</text>
     <text className="lbl-sub" x="1152" y="619" textAnchor="end">Bonus, and optional</text>
     <text className="lbl-sub" x="1053.8" y="170.8">Participants likely arrive here</text>
-    <rect className="box" x="56" y="48" width="452" height="196"/>
-    <rect className="box-in" x="64" y="56" width="436" height="180"/>
-    <text className="cart-eyebrow" x="86" y="96">World Zombie Day: London</text>
-    <text className="cart-title" x="84" y="152">The route</text>
-    <text className="cart-sub" x="86" y="186">Base camp: Soho Square</text>
-    <text className="cart-sub" x="86" y="212">Saturday 10 October</text>
+    {/* The cartouche, grouped so it can be taken off as a unit. On the web
+        page the map is a long way below the heading and has to say what it
+        is a map of; on /the-route/sheet the same words are 20mm above it
+        in the sheet's own header, and printing a title twice on one side
+        of A4 looks like a mistake rather than emphasis. */}
+    <g className="cart">
+      <rect className="box" x="56" y="48" width="452" height="196"/>
+      <rect className="box-in" x="64" y="56" width="436" height="180"/>
+      <text className="cart-eyebrow" x="86" y="96">World Zombie Day: London</text>
+      <text className="cart-title" x="84" y="152">The route</text>
+      <text className="cart-sub" x="86" y="186">Base camp: Soho Square</text>
+      <text className="cart-sub" x="86" y="212">Saturday 10 October</text>
+    </g>
     <rect className="box" x="56" y="586" width="438" height="326"/>
     <rect className="box-in" x="64" y="594" width="422" height="310"/>
     <text className="key-title" x="84" y="630">Reading the map</text>
