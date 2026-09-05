@@ -116,6 +116,7 @@ export function ConsentBanner({ copy }: { copy: ConsentCopy }) {
             />
             <div
               ref={panel}
+              data-consent-dialog=""
               role="dialog"
               aria-modal="true"
               aria-labelledby="consent-title"

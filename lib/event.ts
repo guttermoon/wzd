@@ -75,7 +75,7 @@ export const EVENT = {
      *  place from base camp, so a different link — these two were the
      *  same address for a while and the check-in row was pointing at the
      *  station under the words "Soho Square". */
-    station: "https://maps.app.goo.gl/PdxBFN8gpfAZLuNz7",
+    station: "https://maps.app.goo.gl/9k6zPZhiRm7Dw4UU9",
     walk1: "https://maps.app.goo.gl/tZgNss8E15NzXtPj7",
     walk2: "https://maps.app.goo.gl/gdUa7zzARV4mZtEE9",
     walk3: "https://maps.app.goo.gl/1wZdxgZkGZoV7Foh8",

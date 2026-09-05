@@ -3,6 +3,7 @@ import { cookies } from "next/headers"
 
 import { RouteMap } from "@/components/route-map"
 import { RouteUnlock } from "@/components/route-unlock"
+import { PrintButton } from "@/components/print-button"
 import { makeCta } from "@/components/cta"
 import { makeT, makeS, makeHas, makeAny, makeP } from "@/components/notion-text"
 import { PageShell, Section } from "@/components/page-shell"
@@ -157,7 +158,15 @@ export default async function TheRoutePage() {
             <P k="route.map.oxford" className="prose-wzd mt-3 font-body text-muted" />
           </Section>
 
+          {/* Above the running order rather than at the foot: the list is
+              the thing anyone prints, and a control below it is a control
+              found after scrolling past what you wanted. */}
           <Section title={<T k="route.day.title" />}>
+            {has("route.print") ? (
+              <p className="no-print mt-6">
+                <PrintButton label={S("route.print")} />
+              </p>
+            ) : null}
             <ol className="mt-6 border-2 border-rule">
               {DAY.filter((d) => has(`route.${d.key}.what`)).map((d) => (
                 <li
