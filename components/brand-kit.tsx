@@ -1,3 +1,5 @@
+import type { ReactNode } from "react"
+
 import { Graphic } from "@/components/photo"
 
 /**
@@ -47,8 +49,14 @@ const PALETTE = [
  * of colours: they stay correct if a token ever moves, and they are
  * readable to anyone using a screen reader, which a flat image of a palette
  * is not.
+ *
+ * `downloads` is a slot rather than markup of its own, because the buttons
+ * are Notion rows and only a server component can read them. It sits
+ * between the marks and the palette deliberately: someone who has just
+ * looked at a logo wants to take it away, and making them scroll past four
+ * colours first puts the palette in the way of the thing they came for.
  */
-export function BrandKit() {
+export function BrandKit({ downloads }: { downloads?: ReactNode }) {
   return (
     <div className="mt-6 space-y-6">
       <div className="grid gap-4 sm:grid-cols-2">
@@ -102,6 +110,8 @@ export function BrandKit() {
           full lock-up will not fit.
         </p>
       </div>
+
+      {downloads}
 
       <ul className="grid gap-3 sm:grid-cols-2">
         {PALETTE.map((colour) => (
