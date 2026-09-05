@@ -5,7 +5,10 @@ import type { JSX } from "react"
  *
  * Generated rather than drawn: every junction in it is a real latitude and
  * longitude, projected once, so the grid is true and each leg runs down
- * the street it really runs down. Two liberties are taken and both are
+ * the street it really runs down. Walks 1, 3 and 4 are traced against the
+ * owner's own Google Maps routes; walks 2 and 5 are still reconstructions
+ * from their endpoints, which is why the page says the streets within a
+ * walk are indicative and the Maps link is the route. Two liberties are taken and both are
  * declared on the face of the map — longitude outside the Soho core is
  * compressed so the long tails west to Bond Street and east to Covent
  * Garden do not squash the part anyone navigates by, and legs sharing a
@@ -62,16 +65,18 @@ export function RouteMap(): JSX.Element {
     <path className="rd-minor" d="M665,495.6 L748.5,485.4"/>
     <path className="rd-minor" d="M806.4,239.2 L877.1,249.4"/>
     <path className="rd-minor" d="M890,177.6 L909.2,218.7"/>
+    <path className="rd-minor" d="M710,280.2 L581.4,290.5"/>
+    <path className="rd-minor" d="M1005.6,464.9 L947.8,475.1"/>
     <text className="lbl-dist" x="210" y="500" textAnchor="middle">Mayfair</text>
     <text className="lbl-dist" x="872" y="700" textAnchor="middle">Chinatown</text>
-    <path className="leg-case" d="M919.8,251.3 L936.2,288.1 L955.7,391.6 L976.4,502.1 L852.1,524.2 L781.8,524.2 L762.2,477.4 L829.5,477.4 L817.7,383.8 L797.1,229.7 L878.2,241.5 L913.6,246.6"/>
-    <path className="leg w1" d="M919.8,251.3 L936.2,288.1 L955.7,391.6 L976.4,502.1 L852.1,524.2 L781.8,524.2 L762.2,477.4 L829.5,477.4 L817.7,383.8 L797.1,229.7 L878.2,241.5 L913.6,246.6"/>
+    <path className="leg-case" d="M917.2,248.1 L967.7,285.8 L994.1,391 L1015.6,471.2 L960.9,480.9 L974.3,502.4 L847.2,514.3 L834.1,493.4 L768.4,493.4 L747.2,425.9 L721.4,312.6 L706.9,231.2 L807,231.2 L878.2,241.5 L913.6,246.6"/>
+    <path className="leg w1" d="M917.2,248.1 L967.7,285.8 L994.1,391 L1015.6,471.2 L960.9,480.9 L974.3,502.4 L847.2,514.3 L834.1,493.4 L768.4,493.4 L747.2,425.9 L721.4,312.6 L706.9,231.2 L807,231.2 L878.2,241.5 L913.6,246.6"/>
     <path className="leg-case" d="M904.5,255.3 L901.4,220.8 L885.5,186.9 L801.3,206 L711,216.3 L476.8,247 L387.5,277.5 L260.7,328.7 L130.3,380"/>
     <path className="leg w2" d="M904.5,255.3 L901.4,220.8 L885.5,186.9 L801.3,206 L711,216.3 L476.8,247 L387.5,277.5 L260.7,328.7 L130.3,380"/>
     <path className="leg-case" d="M130.7,380.9 L261.1,329.6 L387.9,278.4 L477.1,248 L711.1,217.3 L801.5,207 L884.9,188 L900.4,221 L903.5,255.4"/>
     <path className="leg w2" d="M130.7,380.9 L261.1,329.6 L387.9,278.4 L477.1,248 L711.1,217.3 L801.5,207 L884.9,188 L900.4,221 L903.5,255.4"/>
-    <path className="leg-case" d="M913.7,245.7 L878.4,240.5 L795.3,228.5 L810.3,312.2 L815.8,373.8 L729.9,373.8 L742.7,414.8 L616.6,414.8 L631.3,438.2 L643.8,468.3 L659.3,505.4 L749.1,494.4 L768.3,494.4 L779.1,520.3 L792.3,541.5"/>
-    <path className="leg w3" d="M913.7,245.7 L878.4,240.5 L795.3,228.5 L810.3,312.2 L815.8,373.8 L729.9,373.8 L742.7,414.8 L616.6,414.8 L631.3,438.2 L643.8,468.3 L659.3,505.4 L749.1,494.4 L768.3,494.4 L779.1,520.3 L792.3,541.5"/>
+    <path className="leg-case" d="M913.7,245.7 L878.4,240.5 L805.2,229.9 L707.7,271.4 L595.9,282.5 L611.3,344 L624,394.9 L630.5,436.4 L652,493.5 L721.2,504.5 L769.4,514.1 L793.1,542.5"/>
+    <path className="leg w3" d="M913.7,245.7 L878.4,240.5 L805.2,229.9 L707.7,271.4 L595.9,282.5 L611.3,344 L624,394.9 L630.5,436.4 L652,493.5 L721.2,504.5 L769.4,514.1 L793.1,542.5"/>
     <path className="leg-case" d="M792.3,541.5 L798.6,551.4 L828.6,608.9 L792,696.7 L734.5,788.4"/>
     <path className="leg w4" d="M792.3,541.5 L798.6,551.4 L828.6,608.9 L792,696.7 L734.5,788.4"/>
     <path className="leg-case" d="M742.1,793.2 L883.5,772.6 L992.8,752.1 L1069.9,721.3 L1109.3,670 L1146,629"/>
@@ -93,14 +98,16 @@ export function RouteMap(): JSX.Element {
     <text className="lbl-st" x="1089.6" y="686.2" transform="rotate(-52.5 1089.6 686.2)" style={{ fontSize: "11px" }}>Cranbourn St</text>
     <text className="lbl-st" x="706.8" y="522" transform="rotate(-7 706.8 522)" style={{ fontSize: "11px" }}>Peter St</text>
     <text className="lbl-st" x="841.7" y="234.8" transform="rotate(8.3 841.7 234.8)" style={{ fontSize: "11px" }}>Carlisle St</text>
-    <path className="arw w1" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(915.8 512.9) rotate(169.9)"/>
-    <path className="arw w1" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(818.8 392.6) rotate(-97.1)"/>
-    <circle className="walk-disc w1" cx="958.3" cy="405.5" r="16"/>
-    <text className="walk-n" x="958.3" y="412" textAnchor="middle">1</text>
-    <circle className="walk-disc w1" cx="841.6" cy="524.2" r="16"/>
-    <text className="walk-n" x="841.6" y="530.7" textAnchor="middle">1</text>
-    <circle className="walk-disc w1" cx="807.7" cy="308.7" r="16"/>
-    <text className="walk-n" x="807.7" y="315.2" textAnchor="middle">1</text>
+    <text className="lbl-st" x="645.7" y="274.8" transform="rotate(-4.6 645.7 274.8)" style={{ fontSize: "11px" }}>Noel St</text>
+    <text className="lbl-st" x="976.7" y="460.5" transform="rotate(-10.1 976.7 460.5)" style={{ fontSize: "10px" }}>Bateman St</text>
+    <path className="arw w1" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(959.3 503.8) rotate(174.6)"/>
+    <path className="arw w1" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(725.6 330.9) rotate(-102.8)"/>
+    <circle className="walk-disc w1" cx="995.1" cy="394.7" r="16"/>
+    <text className="walk-n" x="995.1" y="401.2" textAnchor="middle">1</text>
+    <circle className="walk-disc w1" cx="877.2" cy="511.5" r="16"/>
+    <text className="walk-n" x="877.2" y="518" textAnchor="middle">1</text>
+    <circle className="walk-disc w1" cx="708.4" cy="239.7" r="16"/>
+    <text className="walk-n" x="708.4" y="246.2" textAnchor="middle">1</text>
     <path className="arw w2" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(449.8 256.2) rotate(161.2)"/>
     <circle className="walk-disc w2" cx="618.4" cy="228.5" r="16"/>
     <text className="walk-n" x="618.4" y="235" textAnchor="middle">2</text>
@@ -112,14 +119,14 @@ export function RouteMap(): JSX.Element {
     <text className="walk-n" x="368.9" y="292.6" textAnchor="middle">2</text>
     <circle className="walk-disc w2" cx="702.3" cy="218.5" r="16"/>
     <text className="walk-n" x="702.3" y="225" textAnchor="middle">2</text>
-    <path className="arw w3" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(752.8 373.8) rotate(180)"/>
-    <path className="arw w3" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(655.5 496.2) rotate(67.3)"/>
-    <circle className="walk-disc w3" cx="801.9" cy="265.2" r="16"/>
-    <text className="walk-n" x="801.9" y="271.7" textAnchor="middle">3</text>
-    <circle className="walk-disc w3" cx="706.6" cy="414.8" r="16"/>
-    <text className="walk-n" x="706.6" y="421.3" textAnchor="middle">3</text>
-    <circle className="walk-disc w3" cx="719.5" cy="498" r="16"/>
-    <text className="walk-n" x="719.5" y="504.5" textAnchor="middle">3</text>
+    <path className="arw w3" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(628.5 279.3) rotate(174.3)"/>
+    <path className="arw w3" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(653.5 493.7) rotate(9.1)"/>
+    <circle className="walk-disc w3" cx="776.8" cy="242" r="16"/>
+    <text className="walk-n" x="776.8" y="248.5" textAnchor="middle">3</text>
+    <circle className="walk-disc w3" cx="610.1" cy="339.4" r="16"/>
+    <text className="walk-n" x="610.1" y="345.9" textAnchor="middle">3</text>
+    <circle className="walk-disc w3" cx="715.9" cy="503.7" r="16"/>
+    <text className="walk-n" x="715.9" y="510.2" textAnchor="middle">3</text>
     <path className="arw w4" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(795.6 688) rotate(112.7)"/>
     <circle className="walk-disc w4" cx="820.4" cy="628.6" r="16"/>
     <text className="walk-n" x="820.4" y="635.1" textAnchor="middle">4</text>
