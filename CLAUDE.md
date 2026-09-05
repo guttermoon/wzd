@@ -228,17 +228,28 @@ answered. There is no client-side check to step over.
 
 The map is `components/route-map.tsx` — inline SVG, generated from real
 latitudes and longitudes, taking its colours from the theme's own
-variables. Its rules are in `app/globals.css` under "the route map". Three
+variables. **Everything on it and on the page comes from what the owner
+actually supplied** — the times, the place names and the six Google Maps
+links. There are no distances, no walking times and no street-by-street
+narrative, because none were given: the map says on its face that the
+streets within each walk are indicative and that the Maps link is the
+route. Walk 5's far end is an arrow off the edge of the plate under a
+label, not a pin, because BloodSport's address was never supplied and a
+pin would be a guess drawn in the same ink as a fact. Its rules are in `app/globals.css` under "the route map". Three
 things there are load-bearing:
 
-- **Grey is the city, red is movement, ink is where you stand still.**
-  `--road` for the street grid, `--route` for the legs, `--text` for base
-  camp and the timed stops. The three differ in lightness as well as hue,
-  because a route you can only pick out by colour is one a colour-blind
-  reader cannot follow.
-- **Walks are numbered discs and stops are numbered diamonds.** Five legs
-  cannot be told apart by hue in a palette with one red, so they are told
-  apart by number and shape. Never make colour the only difference.
+- **One colour per walk** (`--w1`..`--w5`), grey for the street grid, ink
+  for base camp and the timed stops. Each walk colour clears 4.5:1 on its
+  own ground, because each carries a numeral set in the ground's colour,
+  and each is a hue the grid is not, so a route is never mistaken for a
+  road. The same `w1`..`w5` classes drive the line, its arrows, its discs,
+  its entry in the key and the rule down its row in the running order —
+  one class, so the list and the map can never disagree.
+- **Colour is never the only difference.** Walks are numbered discs, stops
+  are numbered diamonds, and every walk carries its number on the line as
+  well as in the key. Five hues are not five distinctions for every
+  reader, and 1.4.1 is not satisfied by a palette however carefully it is
+  measured.
 - `--road` is held at 3:1 against each ground. The grid is information —
   it is what tells a reader which way round Soho they are looking — not
   texture.

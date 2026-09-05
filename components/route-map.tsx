@@ -22,6 +22,12 @@ import type { JSX } from "react"
  * markup, deliberately: a rule you can talk your way past is not a rule.
  * So this comment says "raster image" where it means the tag.)
  *
+ * Each walk has its own colour, carried by a `w1`..`w5` class on its line,
+ * its arrows and its numbered discs — and on the swatch in the key, which
+ * uses the same classes so the legend cannot fall out of step with the
+ * map. Colour is never the only difference: every walk carries its number
+ * too, because five hues are not five distinctions for every reader.
+ *
  * The route is carried twice over: once as this drawing, and once as the
  * running order beneath it. The drawing is `role="img"` with a title and
  * a description, and the description points at that list rather than
@@ -34,175 +40,162 @@ export function RouteMap(): JSX.Element {
   return (
     <svg className="wzdmap" viewBox="0 0 1240 940" role="img" aria-labelledby="map-title map-desc">
     <title id="map-title">The World Zombie Day walking route through Soho</title>
-    <desc id="map-desc">A schematic street map of Soho and Covent Garden. Base camp is Soho Square, marked with a star. Five numbered walks lead out of it and back: walk one loops south to Meard Street; walk two runs west along Oxford Street to Bond Street and back, dropping south down Berwick Street to NQ64; walk three goes west to Berwick Street Market and south to St Anne&rsquo;s Churchyard; walk four goes south down Wardour Street and along Shaftesbury Avenue to Piccadilly Circus; and an optional fifth walk crosses Leicester Square to Endell Street in Covent Garden. The same route is set out in full, with times, in the schedule below this map.</desc>
-    <rect className="grn" x="786.1" y="220.2" width="85.9" height="88.2"/>
-    <rect className="grn" x="905.8" y="710" width="73.7" height="58.8"/>
-    <rect className="grn" x="709.4" y="523.9" width="30.7" height="29.4"/>
-    <rect className="grn" x="408.1" y="602.3" width="37.3" height="49"/>
-    <path className="rd-major" d="M79.3,376.9 L203.8,327.9 L325.1,278.9 L411.3,249.6 L635.7,220.2 L721.7,210.4 L807.6,190.8 L948.8,161.4"/>
-    <path className="rd-major" d="M325.1,278.9 L379.4,416.1 L482.2,572.9 L598.9,710 L666.4,778.6"/>
-    <path className="rd-major" d="M666.4,778.6 L721.7,690.4 L758.5,602.3 L832.2,572.9 L924.2,553.3 L1004.3,543.5 L1052.2,465.1"/>
-    <path className="rd-major" d="M948.8,161.4 L979.5,347.5 L1004.3,543.5 L1017,661.1 L1029.8,778.6"/>
-    <path className="rd-major" d="M635.7,220.2 L654.1,318.1 L666.4,386.7 L678.7,425.9 L697.1,484.7 L709.4,514.1 L727.8,543.5 L758.5,602.3"/>
-    <path className="rd-major" d="M721.7,210.4 L727.8,249.6 L740.1,318.1 L746.2,386.7 L758.5,484.7 L770.8,514.1 L807.6,582.7"/>
-    <path className="rd-major" d="M411.3,249.6 L512.9,298.5 L537.5,376.9 L562.1,425.9 L580.5,465.1 L592.7,494.5"/>
-    <path className="rd-major" d="M709.4,514.1 L770.8,514.1 L881.3,494.5 L924.2,494.5 L997.9,494.5"/>
-    <path className="rd-major" d="M875.1,298.5 L899.7,396.5 L924.2,494.5 L936.5,553.3"/>
-    <path className="rd-major" d="M844.4,298.5 L862.8,396.5 L881.3,494.5 L875.1,563.1"/>
-    <path className="rd-major" d="M411.3,425.9 L562.1,425.9 L678.7,425.9"/>
-    <path className="rd-major" d="M666.4,778.6 L801.5,759 L905.8,739.4"/>
-    <path className="rd-major" d="M1017,661.1 L1090.5,572.9 L1154.3,504.3 L1189.4,465.1"/>
-    <path className="rd-major" d="M1157.5,465.1 L1163.9,376.9 L1170.3,278.9"/>
-    <path className="rd-major" d="M979.5,710 L1017,661.1"/>
-    <path className="rd-minor" d="M697.1,484.7 L758.5,484.7"/>
-    <path className="rd-minor" d="M666.4,386.7 L746.2,386.7"/>
-    <path className="rd-minor" d="M592.7,494.5 L672.5,484.7"/>
-    <path className="rd-minor" d="M727.8,249.6 L795.3,259.3"/>
-    <path className="rd-minor" d="M807.6,190.8 L826,230"/>
-    <text className="lbl-dist" x="232" y="512" textAnchor="middle">Mayfair</text>
-    <text className="lbl-dist" x="856" y="690" textAnchor="middle">Chinatown</text>
-    <path className="ret" d="M580.5,465.1 L562.1,425.9 L678.7,425.9 L666.4,386.7 L746.2,386.7 L727.8,249.6 L795.3,259.3 L829.1,264.2"/>
-    <path className="leg-case" d="M836.4,261 L852.1,296.1 L870.7,395 L890.6,501 L771.5,522.1 L704,522.1 L685.1,476.7 L749.4,476.7 L738.3,387.7 L718.5,240.1 L796.5,251.4 L830.2,256.3"/>
-    <path className="leg" d="M836.4,261 L852.1,296.1 L870.7,395 L890.6,501 L771.5,522.1 L704,522.1 L685.1,476.7 L749.4,476.7 L738.3,387.7 L718.5,240.1 L796.5,251.4 L830.2,256.3"/>
-    <path className="leg-case" d="M821.1,265 L818.2,232.1 L803.1,200 L723,218.3 L636.7,228.1 L413.1,257.4 L327.9,286.4 L206.8,335.4 L82.2,384.4"/>
-    <path className="leg" d="M821.1,265 L818.2,232.1 L803.1,200 L723,218.3 L636.7,228.1 L413.1,257.4 L327.9,286.4 L206.8,335.4 L82.2,384.4"/>
-    <path className="leg-case" d="M82.6,385.3 L207.1,336.3 L328.2,287.4 L410.7,259.3 L505.5,305 L529.1,380.3 L554,429.8 L572.3,468.9"/>
-    <path className="leg" d="M82.6,385.3 L207.1,336.3 L328.2,287.4 L410.7,259.3 L505.5,305 L529.1,380.3 L554,429.8 L572.3,468.9"/>
-    <path className="leg-case" d="M830.4,255.3 L796.6,250.4 L716.7,238.9 L731.1,319.3 L736.4,377.7 L654.2,377.7 L666.4,416.9 L545.8,416.9 L560.2,439.9 L572.2,468.6 L587.1,504.3 L673.1,493.7 L691.1,493.7 L701.4,518.2 L714,538.5"/>
-    <path className="leg" d="M830.4,255.3 L796.6,250.4 L716.7,238.9 L731.1,319.3 L736.4,377.7 L654.2,377.7 L666.4,416.9 L545.8,416.9 L560.2,439.9 L572.2,468.6 L587.1,504.3 L673.1,493.7 L691.1,493.7 L701.4,518.2 L714,538.5"/>
-    <path className="leg-case" d="M714,538.5 L720,548 L748.6,602.7 L713.6,686.3 L658.8,773.9"/>
-    <path className="leg" d="M714,538.5 L720,548 L748.6,602.7 L713.6,686.3 L658.8,773.9"/>
-    <path className="leg-case" d="M666.4,778.6 L801.5,759 L905.8,739.4 L979.5,710 L1017,661.1 L1090.5,572.9 L1154.3,504.3 L1157.5,465.1 L1163.9,376.9"/>
-    <path className="leg" d="M666.4,778.6 L801.5,759 L905.8,739.4 L979.5,710 L1017,661.1 L1090.5,572.9 L1154.3,504.3 L1157.5,465.1 L1163.9,376.9" strokeDasharray="14 10"/>
-    <text className="lbl-st" x="710.9" y="192.1" transform="rotate(-6.5 710.9 192.1)" style={{ fontSize: "18px" }}>Oxford Street</text>
-    <text className="lbl-st" x="558.3" y="666.8" transform="rotate(49.6 558.3 666.8)" style={{ fontSize: "15px" }}>Regent Street</text>
-    <text className="lbl-st" x="895.5" y="544.9" transform="rotate(-12 895.5 544.9)" style={{ fontSize: "15px" }}>Shaftesbury Avenue</text>
-    <text className="lbl-st" x="973.1" y="313.3" transform="rotate(80.6 973.1 313.3)" style={{ fontSize: "14px" }}>Charing Cross Rd</text>
-    <text className="lbl-st" x="649.2" y="277.3" transform="rotate(79.4 649.2 277.3)" style={{ fontSize: "14px" }}>Wardour St</text>
-    <text className="lbl-st" x="785.6" y="562.3" transform="rotate(61.8 785.6 562.3)" style={{ fontSize: "14px" }}>Dean St</text>
-    <text className="lbl-st" x="878" y="550.5" transform="rotate(-84.9 878 550.5)" style={{ fontSize: "13px" }}>Frith St</text>
-    <text className="lbl-st" x="904.4" y="420" transform="rotate(75.9 904.4 420)" style={{ fontSize: "13px" }}>Greek St</text>
-    <text className="lbl-st" x="499.1" y="278.4" transform="rotate(25.7 499.1 278.4)" style={{ fontSize: "14px" }}>Berwick St</text>
-    <text className="lbl-st" x="464.8" y="430.4" transform="rotate(0 464.8 430.4)" style={{ fontSize: "13px" }}>Broadwick St</text>
-    <text className="lbl-st" x="957.3" y="514" transform="rotate(0 957.3 514)" style={{ fontSize: "13px" }}>Old Compton St</text>
-    <text className="lbl-st" x="727.8" y="462.2" transform="rotate(0 727.8 462.2)" style={{ fontSize: "12px" }}>Meard St</text>
-    <text className="lbl-st" x="706.3" y="368.2" transform="rotate(0 706.3 368.2)" style={{ fontSize: "11px" }}>St Anne&rsquo;s Ct</text>
-    <text className="lbl-st" x="1067.2" y="589.4" transform="rotate(-50.2 1067.2 589.4)" style={{ fontSize: "13px" }}>Long Acre</text>
-    <text className="lbl-st" x="1162.1" y="390.3" transform="rotate(-85.9 1162.1 390.3)" style={{ fontSize: "13px" }}>Endell St</text>
-    <text className="lbl-st" x="767.3" y="785.5" transform="rotate(-8.3 767.3 785.5)" style={{ fontSize: "12px" }}>Coventry St</text>
-    <text className="lbl-st" x="998.3" y="676.1" transform="rotate(-52.5 998.3 676.1)" style={{ fontSize: "11px" }}>Cranbourn St</text>
-    <text className="lbl-st" x="632.6" y="521.1" transform="rotate(-7 632.6 521.1)" style={{ fontSize: "11px" }}>Peter St</text>
-    <text className="lbl-st" x="761.6" y="244.9" transform="rotate(8.3 761.6 244.9)" style={{ fontSize: "11px" }}>Carlisle St</text>
-    <path className="arw" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(832.3 511.3) rotate(169.9)"/>
-    <path className="arw" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(739.3 395.9) rotate(-97.1)"/>
-    <circle className="walk-disc" cx="873.3" cy="408.7" r="16"/>
-    <text className="walk-n" x="873.3" y="415.2" textAnchor="middle">1</text>
-    <circle className="walk-disc" cx="761.2" cy="522.1" r="16"/>
-    <text className="walk-n" x="761.2" y="528.6" textAnchor="middle">1</text>
-    <circle className="walk-disc" cx="728.6" cy="315.6" r="16"/>
-    <text className="walk-n" x="728.6" y="322.1" textAnchor="middle">1</text>
-    <path className="arw" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(371.6 271.5) rotate(161.2)"/>
-    <circle className="walk-disc" cx="531.7" cy="241.8" r="16"/>
-    <text className="walk-n" x="531.7" y="248.3" textAnchor="middle">2</text>
-    <circle className="walk-disc" cx="188.7" cy="342.5" r="16"/>
-    <text className="walk-n" x="188.7" y="349" textAnchor="middle">2</text>
-    <path className="arw" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(165.3 352.8) rotate(-21.5)"/>
-    <path className="arw" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(448.3 277.4) rotate(25.7)"/>
-    <circle className="walk-disc" cx="259.5" cy="315.1" r="16"/>
-    <text className="walk-n" x="259.5" y="321.6" textAnchor="middle">2</text>
-    <circle className="walk-disc" cx="533.5" cy="389.1" r="16"/>
-    <text className="walk-n" x="533.5" y="395.6" textAnchor="middle">2</text>
-    <path className="arw" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(676.1 377.7) rotate(180)"/>
-    <path className="arw" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(583.2 494.9) rotate(67.3)"/>
-    <circle className="walk-disc" cx="723" cy="273.7" r="16"/>
-    <text className="walk-n" x="723" y="280.2" textAnchor="middle">3</text>
-    <circle className="walk-disc" cx="631.8" cy="416.9" r="16"/>
-    <text className="walk-n" x="631.8" y="423.4" textAnchor="middle">3</text>
-    <circle className="walk-disc" cx="644.1" cy="497.3" r="16"/>
-    <text className="walk-n" x="644.1" y="503.8" textAnchor="middle">3</text>
-    <path className="arw" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(717 678.2) rotate(112.7)"/>
-    <circle className="walk-disc" cx="740.7" cy="621.6" r="16"/>
-    <text className="walk-n" x="740.7" y="628.1" textAnchor="middle">4</text>
-    <circle className="walk-disc" cx="687.1" cy="728.6" r="16"/>
-    <text className="walk-n" x="687.1" y="735.1" textAnchor="middle">4</text>
-    <path className="arw" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(934.5 728) rotate(-21.8)"/>
-    <path className="arw" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(1104 558.3) rotate(-47.1)"/>
-    <circle className="walk-disc" cx="780.4" cy="762.1" r="16"/>
-    <text className="walk-n" x="780.4" y="768.6" textAnchor="middle">5</text>
-    <circle className="walk-disc" cx="934.5" cy="728" r="16"/>
-    <text className="walk-n" x="934.5" y="734.5" textAnchor="middle">5</text>
-    <circle className="walk-disc" cx="1156.5" cy="477.4" r="16"/>
-    <text className="walk-n" x="1156.5" y="483.9" textAnchor="middle">5</text>
-    <g><circle className="stn" cx="948.8" cy="161.4" r="8.5"/><rect className="stn-bar" x="940.3" y="159.8" width="17" height="3.2"/><text className="lbl-stn" x="963.8" y="166.4" textAnchor="start">Tottenham Court Rd</text></g>
-    <g><circle className="stn" cx="325.1" cy="278.9" r="8.5"/><rect className="stn-bar" x="316.6" y="277.3" width="17" height="3.2"/><text className="lbl-stn" x="325.1" y="304.9" textAnchor="middle">Oxford Circus</text></g>
-    <g><circle className="stn" cx="79.3" cy="376.9" r="8.5"/><rect className="stn-bar" x="70.8" y="375.3" width="17" height="3.2"/><text className="lbl-stn" x="79.3" y="402.9" textAnchor="middle">Bond Street</text></g>
-    <g><circle className="stn" cx="666.4" cy="778.6" r="8.5"/><rect className="stn-bar" x="657.9" y="777" width="17" height="3.2"/><text className="lbl-stn" x="666.4" y="804.6" textAnchor="middle">Piccadilly Circus</text></g>
-    <g><circle className="stn" cx="1017" cy="661.1" r="8.5"/><rect className="stn-bar" x="1008.5" y="659.5" width="17" height="3.2"/><text className="lbl-stn" x="1032" y="666.1" textAnchor="start">Leicester Square</text></g>
-    <g><circle className="stn" cx="1154.3" cy="504.3" r="8.5"/><rect className="stn-bar" x="1145.8" y="502.7" width="17" height="3.2"/><text className="lbl-stn" x="1139.3" y="509.3" textAnchor="end">Covent Garden</text></g>
-    <polygon className="base-star" points="829.1,242.2 834.7,256.6 850,257.4 838.1,267.2 842,282 829.1,273.7 816.1,282 820,267.2 808.2,257.4 823.5,256.6"/>
-    <text className="lbl-big" x="863.1" y="256.2">Soho Square</text>
-    <text className="lbl-place" x="863.1" y="278.2">Base camp — the hut · from 12 noon</text>
-    <text className="lbl-sub" x="863.1" y="298.2">Stops 1 and 2 regroup here</text>
-    <rect className="stop" x="706.7" y="518.7" width="30" height="30" transform="rotate(45 721.7 533.7)"/><text className="stop-n" x="721.7" y="539.7" textAnchor="middle">3</text>
-    <text className="lbl-big" x="681.7" y="535.7" textAnchor="end">St Anne&rsquo;s Churchyard</text>
-    <text className="lbl-sub" x="681.7" y="555.7" textAnchor="end">Stop 3 · 4.30–5.30pm</text>
-    <rect className="stop" x="651.4" y="763.6" width="30" height="30" transform="rotate(45 666.4 778.6)"/><text className="stop-n" x="666.4" y="784.6" textAnchor="middle">4</text>
-    <text className="lbl-big" x="666.4" y="826.6" textAnchor="middle">Eros · Piccadilly Circus</text>
-    <text className="lbl-sub" x="666.4" y="846.6" textAnchor="middle">Stop 4 · 6–7pm</text>
-    <circle className="spot" cx="568.2" cy="435.7" r="7"/>
-    <text className="lbl-big" x="548.2" y="411.7" textAnchor="end">Berwick Street Market</text>
-    <circle className="spot" cx="580.5" cy="465.1" r="7"/>
-    <text className="lbl-big" x="562.5" y="481.1" textAnchor="end">NQ64 arcade bar</text>
-    <text className="lbl-sub" x="562.5" y="499.1" textAnchor="end">Walk 2 finishes here</text>
-    <circle className="spot" cx="1163.9" cy="376.9" r="7"/>
-    <text className="lbl-big" x="1143.9" y="346.9" textAnchor="end">BloodSport</text>
-    <text className="lbl-sub" x="1143.9" y="366.9" textAnchor="end">Covent Garden · optional</text>
-    <text className="lbl-sub" x="75.3" y="420.9">Walk 2 turns round here</text>
-    <text className="lbl-sub" x="964.8" y="185.4">Most of us arrive here</text>
+    <desc id="map-desc">A schematic street map of Soho. Base camp is Soho Square, marked with a star, where check-in and stops 1 and 2 happen. Five numbered walks lead out of it: walk one loops south by Meard Street and back; walk two runs west along Oxford Street to Bond Street and back; walk three goes west to Berwick Street Market and south to St Anne&rsquo;s Churchyard; walk four goes south to Piccadilly Circus; and an optional fifth walk goes east by Leicester Square. The same route, with its times and a Google Maps link for each walk, is set out in the list below this map.</desc>
+    <rect className="grn" x="867.5" y="208.4" width="90" height="92.3"/>
+    <rect className="grn" x="992.8" y="721.3" width="77.1" height="61.6"/>
+    <rect className="grn" x="787.1" y="526.4" width="32.1" height="30.8"/>
+    <path className="rd-major" d="M127.4,372.5 L257.7,321.2 L384.8,270 L475,239.2 L710,208.4 L800,198.1 L890,177.6 L1037.8,146.8"/>
+    <path className="rd-major" d="M384.8,270 L441.6,413.6 L549.3,577.7 L671.4,721.3 L742.1,793.2"/>
+    <path className="rd-major" d="M742.1,793.2 L800,700.8 L838.5,608.5 L915.7,577.7 L1012.1,557.2 L1095.9,546.9 L1146,464.9"/>
+    <path className="rd-major" d="M1037.8,146.8 L1069.9,341.8 L1095.9,546.9 L1109.3,670 L1122.6,793.2"/>
+    <path className="rd-major" d="M710,208.4 L729.3,311 L742.1,382.8 L755,423.8 L774.3,485.4 L787.1,516.2 L806.4,546.9 L838.5,608.5"/>
+    <path className="rd-major" d="M800,198.1 L806.4,239.2 L819.3,311 L825.7,382.8 L838.5,485.4 L851.4,516.2 L890,588"/>
+    <path className="rd-major" d="M475,239.2 L581.4,290.5 L607.1,372.5 L632.9,423.8 L652.1,464.9 L665,495.6"/>
+    <path className="rd-major" d="M787.1,516.2 L851.4,516.2 L967.1,495.6 L1012.1,495.6 L1089.2,495.6"/>
+    <path className="rd-major" d="M960.7,290.5 L986.4,393.1 L1012.1,495.6 L1024.9,557.2"/>
+    <path className="rd-major" d="M928.5,290.5 L947.8,393.1 L967.1,495.6 L960.7,567.5"/>
+    <path className="rd-major" d="M475,423.8 L632.9,423.8 L755,423.8"/>
+    <path className="rd-major" d="M742.1,793.2 L883.5,772.6 L992.8,752.1"/>
+    <path className="rd-major" d="M1069.9,721.3 L1109.3,670"/>
+    <path className="rd-minor" d="M774.3,485.4 L838.5,485.4"/>
+    <path className="rd-minor" d="M742.1,382.8 L825.7,382.8"/>
+    <path className="rd-minor" d="M665,495.6 L748.5,485.4"/>
+    <path className="rd-minor" d="M806.4,239.2 L877.1,249.4"/>
+    <path className="rd-minor" d="M890,177.6 L909.2,218.7"/>
+    <text className="lbl-dist" x="210" y="500" textAnchor="middle">Mayfair</text>
+    <text className="lbl-dist" x="872" y="700" textAnchor="middle">Chinatown</text>
+    <path className="leg-case" d="M919.8,251.3 L936.2,288.1 L955.7,391.6 L976.4,502.1 L852.1,524.2 L781.8,524.2 L762.2,477.4 L829.5,477.4 L817.7,383.8 L797.1,229.7 L878.2,241.5 L913.6,246.6"/>
+    <path className="leg w1" d="M919.8,251.3 L936.2,288.1 L955.7,391.6 L976.4,502.1 L852.1,524.2 L781.8,524.2 L762.2,477.4 L829.5,477.4 L817.7,383.8 L797.1,229.7 L878.2,241.5 L913.6,246.6"/>
+    <path className="leg-case" d="M904.5,255.3 L901.4,220.8 L885.5,186.9 L801.3,206 L711,216.3 L476.8,247 L387.5,277.5 L260.7,328.7 L130.3,380"/>
+    <path className="leg w2" d="M904.5,255.3 L901.4,220.8 L885.5,186.9 L801.3,206 L711,216.3 L476.8,247 L387.5,277.5 L260.7,328.7 L130.3,380"/>
+    <path className="leg-case" d="M130.7,380.9 L261.1,329.6 L387.9,278.4 L477.1,248 L711.1,217.3 L801.5,207 L884.9,188 L900.4,221 L903.5,255.4"/>
+    <path className="leg w2" d="M130.7,380.9 L261.1,329.6 L387.9,278.4 L477.1,248 L711.1,217.3 L801.5,207 L884.9,188 L900.4,221 L903.5,255.4"/>
+    <path className="leg-case" d="M913.7,245.7 L878.4,240.5 L795.3,228.5 L810.3,312.2 L815.8,373.8 L729.9,373.8 L742.7,414.8 L616.6,414.8 L631.3,438.2 L643.8,468.3 L659.3,505.4 L749.1,494.4 L768.3,494.4 L779.1,520.3 L792.3,541.5"/>
+    <path className="leg w3" d="M913.7,245.7 L878.4,240.5 L795.3,228.5 L810.3,312.2 L815.8,373.8 L729.9,373.8 L742.7,414.8 L616.6,414.8 L631.3,438.2 L643.8,468.3 L659.3,505.4 L749.1,494.4 L768.3,494.4 L779.1,520.3 L792.3,541.5"/>
+    <path className="leg-case" d="M792.3,541.5 L798.6,551.4 L828.6,608.9 L792,696.7 L734.5,788.4"/>
+    <path className="leg w4" d="M792.3,541.5 L798.6,551.4 L828.6,608.9 L792,696.7 L734.5,788.4"/>
+    <path className="leg-case" d="M742.1,793.2 L883.5,772.6 L992.8,752.1 L1069.9,721.3 L1109.3,670 L1146,629"/>
+    <path className="leg w5" d="M742.1,793.2 L883.5,772.6 L992.8,752.1 L1069.9,721.3 L1109.3,670 L1146,629" strokeDasharray="14 10"/>
+    <text className="lbl-st" x="788.7" y="179.9" transform="rotate(-6.5 788.7 179.9)" style={{ fontSize: "18px" }}>Oxford Street</text>
+    <text className="lbl-st" x="628.9" y="675.8" transform="rotate(49.6 628.9 675.8)" style={{ fontSize: "15px" }}>Regent Street</text>
+    <text className="lbl-st" x="982" y="549.1" transform="rotate(-12 982 549.1)" style={{ fontSize: "15px" }}>Shaftesbury Avenue</text>
+    <text className="lbl-st" x="1063.2" y="305.7" transform="rotate(80.6 1063.2 305.7)" style={{ fontSize: "14px" }}>Charing Cross Rd</text>
+    <text className="lbl-st" x="724.1" y="268.9" transform="rotate(79.4 724.1 268.9)" style={{ fontSize: "14px" }}>Wardour St</text>
+    <text className="lbl-st" x="867" y="565.7" transform="rotate(61.8 867 565.7)" style={{ fontSize: "14px" }}>Dean St</text>
+    <text className="lbl-st" x="963.7" y="553.4" transform="rotate(-84.9 963.7 553.4)" style={{ fontSize: "13px" }}>Frith St</text>
+    <text className="lbl-st" x="991.3" y="417.4" transform="rotate(75.9 991.3 417.4)" style={{ fontSize: "13px" }}>Greek St</text>
+    <text className="lbl-st" x="566.9" y="270" transform="rotate(25.7 566.9 270)" style={{ fontSize: "14px" }}>Berwick St</text>
+    <text className="lbl-st" x="531" y="428.3" transform="rotate(0 531 428.3)" style={{ fontSize: "13px" }}>Broadwick St</text>
+    <text className="lbl-st" x="1046.7" y="515.1" transform="rotate(0 1046.7 515.1)" style={{ fontSize: "13px" }}>Old Compton St</text>
+    <text className="lbl-st" x="806.4" y="462.9" transform="rotate(0 806.4 462.9)" style={{ fontSize: "12px" }}>Meard St</text>
+    <text className="lbl-st" x="783.9" y="364.3" transform="rotate(0 783.9 364.3)" style={{ fontSize: "11px" }}>St Anne&rsquo;s Ct</text>
+    <text className="lbl-st" x="847.7" y="799.3" transform="rotate(-8.3 847.7 799.3)" style={{ fontSize: "12px" }}>Coventry St</text>
+    <text className="lbl-st" x="1089.6" y="686.2" transform="rotate(-52.5 1089.6 686.2)" style={{ fontSize: "11px" }}>Cranbourn St</text>
+    <text className="lbl-st" x="706.8" y="522" transform="rotate(-7 706.8 522)" style={{ fontSize: "11px" }}>Peter St</text>
+    <text className="lbl-st" x="841.7" y="234.8" transform="rotate(8.3 841.7 234.8)" style={{ fontSize: "11px" }}>Carlisle St</text>
+    <path className="arw w1" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(915.8 512.9) rotate(169.9)"/>
+    <path className="arw w1" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(818.8 392.6) rotate(-97.1)"/>
+    <circle className="walk-disc w1" cx="958.3" cy="405.5" r="16"/>
+    <text className="walk-n" x="958.3" y="412" textAnchor="middle">1</text>
+    <circle className="walk-disc w1" cx="841.6" cy="524.2" r="16"/>
+    <text className="walk-n" x="841.6" y="530.7" textAnchor="middle">1</text>
+    <circle className="walk-disc w1" cx="807.7" cy="308.7" r="16"/>
+    <text className="walk-n" x="807.7" y="315.2" textAnchor="middle">1</text>
+    <path className="arw w2" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(449.8 256.2) rotate(161.2)"/>
+    <circle className="walk-disc w2" cx="618.4" cy="228.5" r="16"/>
+    <text className="walk-n" x="618.4" y="235" textAnchor="middle">2</text>
+    <circle className="walk-disc w2" cx="289.7" cy="317" r="16"/>
+    <text className="walk-n" x="289.7" y="323.5" textAnchor="middle">2</text>
+    <path className="arw w2" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(257.9 330.8) rotate(-21.5)"/>
+    <path className="arw w2" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(532.8 240.7) rotate(-7.5)"/>
+    <circle className="walk-disc w2" cx="368.9" cy="286.1" r="16"/>
+    <text className="walk-n" x="368.9" y="292.6" textAnchor="middle">2</text>
+    <circle className="walk-disc w2" cx="702.3" cy="218.5" r="16"/>
+    <text className="walk-n" x="702.3" y="225" textAnchor="middle">2</text>
+    <path className="arw w3" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(752.8 373.8) rotate(180)"/>
+    <path className="arw w3" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(655.5 496.2) rotate(67.3)"/>
+    <circle className="walk-disc w3" cx="801.9" cy="265.2" r="16"/>
+    <text className="walk-n" x="801.9" y="271.7" textAnchor="middle">3</text>
+    <circle className="walk-disc w3" cx="706.6" cy="414.8" r="16"/>
+    <text className="walk-n" x="706.6" y="421.3" textAnchor="middle">3</text>
+    <circle className="walk-disc w3" cx="719.5" cy="498" r="16"/>
+    <text className="walk-n" x="719.5" y="504.5" textAnchor="middle">3</text>
+    <path className="arw w4" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(795.6 688) rotate(112.7)"/>
+    <circle className="walk-disc w4" cx="820.4" cy="628.6" r="16"/>
+    <text className="walk-n" x="820.4" y="635.1" textAnchor="middle">4</text>
+    <circle className="walk-disc w4" cx="764.2" cy="740.9" r="16"/>
+    <text className="walk-n" x="764.2" y="747.4" textAnchor="middle">4</text>
+    <path className="arw w5" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(886.8 772) rotate(-10.6)"/>
+    <path className="arw w5" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(1011.4 744.7) rotate(-21.8)"/>
+    <path className="arw w5" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(1127.7 649.4) rotate(-48.1)"/>
+    <circle className="walk-disc w5" cx="823.5" cy="781.3" r="16"/>
+    <text className="walk-n" x="823.5" y="787.8" textAnchor="middle">5</text>
+    <circle className="walk-disc w5" cx="945.1" cy="761.1" r="16"/>
+    <text className="walk-n" x="945.1" y="767.6" textAnchor="middle">5</text>
+    <circle className="walk-disc w5" cx="1062.3" cy="724.4" r="16"/>
+    <text className="walk-n" x="1062.3" y="730.9" textAnchor="middle">5</text>
+    <g><circle className="stn" cx="1037.8" cy="146.8" r="8.5"/><rect className="stn-bar" x="1029.3" y="145.2" width="17" height="3.2"/><text className="lbl-stn" x="1052.8" y="151.8" textAnchor="start">Tottenham Court Rd</text></g>
+    <g><circle className="stn" cx="384.8" cy="270" r="8.5"/><rect className="stn-bar" x="376.3" y="268.4" width="17" height="3.2"/><text className="lbl-stn" x="384.8" y="296" textAnchor="middle">Oxford Circus</text></g>
+    <g><circle className="stn" cx="127.4" cy="372.5" r="8.5"/><rect className="stn-bar" x="118.9" y="370.9" width="17" height="3.2"/><text className="lbl-stn" x="127.4" y="398.5" textAnchor="middle">Bond Street</text></g>
+    <g><circle className="stn" cx="742.1" cy="793.2" r="8.5"/><rect className="stn-bar" x="733.6" y="791.6" width="17" height="3.2"/><text className="lbl-stn" x="742.1" y="819.2" textAnchor="middle">Piccadilly Circus</text></g>
+    <g><circle className="stn" cx="1109.3" cy="670" r="8.5"/><rect className="stn-bar" x="1100.8" y="668.4" width="17" height="3.2"/><text className="lbl-stn" x="1109.3" y="696" textAnchor="middle">Leicester Square</text></g>
+    <polygon className="base-star" points="912.5,232.6 918,246.9 933.4,247.8 921.5,257.5 925.4,272.4 912.5,264.1 899.5,272.4 903.4,257.5 891.5,247.8 906.9,246.9"/>
+    <text className="lbl-big" x="946.5" y="246.6">Soho Square</text>
+    <text className="lbl-place" x="946.5" y="268.6">Base camp — the Hut</text>
+    <text className="lbl-sub" x="946.5" y="288.6">Check-in 12–1pm · stops 1 and 2</text>
+    <rect className="stop" x="785" y="521.7" width="30" height="30" transform="rotate(45 800 536.7)"/><text className="stop-n" x="800" y="542.7" textAnchor="middle">3</text>
+    <text className="lbl-big" x="760" y="538.7" textAnchor="end">St Anne&rsquo;s Churchyard</text>
+    <text className="lbl-sub" x="760" y="558.7" textAnchor="end">Stop 3 · 4.30–5.30pm</text>
+    <rect className="stop" x="727.1" y="778.2" width="30" height="30" transform="rotate(45 742.1 793.2)"/><text className="stop-n" x="742.1" y="799.2" textAnchor="middle">4</text>
+    <text className="lbl-big" x="742.1" y="841.2" textAnchor="middle">Eros Statue · Piccadilly Circus</text>
+    <text className="lbl-sub" x="742.1" y="861.2" textAnchor="middle">Stop 4 · 6–7pm</text>
+    <circle className="spot" cx="639.3" cy="434.1" r="7"/>
+    <text className="lbl-big" x="619.3" y="410.1" textAnchor="end">Berwick Street Market</text>
+    <text className="lbl-big" x="1152" y="599" textAnchor="end">To BloodSport</text>
+    <text className="lbl-sub" x="1152" y="619" textAnchor="end">Bonus, from 7pm</text>
+    <text className="lbl-sub" x="1053.8" y="170.8">Participants likely arrive here</text>
     <rect className="box" x="56" y="48" width="452" height="196"/>
     <rect className="box-in" x="64" y="56" width="436" height="180"/>
     <text className="cart-eyebrow" x="86" y="96">World Zombie Day: London</text>
     <text className="cart-title" x="84" y="152">The route</text>
-    <text className="cart-sub" x="86" y="186">Soho Square and back, five times over</text>
-    <text className="cart-sub" x="86" y="212">Saturday 10 October · 12 noon to 7pm</text>
+    <text className="cart-sub" x="86" y="186">Base camp: Soho Square</text>
+    <text className="cart-sub" x="86" y="212">Saturday 10 October · from 12 noon</text>
     <rect className="box" x="56" y="586" width="438" height="326"/>
     <rect className="box-in" x="64" y="594" width="422" height="310"/>
     <text className="key-title" x="84" y="630">Reading the map</text>
     <polygon className="base-star" points="100,648 103.3,656.5 112.4,657 105.3,662.7 107.6,671.5 100,666.6 92.4,671.5 94.7,662.7 87.6,657 96.7,656.5"/>
     <text className="key-t" x="140" y="666">Base camp — Soho Square (stops 1 and 2)</text>
     <rect className="stop" x="89" y="677" width="22" height="22" transform="rotate(45 100 688)"/>
-    <text className="key-t" x="140" y="693">A timed stop, numbered as on the schedule</text>
-    <path className="leg" d="M74,715 L126,715"/>
-    <circle className="walk-disc" cx="100" cy="715" r="13"/>
+    <text className="key-t" x="140" y="693">A timed stop, numbered as on the list</text>
+    <path className="leg w1" d="M74,715 L126,715"/>
+    <circle className="walk-disc w1" cx="100" cy="715" r="13"/>
     <text className="walk-n" x="100" y="720" textAnchor="middle" style={{ fontSize: "15px" }}>1</text>
-    <text className="key-t" x="140" y="720">Walk 1 · 1.15–1.45pm · Meard Street loop</text>
-    <path className="leg" d="M74,742 L126,742"/>
-    <circle className="walk-disc" cx="100" cy="742" r="13"/>
+    <text className="key-t" x="140" y="720">Walk 1 · 1.15–1.45pm · Meard St loop</text>
+    <path className="leg w2" d="M74,742 L126,742"/>
+    <circle className="walk-disc w2" cx="100" cy="742" r="13"/>
     <text className="walk-n" x="100" y="747" textAnchor="middle" style={{ fontSize: "15px" }}>2</text>
-    <text className="key-t" x="140" y="747">Walk 2 · 2–3pm · Oxford St, Bond St, NQ64</text>
-    <path className="leg" d="M74,769 L126,769"/>
-    <circle className="walk-disc" cx="100" cy="769" r="13"/>
+    <text className="key-t" x="140" y="747">Walk 2 · 2–3pm · Oxford St, Bond St, back</text>
+    <path className="leg w3" d="M74,769 L126,769"/>
+    <circle className="walk-disc w3" cx="100" cy="769" r="13"/>
     <text className="walk-n" x="100" y="774" textAnchor="middle" style={{ fontSize: "15px" }}>3</text>
     <text className="key-t" x="140" y="774">Walk 3 · 4–4.30pm · Market and churchyard</text>
-    <path className="leg" d="M74,796 L126,796"/>
-    <circle className="walk-disc" cx="100" cy="796" r="13"/>
+    <path className="leg w4" d="M74,796 L126,796"/>
+    <circle className="walk-disc w4" cx="100" cy="796" r="13"/>
     <text className="walk-n" x="100" y="801" textAnchor="middle" style={{ fontSize: "15px" }}>4</text>
-    <text className="key-t" x="140" y="801">Walk 4 · 5.30–6pm · Down to Piccadilly</text>
-    <path className="leg" d="M74,823 L126,823" strokeDasharray="14 10"/>
-    <circle className="walk-disc" cx="100" cy="823" r="13"/>
+    <text className="key-t" x="140" y="801">Walk 4 · 5.30–6pm · To Piccadilly Circus</text>
+    <path className="leg w5" d="M74,823 L126,823" strokeDasharray="14 10"/>
+    <circle className="walk-disc w5" cx="100" cy="823" r="13"/>
     <text className="walk-n" x="100" y="828" textAnchor="middle" style={{ fontSize: "15px" }}>5</text>
-    <text className="key-t" x="140" y="828">Walk 5 · from 7pm · BloodSport (optional)</text>
-    <path className="ret" d="M74,850 L126,850"/>
-    <text className="key-t" x="140" y="855">The way back to base camp</text>
-    <circle className="stn" cx="100" cy="877" r="11"/>
-    <rect className="stn-bar" x="89" y="875" width="22" height="4"/>
-    <text className="key-t" x="140" y="882">Underground station</text>
-    <rect className="scale-a" x="968" y="856" width="88.6" height="7"/>
-    <rect className="scale-b" x="1056.6" y="856" width="88.6" height="7"/>
+    <text className="key-t" x="140" y="828">Walk 5 · from 7pm · To BloodSport (optional)</text>
+    <circle className="stn" cx="100" cy="850" r="11"/>
+    <rect className="stn-bar" x="89" y="848" width="22" height="4"/>
+    <text className="key-t" x="140" y="855">Underground station</text>
+    <rect className="scale-a" x="968" y="856" width="92.8" height="7"/>
+    <rect className="scale-b" x="1060.8" y="856" width="92.8" height="7"/>
     <text className="lbl-sub" x="968" y="847">0</text>
-    <text className="lbl-sub" x="1145.2" y="847" textAnchor="end">200 m</text>
+    <text className="lbl-sub" x="1153.6" y="847" textAnchor="end">200 m</text>
     <text className="lbl-sub" x="968" y="881">True in Soho. Walks 2 and 5 reach</text>
-    <text className="lbl-sub" x="968" y="899">further than the map shows.</text>
+    <text className="lbl-sub" x="968" y="899">further than the plate shows.</text>
     <circle className="compass" cx="1178" cy="120" r="30"/>
     <polygon className="compass-n" points="1178,88 1168,132 1178,124 1188,132"/>
     <text className="compass-t" x="1178" y="80" textAnchor="middle">N</text>

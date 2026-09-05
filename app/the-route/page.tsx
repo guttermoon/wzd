@@ -38,23 +38,25 @@ export const metadata: Metadata = {
 /**
  * The legs, in order, keyed by the copy rows that describe them.
  *
- * `walk` puts the red rule down the side: it marks the rows where the
- * horde is actually moving, so the shape of the day — out, back, sit
- * down, out again — is visible before a word of it is read.
+ * A row with a `w` is a walk, and takes that walk's own colour down its
+ * left edge — the same colour its line, its numbers and its key entry
+ * carry on the map, so the two can be read against each other. The rows
+ * without one are the stops, and they are the ones with no rule: the
+ * shape of the day is then visible before a word of it is read.
  */
 const DAY = [
-  { key: "arrive", kind: "plain" as const },
-  { key: "prepare", kind: "plain" as const },
-  { key: "walk1", kind: "walk" as const },
-  { key: "stop1", kind: "plain" as const },
-  { key: "walk2", kind: "walk" as const },
-  { key: "stop2", kind: "plain" as const },
-  { key: "walk3", kind: "walk" as const },
-  { key: "stop3", kind: "plain" as const },
-  { key: "walk4", kind: "walk" as const },
-  { key: "stop4", kind: "plain" as const },
-  { key: "bonus", kind: "walk" as const },
-]
+  { key: "arrive" },
+  { key: "prepare" },
+  { key: "walk1", w: "1" },
+  { key: "stop1" },
+  { key: "walk2", w: "2" },
+  { key: "stop2" },
+  { key: "walk3", w: "3" },
+  { key: "stop3" },
+  { key: "walk4", w: "4" },
+  { key: "stop4" },
+  { key: "bonus", w: "5" },
+] as { key: string; w?: string }[]
 
 export default async function TheRoutePage() {
   const copy = await getSiteCopy()
@@ -151,15 +153,15 @@ export default async function TheRoutePage() {
                   key={d.key}
                   className={[
                     "border-b border-edge p-5 last:border-b-0 sm:grid sm:grid-cols-[9.5rem_1fr] sm:gap-x-6 sm:p-6",
-                    // The red rule marks the rows where the horde is
-                    // moving. Nothing is tinted: the site carries
-                    // structure in rules and shapes, never in bands of
-                    // tone, and one row in a different ground would be the
-                    // only place on the site that broke that.
-                    d.kind === "walk" ? "border-l-[6px] border-l-accent" : "",
+                    // Nothing is tinted: the site carries structure in
+                    // rules and shapes, never in bands of tone, and one
+                    // row on a different ground would be the only place on
+                    // the site that broke that.
+                    d.w ? "border-l-[6px]" : "",
                   ]
                     .filter(Boolean)
                     .join(" ")}
+                  style={d.w ? { borderLeftColor: `var(--w${d.w})` } : undefined}
                 >
                   <div className="font-body text-sm font-bold tabular-nums">
                     <T k={`route.${d.key}.when`} />
@@ -191,9 +193,6 @@ export default async function TheRoutePage() {
             </ol>
           </Section>
 
-          <Section title={<T k="route.lost.title" />}>
-            <P k="route.lost.body" className="prose-wzd font-body" />
-          </Section>
         </>
       )}
     </PageShell>

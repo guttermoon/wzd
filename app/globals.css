@@ -59,11 +59,18 @@
 
   /* The route map's street grid and its open ground. */
   --road: #9c9184; /* 3.10:1 on paper — the grid carries meaning */
-  /* The route line itself. It reads as the brand's red at a glance while
-     staying far enough from --road in lightness that the two never blur
-     into each other — a line and a street have to differ by more than
-     hue, or nobody with a colour vision deficiency can follow the walk. */
-  --route: #b03a2e;
+  /* One colour per walk, so a leg can be traced by eye across a map that
+     five of them cross. Each clears 4.5:1 on its own ground, because each
+     carries a numeral set in the ground's colour; each is a hue the street
+     grid is not, so a route is never mistaken for a road. Colour is never
+     the only difference — every walk carries its number, on the line and
+     in the key — because five hues cannot be told apart by every reader,
+     and 1.4.1 is not satisfied by a palette however careful. */
+  --w1: #a83226; /* 6.60:1 on paper */
+  --w2: #0f5a66; /* 7.78:1 */
+  --w3: #5f7d18; /* 4.69:1 */
+  --w4: #4a2261; /* 12.29:1 */
+  --w5: #96540a; /* 5.83:1 */
   --open-ground: #efe3d2;
 
   --radius: 0rem;
@@ -91,8 +98,11 @@
   --border: #8f8f8f; /* 5.38:1 */
   --focus: #7fb2ff;
   --road: #6f6f6f; /* 3.19:1 on ink */
-  --route: #e74c3c; /* Zombie Red proper here: 4.56:1 on ink, and a
-    drawn line rather than type, so the display-only rule is satisfied */
+  --w1: #ff8a7a; /* 7.60:1 on ink */
+  --w2: #49b9cc; /* 7.54:1 */
+  --w3: #c8dc6b; /* 11.52:1 */
+  --w4: #c288e0; /* 6.54:1 */
+  --w5: #e2a94f; /* 8.31:1 */
   --open-ground: #39352f;
 }
 
@@ -241,11 +251,24 @@
   }
   .leg {
     fill: none;
-    stroke: var(--route);
     stroke-width: 7;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
+
+  /* The walk's own colour, taken by its line, its arrows and its numbered
+     discs alike — including the swatch in the key, which uses the same
+     classes so the legend cannot fall out of step with the map. */
+  .w1 { stroke: var(--w1); }
+  .w2 { stroke: var(--w2); }
+  .w3 { stroke: var(--w3); }
+  .w4 { stroke: var(--w4); }
+  .w5 { stroke: var(--w5); }
+  .arw.w1, .walk-disc.w1 { fill: var(--w1); }
+  .arw.w2, .walk-disc.w2 { fill: var(--w2); }
+  .arw.w3, .walk-disc.w3 { fill: var(--w3); }
+  .arw.w4, .walk-disc.w4 { fill: var(--w4); }
+  .arw.w5, .walk-disc.w5 { fill: var(--w5); }
   .ret {
     fill: none;
     stroke: var(--muted);
@@ -253,15 +276,15 @@
     stroke-dasharray: 2 7;
     stroke-linecap: round;
   }
-  .arw { fill: var(--route); stroke: var(--bg); stroke-width: 1.5; }
+  .arw { stroke: var(--bg); stroke-width: 1.5; }
 
   /* Walks are discs and stops are diamonds, and both carry their number.
      Shape and number, not colour: five legs cannot be told apart by hue
      in a palette of one red, and a map that needed you to see colour to
      use it would fail 1.4.1 whatever the palette. */
-  .walk-disc { fill: var(--accent-strong); stroke: var(--bg); stroke-width: 3; }
+  .walk-disc { stroke: var(--bg); stroke-width: 3; }
   .walk-n {
-    fill: var(--on-accent);
+    fill: var(--bg);
     font-family: var(--font-display), "Arial Black", Impact, sans-serif;
     font-weight: 700;
     font-size: 18px;
