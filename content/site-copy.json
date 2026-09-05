@@ -329,6 +329,7 @@
   "route.locked.working": "Checking…",
   "route.locked.wrong": "That isn’t the password. Check the email we sent when you registered.",
   "route.locked.problem": "Something went wrong at our end. Try again in a moment.",
+  "route.locked.busy": "Too many tries from your connection. Wait about ten minutes and try again.",
   "route.locked.unconfigured": "The route isn’t up yet. It goes out to everyone who has registered as soon as it is.",
   "route.confidential.label": "Strictly confidential",
   "route.confidential.body": "& subject to change. Please don’t forward this page or post it anywhere.",

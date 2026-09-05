@@ -89,6 +89,7 @@ export default async function TheRoutePage() {
                 working={S("route.locked.working")}
                 wrong={S("route.locked.wrong")}
                 problem={S("route.locked.problem")}
+                busy={S("route.locked.busy")}
                 unconfigured={S("route.locked.unconfigured")}
               />
             ) : (

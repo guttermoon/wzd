@@ -31,6 +31,13 @@ import type { JSX } from "react"
  * map. Colour is never the only difference: every walk carries its number
  * too, because five hues are not five distinctions for every reader.
  *
+ * **No times are drawn on it.** The running order below takes its times
+ * from Notion, and a drawing cannot; baking them in here meant an owner
+ * correcting a time on the morning of the walk would leave the page
+ * contradicting itself, on the one page most likely to get that
+ * correction. The map carries the shape and the numbers, the list carries
+ * the clock, and there is one source for each.
+ *
  * The route is carried twice over: once as this drawing, and once as the
  * running order beneath it. The drawing is `role="img"` with a title and
  * a description, and the description points at that list rather than
@@ -69,8 +76,8 @@ export function RouteMap(): JSX.Element {
     <path className="rd-minor" d="M1005.6,464.9 L947.8,475.1"/>
     <text className="lbl-dist" x="210" y="500" textAnchor="middle">Mayfair</text>
     <text className="lbl-dist" x="872" y="700" textAnchor="middle">Chinatown</text>
-    <path className="leg-case" d="M917.2,248.1 L967.7,285.8 L994.1,391 L1015.6,471.2 L960.9,480.9 L974.3,502.4 L847.2,514.3 L834.1,493.4 L768.4,493.4 L747.2,425.9 L721.4,312.6 L706.9,231.2 L807,231.2 L878.2,241.5 L913.6,246.6"/>
-    <path className="leg w1" d="M917.2,248.1 L967.7,285.8 L994.1,391 L1015.6,471.2 L960.9,480.9 L974.3,502.4 L847.2,514.3 L834.1,493.4 L768.4,493.4 L747.2,425.9 L721.4,312.6 L706.9,231.2 L807,231.2 L878.2,241.5 L913.6,246.6"/>
+    <path className="leg-case" d="M917.2,248.1 L967.5,285.6 L994,370.1 L1016.1,440.5 L943.4,452.1 L886.5,472.3 L840.3,493.4 L768.4,493.4 L747.2,425.9 L721.4,312.6 L706.9,231.2 L807,231.2 L878.2,241.5 L913.6,246.6"/>
+    <path className="leg w1" d="M917.2,248.1 L967.5,285.6 L994,370.1 L1016.1,440.5 L943.4,452.1 L886.5,472.3 L840.3,493.4 L768.4,493.4 L747.2,425.9 L721.4,312.6 L706.9,231.2 L807,231.2 L878.2,241.5 L913.6,246.6"/>
     <path className="leg-case" d="M904.5,255.3 L901.4,220.8 L885.5,186.9 L801.3,206 L711,216.3 L476.8,247 L387.5,277.5 L260.7,328.7 L130.3,380"/>
     <path className="leg w2" d="M904.5,255.3 L901.4,220.8 L885.5,186.9 L801.3,206 L711,216.3 L476.8,247 L387.5,277.5 L260.7,328.7 L130.3,380"/>
     <path className="leg-case" d="M130.7,380.9 L261.1,329.6 L387.9,278.4 L477.1,248 L711.1,217.3 L801.5,207 L884.9,188 L900.4,221 L903.5,255.4"/>
@@ -100,14 +107,14 @@ export function RouteMap(): JSX.Element {
     <text className="lbl-st" x="841.7" y="234.8" transform="rotate(8.3 841.7 234.8)" style={{ fontSize: "11px" }}>Carlisle St</text>
     <text className="lbl-st" x="645.7" y="274.8" transform="rotate(-4.6 645.7 274.8)" style={{ fontSize: "11px" }}>Noel St</text>
     <text className="lbl-st" x="976.7" y="460.5" transform="rotate(-10.1 976.7 460.5)" style={{ fontSize: "10px" }}>Bateman St</text>
-    <path className="arw w1" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(959.3 503.8) rotate(174.6)"/>
-    <path className="arw w1" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(725.6 330.9) rotate(-102.8)"/>
-    <circle className="walk-disc w1" cx="995.1" cy="394.7" r="16"/>
-    <text className="walk-n" x="995.1" y="401.2" textAnchor="middle">1</text>
-    <circle className="walk-disc w1" cx="877.2" cy="511.5" r="16"/>
-    <text className="walk-n" x="877.2" y="518" textAnchor="middle">1</text>
-    <circle className="walk-disc w1" cx="708.4" cy="239.7" r="16"/>
-    <text className="walk-n" x="708.4" y="246.2" textAnchor="middle">1</text>
+    <path className="arw w1" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(917.5 461.3) rotate(160.5)"/>
+    <path className="arw w1" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(720.9 309.8) rotate(-100.1)"/>
+    <circle className="walk-disc w1" cx="997.5" cy="381.4" r="16"/>
+    <text className="walk-n" x="997.5" y="387.9" textAnchor="middle">1</text>
+    <circle className="walk-disc w1" cx="846.6" cy="490.5" r="16"/>
+    <text className="walk-n" x="846.6" y="497" textAnchor="middle">1</text>
+    <circle className="walk-disc w1" cx="713.3" cy="231.2" r="16"/>
+    <text className="walk-n" x="713.3" y="237.7" textAnchor="middle">1</text>
     <path className="arw w2" d="M-9,-6.5 L10,0 L-9,6.5 Z" transform="translate(449.8 256.2) rotate(161.2)"/>
     <circle className="walk-disc w2" cx="618.4" cy="228.5" r="16"/>
     <text className="walk-n" x="618.4" y="235" textAnchor="middle">2</text>
@@ -149,51 +156,51 @@ export function RouteMap(): JSX.Element {
     <polygon className="base-star" points="912.5,232.6 918,246.9 933.4,247.8 921.5,257.5 925.4,272.4 912.5,264.1 899.5,272.4 903.4,257.5 891.5,247.8 906.9,246.9"/>
     <text className="lbl-big" x="946.5" y="246.6">Soho Square</text>
     <text className="lbl-place" x="946.5" y="268.6">Base camp — the Hut</text>
-    <text className="lbl-sub" x="946.5" y="288.6">Check-in 12–1pm · stops 1 and 2</text>
+    <text className="lbl-sub" x="946.5" y="288.6">Check-in · stops 1 and 2</text>
     <rect className="stop" x="785" y="521.7" width="30" height="30" transform="rotate(45 800 536.7)"/><text className="stop-n" x="800" y="542.7" textAnchor="middle">3</text>
     <text className="lbl-big" x="760" y="538.7" textAnchor="end">St Anne&rsquo;s Churchyard</text>
-    <text className="lbl-sub" x="760" y="558.7" textAnchor="end">Stop 3 · 4.30–5.30pm</text>
+    <text className="lbl-sub" x="760" y="558.7" textAnchor="end">Stop 3</text>
     <rect className="stop" x="727.1" y="778.2" width="30" height="30" transform="rotate(45 742.1 793.2)"/><text className="stop-n" x="742.1" y="799.2" textAnchor="middle">4</text>
     <text className="lbl-big" x="742.1" y="841.2" textAnchor="middle">Eros Statue · Piccadilly Circus</text>
-    <text className="lbl-sub" x="742.1" y="861.2" textAnchor="middle">Stop 4 · 6–7pm</text>
+    <text className="lbl-sub" x="742.1" y="861.2" textAnchor="middle">Stop 4</text>
     <circle className="spot" cx="639.3" cy="434.1" r="7"/>
     <text className="lbl-big" x="619.3" y="410.1" textAnchor="end">Berwick Street Market</text>
     <text className="lbl-big" x="1152" y="599" textAnchor="end">To BloodSport</text>
-    <text className="lbl-sub" x="1152" y="619" textAnchor="end">Bonus, from 7pm</text>
+    <text className="lbl-sub" x="1152" y="619" textAnchor="end">Bonus, and optional</text>
     <text className="lbl-sub" x="1053.8" y="170.8">Participants likely arrive here</text>
     <rect className="box" x="56" y="48" width="452" height="196"/>
     <rect className="box-in" x="64" y="56" width="436" height="180"/>
     <text className="cart-eyebrow" x="86" y="96">World Zombie Day: London</text>
     <text className="cart-title" x="84" y="152">The route</text>
     <text className="cart-sub" x="86" y="186">Base camp: Soho Square</text>
-    <text className="cart-sub" x="86" y="212">Saturday 10 October · from 12 noon</text>
+    <text className="cart-sub" x="86" y="212">Saturday 10 October</text>
     <rect className="box" x="56" y="586" width="438" height="326"/>
     <rect className="box-in" x="64" y="594" width="422" height="310"/>
     <text className="key-title" x="84" y="630">Reading the map</text>
     <polygon className="base-star" points="100,648 103.3,656.5 112.4,657 105.3,662.7 107.6,671.5 100,666.6 92.4,671.5 94.7,662.7 87.6,657 96.7,656.5"/>
     <text className="key-t" x="140" y="666">Base camp — Soho Square (stops 1 and 2)</text>
     <rect className="stop" x="89" y="677" width="22" height="22" transform="rotate(45 100 688)"/>
-    <text className="key-t" x="140" y="693">A timed stop, numbered as on the list</text>
+    <text className="key-t" x="140" y="693">A timed stop. Times are on the list below.</text>
     <path className="leg w1" d="M74,715 L126,715"/>
     <circle className="walk-disc w1" cx="100" cy="715" r="13"/>
     <text className="walk-n" x="100" y="720" textAnchor="middle" style={{ fontSize: "15px" }}>1</text>
-    <text className="key-t" x="140" y="720">Walk 1 · 1.15–1.45pm · Meard St loop</text>
+    <text className="key-t" x="140" y="720">Walk 1 — Meard St loop</text>
     <path className="leg w2" d="M74,742 L126,742"/>
     <circle className="walk-disc w2" cx="100" cy="742" r="13"/>
     <text className="walk-n" x="100" y="747" textAnchor="middle" style={{ fontSize: "15px" }}>2</text>
-    <text className="key-t" x="140" y="747">Walk 2 · 2–3pm · Oxford St, Bond St, back</text>
+    <text className="key-t" x="140" y="747">Walk 2 — Oxford St to Bond St, and back</text>
     <path className="leg w3" d="M74,769 L126,769"/>
     <circle className="walk-disc w3" cx="100" cy="769" r="13"/>
     <text className="walk-n" x="100" y="774" textAnchor="middle" style={{ fontSize: "15px" }}>3</text>
-    <text className="key-t" x="140" y="774">Walk 3 · 4–4.30pm · Market and churchyard</text>
+    <text className="key-t" x="140" y="774">Walk 3 — market and churchyard</text>
     <path className="leg w4" d="M74,796 L126,796"/>
     <circle className="walk-disc w4" cx="100" cy="796" r="13"/>
     <text className="walk-n" x="100" y="801" textAnchor="middle" style={{ fontSize: "15px" }}>4</text>
-    <text className="key-t" x="140" y="801">Walk 4 · 5.30–6pm · To Piccadilly Circus</text>
+    <text className="key-t" x="140" y="801">Walk 4 — to Piccadilly Circus</text>
     <path className="leg w5" d="M74,823 L126,823" strokeDasharray="14 10"/>
     <circle className="walk-disc w5" cx="100" cy="823" r="13"/>
     <text className="walk-n" x="100" y="828" textAnchor="middle" style={{ fontSize: "15px" }}>5</text>
-    <text className="key-t" x="140" y="828">Walk 5 · from 7pm · To BloodSport (optional)</text>
+    <text className="key-t" x="140" y="828">Walk 5 — to BloodSport (optional)</text>
     <circle className="stn" cx="100" cy="850" r="11"/>
     <rect className="stn-bar" x="89" y="848" width="22" height="4"/>
     <text className="key-t" x="140" y="855">Underground station</text>

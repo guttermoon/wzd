@@ -22,6 +22,7 @@ export function RouteUnlock({
   wrong,
   problem,
   unconfigured,
+  busy,
 }: {
   label: string
   button: string
@@ -29,9 +30,12 @@ export function RouteUnlock({
   wrong: string
   problem: string
   unconfigured: string
+  busy: string
 }) {
   const [value, setValue] = useState("")
-  const [state, setState] = useState<"idle" | "sending" | "wrong" | "error" | "unset">("idle")
+  const [state, setState] = useState<
+    "idle" | "sending" | "wrong" | "error" | "unset" | "busy"
+  >("idle")
 
   async function submit(event: React.FormEvent) {
     event.preventDefault()
@@ -48,14 +52,36 @@ export function RouteUnlock({
         window.location.reload()
         return
       }
-      setState(response.status === 503 ? "unset" : response.status === 401 ? "wrong" : "error")
+      // 429 gets its own message. Told "something went wrong, try again in
+      // a moment", someone who has hit the attempt cap will keep trying and
+      // keep failing, because the one thing that helps is waiting — and the
+      // limit is per instance, so retrying looks random rather than
+      // deliberate. Saying so is the difference between a wait and a page
+      // that appears to be broken.
+      setState(
+        response.status === 503
+          ? "unset"
+          : response.status === 401
+            ? "wrong"
+            : response.status === 429
+              ? "busy"
+              : "error",
+      )
     } catch {
       setState("error")
     }
   }
 
   const message =
-    state === "wrong" ? wrong : state === "unset" ? unconfigured : state === "error" ? problem : ""
+    state === "wrong"
+      ? wrong
+      : state === "unset"
+        ? unconfigured
+        : state === "busy"
+          ? busy
+          : state === "error"
+            ? problem
+            : ""
 
   return (
     <form onSubmit={submit} className="mt-6 max-w-sm">

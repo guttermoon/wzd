@@ -8,7 +8,7 @@ import {
   mintToken,
   passwordMatches,
 } from "@/lib/route-access"
-import { callerKey, rateLimit } from "@/lib/rate-limit"
+import { callerKey, rateLimit, resetRateLimit } from "@/lib/rate-limit"
 
 /**
  * Takes the password for /the-route and, if it is right, hands back the
@@ -42,10 +42,11 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const limit = rateLimit(callerKey(request, "route-access"), {
-    limit: ATTEMPTS,
-    windowMs: WINDOW_MS,
-  })
+  // Charged up front, because the password cannot be tested before the
+  // caller is allowed to submit it — then refunded below if the answer
+  // was right. Only wrong answers accumulate.
+  const caller = callerKey(request, "route-access")
+  const limit = rateLimit(caller, { limit: ATTEMPTS, windowMs: WINDOW_MS })
   if (!limit.ok) {
     return NextResponse.json(
       { message: "Too many attempts. Try again shortly." },
@@ -63,6 +64,14 @@ export async function POST(request: NextRequest) {
   if (!(await passwordMatches(body.password))) {
     return NextResponse.json({ message: "Wrong password." }, { status: 401 })
   }
+
+  // The answer was right, so this caller has spent nothing. The key is an
+  // address rather than a person — a carrier NAT or a venue's wi-fi puts
+  // every registrant on it behind one — and they all open the same email
+  // within the same few minutes. Without this the eleventh person to type
+  // the password correctly would be turned away for ten minutes by the
+  // ten who got there first.
+  resetRateLimit(caller)
 
   const token = await mintToken()
   if (!token) {

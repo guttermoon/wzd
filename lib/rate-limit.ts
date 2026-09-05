@@ -104,6 +104,26 @@ export function rateLimit(
 }
 
 /**
+ * Forget a caller's window entirely.
+ *
+ * For a limit that guards a secret rather than a cost: the check has to
+ * happen before the secret can be tested, so a correct answer has already
+ * been charged for by the time it is known to be correct. Clearing the
+ * window then means only wrong answers accumulate, which is the behaviour
+ * that was wanted — a brake on guessing that never falls on the people
+ * who know the password.
+ *
+ * That matters because the key is an address, not a person. Registrants
+ * arrive on mobile networks and venue wi-fi, where hundreds share one
+ * public address, and they all open the same email at once. Charging
+ * their successes to a shared bucket would lock out the eleventh person
+ * to get it right.
+ */
+export function resetRateLimit(key: string): void {
+  windows.delete(key)
+}
+
+/**
  * Who is asking, as well as that can be known.
  *
  * `x-forwarded-for` is set by Vercel's edge for requests that arrive
