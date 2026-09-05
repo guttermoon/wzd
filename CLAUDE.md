@@ -189,6 +189,71 @@ is a trap nobody needs.
 
 Revalidation is 60s. `POST /api/revalidate` with the secret to force it.
 
+## /the-route is gated, and fails shut
+
+`/the-route` is the running order and the map, and it is the one page on
+the site behind a password (`ROUTE_PASSWORD`). It names the meeting point,
+which `home.essentials.where.value` promises goes out to people who
+register — so publishing it openly would break a promise the home page
+makes.
+
+The gate is real rather than decorative: the page is a server component
+that renders the running order **only** for a request whose cookie
+verifies, so nothing behind it is ever sent to a browser that has not
+answered. There is no client-side check to step over.
+
+- `lib/route-access.ts` mints and verifies the cookie. What the visitor
+  holds is not the password but a signed note — an expiry plus an HMAC of
+  it, keyed on the password — so a stolen cookie does not hand over the
+  password, and changing `ROUTE_PASSWORD` revokes every note ever issued.
+  Web Crypto throughout, not `node:crypto`, so one implementation serves
+  a server component, a route handler and the edge alike.
+- **With no password set the page stays shut.** An unconfigured deploy
+  must not be the way the meeting point gets out, so this fails closed —
+  the opposite way round from a feature flag.
+- `POST /api/route-access` takes the password. Rate limited like the two
+  mail routes, for a different reason: this secret has to be short enough
+  to read out at a check-in desk, so a cap on attempts is most of what
+  stands between it and a word list. Both sides are hashed before they
+  are compared, so a wrong answer costs the same time whatever its
+  length.
+- The page is `force-dynamic` and `noindex`. It cannot be static — it
+  answers differently for two visitors — and an indexed password form
+  advertises both that the page exists and what is behind it.
+- It is in `UNLISTED_NAV`, not the footer: a link to it would tell any
+  reader the meeting point is one password away. It is listed there so
+  `/api/revalidate` can still reach it, because the page most likely to
+  need a correction on the morning of the walk must not be the one page
+  that cannot get one.
+
+The map is `components/route-map.tsx` — inline SVG, generated from real
+latitudes and longitudes, taking its colours from the theme's own
+variables. **Everything on it and on the page comes from what the owner
+actually supplied** — the times, the place names and the six Google Maps
+links. There are no distances, no walking times and no street-by-street
+narrative, because none were given: the map says on its face that the
+streets within each walk are indicative and that the Maps link is the
+route. Walk 5's far end is an arrow off the edge of the plate under a
+label, not a pin, because BloodSport's address was never supplied and a
+pin would be a guess drawn in the same ink as a fact. Its rules are in `app/globals.css` under "the route map". Three
+things there are load-bearing:
+
+- **One colour per walk** (`--w1`..`--w5`), grey for the street grid, ink
+  for base camp and the timed stops. Each walk colour clears 4.5:1 on its
+  own ground, because each carries a numeral set in the ground's colour,
+  and each is a hue the grid is not, so a route is never mistaken for a
+  road. The same `w1`..`w5` classes drive the line, its arrows, its discs,
+  its entry in the key and the rule down its row in the running order —
+  one class, so the list and the map can never disagree.
+- **Colour is never the only difference.** Walks are numbered discs, stops
+  are numbered diamonds, and every walk carries its number on the line as
+  well as in the key. Five hues are not five distinctions for every
+  reader, and 1.4.1 is not satisfied by a palette however carefully it is
+  measured.
+- `--road` is held at 3:1 against each ground. The grid is information —
+  it is what tells a reader which way round Soho they are looking — not
+  texture.
+
 ## Photographs — credit is enforced, not conventional
 
 The owner's standing instruction is that **every photograph is published

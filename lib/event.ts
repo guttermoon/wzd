@@ -61,6 +61,27 @@ export const EVENT = {
    * display face and is not shipped — the lock-up carries its letterforms
    * as paths — so these are the two a journalist can actually get.
    */
+  /**
+   * The walking route, leg by leg. These are the built-in destinations for
+   * the buttons on /the-route, so the page is right with no Notion at all,
+   * exactly as every other button on the site is; the row's `URL` field
+   * still overrides, which is how the owner repoints a leg when the route
+   * changes without waiting for a deploy.
+   */
+  route: {
+    /** Base camp, for the check-in row. */
+    arrive: "https://maps.app.goo.gl/TX8nCKRAZE1NUdVJA",
+    /** Where most people arrive from, for "Getting there". A different
+     *  place from base camp, so a different link — these two were the
+     *  same address for a while and the check-in row was pointing at the
+     *  station under the words "Soho Square". */
+    station: "https://maps.app.goo.gl/PdxBFN8gpfAZLuNz7",
+    walk1: "https://maps.app.goo.gl/tZgNss8E15NzXtPj7",
+    walk2: "https://maps.app.goo.gl/gdUa7zzARV4mZtEE9",
+    walk3: "https://maps.app.goo.gl/1wZdxgZkGZoV7Foh8",
+    walk4: "https://maps.app.goo.gl/Eqgjr8UBWD6SahpL7",
+    bonus: "https://maps.app.goo.gl/VKh53xof81Q8MZjz6",
+  } as Record<string, string>,
   fonts: {
     display: "https://fonts.google.com/specimen/Grandstander",
     text: "https://fonts.google.com/specimen/Raleway",
@@ -114,4 +135,13 @@ export const LEGAL_NAV = [{ name: "Privacy", href: "/privacy" }] as const
  */
 export const UNLISTED_NAV = [
   { name: "Newsletter confirmed", href: "/confirmed" },
+  /**
+   * The running order, behind a password. Unlisted for the same reason it
+   * is gated: it names the meeting point, and a link to it in the footer
+   * would tell anyone reading that the meeting point is one password away.
+   * Listed here so `POST /api/revalidate` can still push a correction to
+   * it — the page whose copy is most likely to need fixing in a hurry, on
+   * the morning of the walk, must not be the one page that cannot be.
+   */
+  { name: "The route", href: "/the-route" },
 ] as const

@@ -48,6 +48,32 @@ export default async function PressPage() {
   const photoFolder = link("press.photos")
   const pressRelease = link("press.release")
 
+  // The download buttons for the files in public/brand. Unlike every other
+  // button on the site these are not <Cta>s: the paths are assembled by
+  // `npm run logos` and belong to the build, so only the words are the
+  // owner's. The rest of the bargain still holds, though — a row cleared to
+  // nothing takes its own button with it, and a group whose rows are all
+  // empty does not leave a flex row holding open a margin.
+  const Downloads = ({
+    files,
+    className = "",
+  }: {
+    files: [key: string, href: string][]
+    className?: string
+  }) => {
+    const live = files.filter(([key]) => has(key))
+    if (live.length === 0) return null
+    return (
+      <p className={`flex flex-wrap gap-3 ${className}`.trim()}>
+        {live.map(([key, href]) => (
+          <a key={key} href={href} download className="btn btn-secondary">
+            <T k={key} />
+          </a>
+        ))}
+      </p>
+    )
+  }
+
   return (
     <PageShell
       title={<T k="press.title" />}
@@ -103,22 +129,26 @@ export default async function PressPage() {
 
       <Section title={<T k="press.logo.title" />}>
         <P k="press.logo.body" className="prose-wzd font-body" />
-        <BrandKit />
         {/* The supplied artwork itself, copied into public/brand by
             `npm run logos` and never resized or recoloured. The lock-up
             comes twice because it was drawn twice: one version for light
-            grounds and one for dark. */}
-        <p className="mt-6 flex flex-wrap gap-3">
-          <a href="/brand/wordmark-light-bg.png" download className="btn btn-secondary">
-            <T k="press.logo.download.light" />
-          </a>
-          <a href="/brand/wordmark-dark-bg.png" download className="btn btn-secondary">
-            <T k="press.logo.download.dark" />
-          </a>
-          <a href="/brand/brain.png" download className="btn btn-secondary">
-            <T k="press.logo.download.brain" />
-          </a>
-        </p>
+            grounds and one for dark.
+
+            Handed to BrandKit rather than placed after it so the buttons
+            land directly under the marks they hand out, with the palette
+            below them: a journalist here for a logo should not have to
+            scroll past four colours to find the file. */}
+        <BrandKit
+          downloads={
+            <Downloads
+              files={[
+                ["press.logo.download.light", "/brand/wordmark-light-bg.png"],
+                ["press.logo.download.dark", "/brand/wordmark-dark-bg.png"],
+                ["press.logo.download.brain", "/brand/brain.png"],
+              ]}
+            />
+          }
+        />
       </Section>
 
       {/* The typefaces, next to the logos: both are brand assets, and a
@@ -178,20 +208,15 @@ export default async function PressPage() {
           </div>
           <div className="sm:col-span-8 lg:col-span-9">
             <P k="press.qr.body" className="prose-wzd font-body" />
-            <p className="mt-6 flex flex-wrap gap-3">
-              <a href="/brand/qr-donate.png" download className="btn btn-secondary">
-                <T k="press.qr.download.standard" />
-              </a>
-              <a href="/brand/qr-donate-transparent.png" download className="btn btn-secondary">
-                <T k="press.qr.download.transparent" />
-              </a>
-              <a href="/brand/qr-donate-red.png" download className="btn btn-secondary">
-                <T k="press.qr.download.red" />
-              </a>
-              <a href="/brand/qr-donate-white.png" download className="btn btn-secondary">
-                <T k="press.qr.download.white" />
-              </a>
-            </p>
+            <Downloads
+              className="mt-6"
+              files={[
+                ["press.qr.download.standard", "/brand/qr-donate.png"],
+                ["press.qr.download.transparent", "/brand/qr-donate-transparent.png"],
+                ["press.qr.download.red", "/brand/qr-donate-red.png"],
+                ["press.qr.download.white", "/brand/qr-donate-white.png"],
+              ]}
+            />
           </div>
         </div>
       </Section>
@@ -225,14 +250,13 @@ export default async function PressPage() {
             />
           </div>
         </div>
-        <p className="mt-6 flex flex-wrap gap-3">
-          <a href="/brand/dgc-light-bg.png" download className="btn btn-secondary">
-            <T k="press.dgc.download.light" />
-          </a>
-          <a href="/brand/dgc-dark-bg.png" download className="btn btn-secondary">
-            <T k="press.dgc.download.dark" />
-          </a>
-        </p>
+        <Downloads
+          className="mt-6"
+          files={[
+            ["press.dgc.download.light", "/brand/dgc-light-bg.png"],
+            ["press.dgc.download.dark", "/brand/dgc-dark-bg.png"],
+          ]}
+        />
       </Section>
 
       {/* Photography lives in an external folder so it can be repointed

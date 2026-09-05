@@ -24,6 +24,9 @@ const base = process.env.BASE_URL ?? "http://localhost:3000"
 const ROUTES = [
   "/", "/register", "/survival", "/faq", "/donate",
   "/become-a-sponsor", "/press", "/photo-policy", "/submit-photos", "/privacy", "/confirmed",
+  // Gated: the checkers see the password form, which is a page like any
+  // other and has to pass like any other.
+  "/the-route",
 ]
 
 /** Headings carry markup — <br>, the per-word spans the Swipe animation adds. */
