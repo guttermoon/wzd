@@ -69,7 +69,13 @@ export const EVENT = {
    * changes without waiting for a deploy.
    */
   route: {
-    arrive: "https://maps.app.goo.gl/PdxBFN8gpfAZLuNz7",
+    /** Base camp, for the check-in row. */
+    arrive: "https://maps.app.goo.gl/TX8nCKRAZE1NUdVJA",
+    /** Where most people arrive from, for "Getting there". A different
+     *  place from base camp, so a different link — these two were the
+     *  same address for a while and the check-in row was pointing at the
+     *  station under the words "Soho Square". */
+    station: "https://maps.app.goo.gl/PdxBFN8gpfAZLuNz7",
     walk1: "https://maps.app.goo.gl/tZgNss8E15NzXtPj7",
     walk2: "https://maps.app.goo.gl/gdUa7zzARV4mZtEE9",
     walk3: "https://maps.app.goo.gl/1wZdxgZkGZoV7Foh8",

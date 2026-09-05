@@ -335,6 +335,7 @@
   "route.confidential.body": "& subject to change. Please don’t forward this page or post it anywhere.",
   "route.arrive.title": "Getting there",
   "route.arrive.body": "Participants likely arrive from Tottenham Court Road station.",
+  "route.arrive.cta2": "Tottenham Court Road station on Google Maps",
   "route.map.title": "The map",
   "route.map.frame": "Route map. Scrolls sideways on a narrow screen.",
   "route.map.note": "Each walk has its own colour and number, matching the list below. The map is schematic and the streets within each walk are indicative — the Google Maps link on each walk is the route.",

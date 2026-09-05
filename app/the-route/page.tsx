@@ -122,6 +122,16 @@ export default async function TheRoutePage() {
 
           <Section title={<T k="route.arrive.title" />}>
             <P k="route.arrive.body" className="prose-wzd font-body" />
+            {/* The station, not base camp. The check-in row below has its
+                own button for Soho Square; these are two different places
+                and were pointing at the same one. */}
+            {has("route.arrive.cta2") ? (
+              <Cta
+                k="route.arrive.cta2"
+                href={EVENT.route.station}
+                className="btn btn-secondary mt-4 text-xs"
+              />
+            ) : null}
           </Section>
 
           <Section title={<T k="route.map.title" />}>
