@@ -1312,6 +1312,14 @@
    are information, not decoration: a browser that helpfully drops
    backgrounds and washes out ink would take the key with it and leave
    five identical grey lines. */
+/* A4 with a real margin. Without a @page rule the browser picks its own,
+   which is usually Letter — the map then lands 8mm narrower than the sheet
+   it was measured against, and the running order gains a page. */
+@page {
+  size: A4 portrait;
+  margin: 14mm 12mm;
+}
+
 @media print {
   :root,
   .dark {
@@ -1381,6 +1389,35 @@
   h2,
   h3 {
     break-after: avoid;
+  }
+
+  /* The page is set for a screen 1100px wide. On a sheet 186mm wide the
+     same type is oversized, so the whole thing steps down a notch and the
+     shell gives up the padding it only has to hold content off the edge of
+     a window. */
+  body {
+    font-size: 10.5pt;
+    line-height: 1.45;
+  }
+  h1 { font-size: 26pt; }
+  h2 { font-size: 15pt; }
+  h3 { font-size: 11pt; }
+  .prose-wzd { max-width: none; }
+  main > div,
+  .max-w-page {
+    max-width: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Ink is expensive and a printed sheet has no hover: the buttons are
+     read as labels, so they lose their frames and sit as plain text. */
+  .btn {
+    border: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    color: var(--muted) !important;
+    font-size: 9pt;
   }
 
   /* Entrances are a screen idea. Anything mid-animation when print is

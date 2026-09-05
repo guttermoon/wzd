@@ -162,9 +162,30 @@ export default async function TheRoutePage() {
               the thing anyone prints, and a control below it is a control
               found after scrolling past what you wanted. */}
           <Section title={<T k="route.day.title" />}>
-            {has("route.print") ? (
-              <p className="no-print mt-6">
-                <PrintButton label={S("route.print")} />
+            {/* The PDF first: it is the one that comes out looking the
+                same on everybody's printer. The button beside it prints
+                the page as the browser sees it, which is the fallback for
+                anyone who would rather not download a file.
+
+                The link is not to a file in public/ — it goes through a
+                handler that checks the same cookie the page does. A PDF of
+                this page sitting in public/ would be the meeting point,
+                downloadable, next to the lock that exists to protect it. */}
+            {any("route.pdf", "route.print") ? (
+              <p className="no-print mt-6 flex flex-wrap items-center gap-3">
+                {has("route.pdf") ? (
+                  <a
+                    href="/the-route/download"
+                    download
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary"
+                  >
+                    {S("route.pdf")}
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                ) : null}
+                {has("route.print") ? <PrintButton label={S("route.print")} /> : null}
               </p>
             ) : null}
             <ol className="mt-6 border-2 border-rule">
