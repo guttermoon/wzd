@@ -1294,3 +1294,109 @@
     transform: none;
   }
 }
+
+/* ── Printing ─────────────────────────────────────────────────────────
+   Deliberately unlayered and last in the file, so these win over the
+   component rules above without a specificity contest.
+
+   **Print is always the light theme.** Dark mode is a screen choice: on
+   paper it is a sheet of ink for a page of type, and most printers will
+   drop the ground anyway and leave greige text on white — the one
+   combination neither theme was measured for. So every token is pushed
+   back to its light value here, `.dark` included. The tokens are the only
+   thing that changes; nothing needs a second set of print-only
+   components, and the map, which takes its colours from these same
+   variables, comes out light with the rest of the page.
+
+   `print-color-adjust: exact` because the walk colours and the red rules
+   are information, not decoration: a browser that helpfully drops
+   backgrounds and washes out ink would take the key with it and leave
+   five identical grey lines. */
+@media print {
+  :root,
+  .dark {
+    --bg: var(--paper);
+    --surface: var(--paper);
+    --text: var(--near-black);
+    --muted: #5f574b;
+    --accent: var(--zombie-red);
+    --accent-text: #b03a2e;
+    --accent-strong: #b03a2e;
+    --on-accent: #ffffff;
+    --rule: var(--near-black);
+    --border: #847763;
+    --road: #9c9184;
+    --open-ground: #efe3d2;
+    --w1: #a83226;
+    --w2: #0f5a66;
+    --w3: #5f7d18;
+    --w4: #4a2261;
+    --w5: #96540a;
+  }
+
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  html,
+  body {
+    background: #ffffff;
+    color: var(--text);
+  }
+
+  /* The furniture. A masthead that is sticky on screen is a banner
+     reprinted on every sheet; the rest is navigation, which a sheet of
+     paper cannot follow. */
+  body > header,
+  body > footer,
+  .no-print,
+  [data-consent-dialog] {
+    display: none !important;
+  }
+
+  /* The map is one wide drawing. On screen it scrolls inside its frame;
+     on paper there is nowhere to scroll to, so the frame lets go of its
+     minimum width and prints whole. */
+  .map-frame {
+    overflow: visible !important;
+    border-width: 1px;
+    break-inside: avoid;
+  }
+  .map-frame > div {
+    min-width: 0 !important;
+  }
+
+  /* A row split across a page break loses either its time or its
+     instruction, and both halves are useless alone. */
+  li,
+  figure,
+  .cut-panel {
+    break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  /* Entrances are a screen idea. Anything mid-animation when print is
+     pressed would otherwise be captured part-way there, or not at all. */
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  /* Only the masking panel, which is the ::after — .wipe itself is the
+     element being revealed, so hiding that hides the heading. */
+  .wipe::after {
+    display: none !important;
+  }
+}
