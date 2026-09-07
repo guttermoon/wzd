@@ -279,6 +279,57 @@ things there are load-bearing:
   it is what tells a reader which way round Soho they are looking — not
   texture.
 
+## Printed QR codes point at `/go/<code>`
+
+A QR code is ink and outlives the decision that produced it, so it never
+carries a destination. `app/go/[code]/route.ts` is the far end of every
+printed code: the codes are declared in `QR_CODES` (`lib/event.ts`) with a
+built-in `href`, and the `URL` cell on the matching `qr.<code>` Notion row
+repoints it with no deploy — the same terms `Cta` uses, checked through
+`lib/href.ts` on the way out as well as on the way in.
+
+Four things there are load-bearing, and all four are about the destination
+staying changeable:
+
+- **307, never 301.** A permanent redirect is cached in the browser more
+  or less forever, so the first person to scan the poster would be pinned
+  to whatever it said that day. The address is permanent precisely so that
+  what it points at is not.
+- **`no-store` and `force-dynamic`**, for the same reason one layer out: a
+  redirect held by a CDN is a link the owner has changed and nobody is
+  following yet. It is `noindex` too, in the response and in `robots.ts`.
+- **Nothing in the request may influence where it goes.** There is no
+  `?url=` and there must never be one, or this stops being a QR target and
+  becomes an open redirect carrying the site's own domain.
+- **A ten-second memo on the copy read** (`TTL_MS` in that file). The
+  route is uncached, so without it every scan is a Notion API call, and a
+  poster being scanned by a crowd is the exact traffic shape that trips a
+  rate limit. What happens then is the point: `getSiteCopy` swallows a
+  failed read and returns the built-in layer, so a throttled instance
+  silently forwards people to the built-in rather than erroring. That is
+  also why a built-in has to be a destination that is genuinely all right,
+  not a placeholder.
+
+The printed codes themselves are `public/brand/qr-go-<code>.svg` and
+`.png`, drawn by `npm run qr` (`scripts/make-qr.mjs`) and committed. The
+`go-` prefix is not decoration — `public/brand` already holds the owner's
+own Zeffy `qr-donate.png` and three siblings from `npm run logos`, and a
+code named `donate` overwrote one of them before the prefix existed. Every
+code is rendered, decoded back with a *different* library, and compared
+against the URL it was asked for; nothing is written if that round trip
+does not match, because a QR code cannot be proofread by eye and its
+failure is invisible until it is on two hundred posters. They are plain
+black at error-correction level Q with the full quiet zone, and no mark in
+the middle: a camera reads them in bad light on a wet pavement, and a tint
+or a cut-out spends the error correction that was there for the pavement.
+
+The `/go` segment is case-sensitive and cannot be made otherwise: a
+`redirects()` rule for `/GO/:code` is compiled case-insensitively and
+matches `/go/:code` too, so the route redirects to itself forever, and a
+second route directory differing only in case is something neither
+TypeScript nor webpack will build. The `[code]` segment *is* matched
+case-insensitively, in `qrCode()`.
+
 ## Photographs — credit is enforced, not conventional
 
 The owner's standing instruction is that **every photograph is published

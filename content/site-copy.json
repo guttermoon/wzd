@@ -372,5 +372,9 @@
   "route.bonus.when": "7pm",
   "route.bonus.what": "Walk 5 — walk to BloodSport via Leicester Square",
   "route.bonus.detail": "Bonus, and optional.",
-  "route.bonus.cta": "Open the bonus walk in Google Maps"
+  "route.bonus.cta": "Open the bonus walk in Google Maps",
+  "qr.poster": "General poster QR — send it wherever the poster should point today.",
+  "qr.register": "Sign-up poster QR — send it wherever the poster should point today.",
+  "qr.sticker": "Sticker QR — send it wherever the sticker should point today.",
+  "qr.flag": "Flag QR — send it wherever the flag should point today."
 }

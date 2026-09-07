@@ -133,6 +133,74 @@ export const LEGAL_NAV = [{ name: "Privacy", href: "/privacy" }] as const
  * owner might want to fix in a hurry would be the one page they could not
  * push through ahead of the 60-second window.
  */
+/**
+ * Printed QR codes, and where each one currently points.
+ *
+ * A QR code on a poster cannot be changed once it is printed, and a
+ * printed run outlives every decision that went into it: the poster that
+ * says "scan to register" is still on a wall in November, when registering
+ * is over and the useful thing to show someone is next year's date. So the
+ * code never carries the destination — it carries `/go/<code>`, which is a
+ * permanent address on this site, and the destination is a `URL` cell in
+ * Notion that the owner can repoint in ten seconds without a deploy.
+ *
+ * `href` is where it goes when Notion says nothing, on exactly the terms
+ * `Cta` uses: the override wins, the built-in stands with an empty cell or
+ * no Notion at all. One thing follows from that and it is worth saying
+ * plainly — **a built-in has to be a destination that is genuinely all
+ * right**, not a placeholder. It is what a scan gets if the Notion read
+ * fails, and a QR code that quietly falls back to a page nobody meant is
+ * worse than one that never moved.
+ *
+ * Adding a code is a line here plus a `qr.<code>` row in Notion. Nothing
+ * renders these labels; they are what the owner sees in the row's `Text`
+ * so they can tell which poster they are repointing.
+ */
+export const QR_CODES = [
+  {
+    code: "poster",
+    label: "General poster — the home page",
+    href: "/",
+  },
+  {
+    code: "register",
+    label: "Sign-up poster — the registration page",
+    href: "/register",
+  },
+  {
+    code: "sticker",
+    label: "Sticker — the fundraising page",
+    href: EVENT.cause.donateUrl,
+  },
+  {
+    code: "flag",
+    label: "Flag — the home page",
+    href: "/",
+  },
+] as const
+
+export type QrCode = (typeof QR_CODES)[number]["code"]
+
+/** The code named by a path segment, whatever case it was printed in. */
+export function qrCode(segment: string) {
+  // Lower-cased on the way in because QR's alphanumeric mode has no lower
+  // case and is markedly denser than byte mode, so someone squeezing a
+  // code onto a small label may well upper-case the URL. The segment is
+  // ours, so it costs nothing to accept both.
+  //
+  // Only the segment, though: the literal `go` in front of it is a
+  // directory name and route matching is case-sensitive, so /GO/POSTER
+  // does 404. It cannot be fixed here or in `redirects()` — Next compiles
+  // those matchers case-insensitively, so a rule for /GO/:code also
+  // catches /go/:code and the route redirects to itself forever — and a
+  // second route directory differing only in case is something neither
+  // TypeScript nor webpack will build. So the rule is simply that the URL
+  // given out for encoding is the lower-case one, which is what
+  // docs/NOTION_SETUP.md prints.
+  const wanted = segment.trim().toLowerCase()
+  return QR_CODES.find((entry) => entry.code === wanted) ?? null
+}
+
 export const UNLISTED_NAV = [
   { name: "Newsletter confirmed", href: "/confirmed" },
   /**
