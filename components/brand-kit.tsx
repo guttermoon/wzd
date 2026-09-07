@@ -6,6 +6,13 @@ import { Graphic } from "@/components/photo"
  * The style guide palette. Zombie Red carries a warning because it is the
  * one people reach for and misuse: at body size it fails contrast either
  * way round.
+ *
+ * Which is why there are two reds rather than one, and why they are next
+ * to each other here. Zombie Red is 3.78:1 on paper — fine for the large
+ * type and the fills it is for, short of the 4.5:1 that anything read at
+ * body size needs. Deep Red is the same hue with the contrast, so a
+ * designer reaching for red on a caption has somewhere to go that is not
+ * "use it anyway". Do not collapse them.
  */
 const PALETTE = [
   {
@@ -13,6 +20,12 @@ const PALETTE = [
     hex: "#E74C3C",
     note: "Display only. Fills, rules and large headings, never body text.",
     swatch: "bg-[#E74C3C]",
+  },
+  {
+    name: "Deep Red",
+    hex: "#B03C2E",
+    note: "Zombie Red at text size. Links, small type and buttons, on either light ground.",
+    swatch: "bg-[#B03C2E]",
   },
   {
     name: "Greige",
