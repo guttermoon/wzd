@@ -172,6 +172,11 @@ export const QR_CODES = [
     label: "Collection-bucket code — the fundraising page",
     href: EVENT.cause.donateUrl,
   },
+  {
+    code: "flag",
+    label: "Flag — the home page",
+    href: "/",
+  },
 ] as const
 
 export type QrCode = (typeof QR_CODES)[number]["code"]

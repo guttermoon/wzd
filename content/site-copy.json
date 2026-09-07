@@ -375,5 +375,6 @@
   "route.bonus.cta": "Open the bonus walk in Google Maps",
   "qr.poster": "General poster QR — send it wherever the poster should point today.",
   "qr.register": "Sign-up poster QR — send it wherever the poster should point today.",
-  "qr.donate": "Collection-bucket QR — send it wherever the code should point today."
+  "qr.donate": "Collection-bucket QR — send it wherever the code should point today.",
+  "qr.flag": "Flag QR — send it wherever the flag should point today."
 }

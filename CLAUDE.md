@@ -310,6 +310,19 @@ staying changeable:
   also why a built-in has to be a destination that is genuinely all right,
   not a placeholder.
 
+The printed codes themselves are `public/brand/qr-go-<code>.svg` and
+`.png`, drawn by `npm run qr` (`scripts/make-qr.mjs`) and committed. The
+`go-` prefix is not decoration — `public/brand` already holds the owner's
+own Zeffy `qr-donate.png` and three siblings from `npm run logos`, and a
+code named `donate` overwrote one of them before the prefix existed. Every
+code is rendered, decoded back with a *different* library, and compared
+against the URL it was asked for; nothing is written if that round trip
+does not match, because a QR code cannot be proofread by eye and its
+failure is invisible until it is on two hundred posters. They are plain
+black at error-correction level Q with the full quiet zone, and no mark in
+the middle: a camera reads them in bad light on a wet pavement, and a tint
+or a cut-out spends the error correction that was there for the pavement.
+
 The `/go` segment is case-sensitive and cannot be made otherwise: a
 `redirects()` rule for `/GO/:code` is compiled case-insensitively and
 matches `/go/:code` too, so the route redirects to itself forever, and a

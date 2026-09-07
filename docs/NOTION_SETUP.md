@@ -232,6 +232,7 @@ which never change:
 | `https://worldzombieday.co.uk/go/poster` | `qr.poster` | the home page |
 | `https://worldzombieday.co.uk/go/register` | `qr.register` | `/register` |
 | `https://worldzombieday.co.uk/go/donate` | `qr.donate` | the Zeffy fundraising page |
+| `https://worldzombieday.co.uk/go/flag` | `qr.flag` | the home page |
 
 **To change where a printed code lands, put the new address in that row's
 `URL` cell.** Nothing else — not the `Text`, not a deploy. Clear the cell
@@ -257,8 +258,31 @@ Three things worth knowing:
   to land.** It is what a scan gets if Notion cannot be reached, so it is
   a real fallback rather than a placeholder.
 
-To add a fourth code, `QR_CODES` in `lib/event.ts` takes one more entry —
-that part is a deploy — and then a `qr.<code>` row here.
+**The codes themselves are drawn for you.** They are in `public/brand/`,
+committed, and downloadable from the site:
+
+- `worldzombieday.co.uk/brand/qr-go-flag.svg` — and `-poster`, `-register`,
+  `-donate`. **Send the SVG to a printer**: it is vector, so it is sharp at
+  any size, from a wristband to a flag.
+- `…/qr-go-flag.png` — 2048px, for Canva, a slide or a social post.
+
+They are rebuilt by `npm run qr`, and only need rebuilding if the domain
+changes or a code is added — *not* when you repoint one, which is the
+whole point of them. Every code is decoded back by a second, independent
+reader before it is written, and the script refuses to save anything that
+does not read back as exactly the right URL. A QR code cannot be
+proofread by looking at it, and its failure is invisible until it is
+already on two hundred posters.
+
+They are plain black on white, with no logo punched out of the middle.
+That is deliberate: the code is read by a camera in bad light on a wet
+pavement, and every tint or cut-out spends error correction that was there
+to survive the wet pavement. Put the branding around it on the artwork,
+not inside it. Leave the white border alone — a code butted up against
+artwork does not scan.
+
+To add a fifth code, `QR_CODES` in `lib/event.ts` takes one more entry —
+that part is a deploy — then a `qr.<code>` row here and `npm run qr`.
 
 ### The PDF goes stale
 
