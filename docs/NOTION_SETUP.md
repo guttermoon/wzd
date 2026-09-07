@@ -219,6 +219,47 @@ leg without a deploy, put the new address in the `URL` field of that
 leg's own row — `route.walk2.cta` and so on. The row's URL wins; with it
 empty the built-in one stands.
 
+### QR codes: `/go/…`, and changing where it lands
+
+A QR code is ink. Once it is on a poster, a wristband or the side of a
+collection bucket it cannot be changed, and it outlives the decision that
+produced it — "scan to register" is still on a wall in November. So the
+code never carries the destination. It carries one of these addresses,
+which never change:
+
+| Encode this in the QR | Row in `wzd-pages` | Where it goes with the cell empty |
+| --- | --- | --- |
+| `https://worldzombieday.co.uk/go/poster` | `qr.poster` | the home page |
+| `https://worldzombieday.co.uk/go/register` | `qr.register` | `/register` |
+| `https://worldzombieday.co.uk/go/donate` | `qr.donate` | the Zeffy fundraising page |
+
+**To change where a printed code lands, put the new address in that row's
+`URL` cell.** Nothing else — not the `Text`, not a deploy. Clear the cell
+again and it goes back to the built-in destination in the right-hand
+column. It is the same `URL` cell that repoints a button anywhere else on
+the site, and the same rules apply: an `https://` address, a path on this
+site like `/faq`, a `mailto:` or a `tel:`. Anything else is ignored and
+the built-in stands.
+
+A change is live within about ten seconds. There is no need to call
+`/api/revalidate` — these addresses are never cached, by us or by anyone's
+browser, which is the whole reason they can be repointed at all.
+
+Three things worth knowing:
+
+- **The `Text` on these three rows is a note to yourself.** It is there so
+  you can tell which poster you are repointing. Nothing on the site
+  renders it; on these rows only the `URL` does anything.
+- **Encode the address exactly as written above, in lower case.** The bit
+  after `/go/` is matched however it is printed, but `/go` itself is not:
+  `/GO/POSTER` will not work.
+- **The built-in destination has to be somewhere you are happy for people
+  to land.** It is what a scan gets if Notion cannot be reached, so it is
+  a real fallback rather than a placeholder.
+
+To add a fourth code, `QR_CODES` in `lib/event.ts` takes one more entry —
+that part is a deploy — and then a `qr.<code>` row here.
+
 ### The PDF goes stale
 
 `/the-route` offers the running order as a PDF. It is **not** a live
