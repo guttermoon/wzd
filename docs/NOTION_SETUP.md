@@ -261,10 +261,28 @@ Three things worth knowing:
 **The codes themselves are drawn for you.** They are in `public/brand/`,
 committed, and downloadable from the site:
 
-- `worldzombieday.co.uk/brand/qr-go-flag.svg` — and `-poster`, `-register`,
-  `-sticker`. **Send the SVG to a printer**: it is vector, so it is sharp at
-  any size, from a wristband to a flag.
-- `…/qr-go-flag.png` — 2048px, for Canva, a slide or a social post.
+- `worldzombieday.co.uk/brand/qr-go-sticker.svg` — and `-poster`,
+  `-register`, `-flag`. **Send the SVG to a printer**: it is vector, so it
+  is sharp at any size, from a wristband to a flag.
+- `…/qr-go-sticker.png` — 2048px, for Canva, a slide or a social post.
+
+Each one also comes three more ways, for putting straight onto artwork
+that already has a colour of its own:
+
+| File | Ink | Ground | Put it on |
+| --- | --- | --- | --- |
+| `qr-go-sticker.svg` | black | white | anything — it brings its own white square |
+| `qr-go-sticker-transparent.svg` | black | none | a light colour |
+| `qr-go-sticker-white.svg` | white | none | a dark colour |
+| `qr-go-sticker-red.svg` | `#b03c2e` | none | a light colour |
+
+The three transparent ones hand you one job with them: **keep the clear
+space around the code clear.** The margin is still in the file, but it is
+now whatever is underneath, so no type, no border and no edge of the
+sticker inside it. A code butted up against artwork does not scan, and on
+a transparent version nothing in the file stops that happening. The white
+one needs a genuinely dark ground and the red one a genuinely light one —
+red on black does not read.
 
 They are rebuilt by `npm run qr`, and only need rebuilding if the domain
 changes or a code is added — *not* when you repoint one, which is the
