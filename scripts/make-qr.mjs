@@ -112,16 +112,17 @@ const common = {
  * is the surface the variant exists to be placed on, which is what it is
  * flattened against before being decoded.
  *
- * The red is #b03c2e, the value asked for. It is one hex digit off the
- * site's own `--accent-strong` (#b03a2e) and that is not worth
- * reconciling here: this is ink for a printer, not a colour the site
- * renders, and it is the value on the artwork order.
+ * The red is #b03a2e — the site's own `--accent-strong`, which is also
+ * `--accent-text` in the light theme, and the Deep Red in the press kit.
+ * One value, so a sticker printed from this and a button on the page are
+ * the same colour. If it is ever changed it should be changed in
+ * app/globals.css first and copied here, not the other way round.
  */
 const VARIANTS = [
   { suffix: "", dark: "#000000ff", light: "#ffffffff", on: "#ffffff" },
   { suffix: "-transparent", dark: "#000000ff", light: "#00000000", on: "#ffffff" },
   { suffix: "-white", dark: "#ffffffff", light: "#00000000", on: "#000000" },
-  { suffix: "-red", dark: "#b03c2eff", light: "#00000000", on: "#ffffff" },
+  { suffix: "-red", dark: "#b03a2eff", light: "#00000000", on: "#ffffff" },
 ]
 
 /**

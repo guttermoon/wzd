@@ -312,7 +312,7 @@ staying changeable:
 
 The printed codes themselves are `public/brand/qr-go-<code>.svg` and
 `.png`, drawn by `npm run qr` (`scripts/make-qr.mjs`) and committed —
-four ways each: black on white, and then black, white and `#b03c2e` on a
+four ways each: black on white, and then black, white and `#b03a2e` on a
 transparent ground, for artwork that has a colour of its own. Each variant
 is decoded **flattened onto the ground it is meant for** (the white one
 against black, the other two against white), because that is the claim

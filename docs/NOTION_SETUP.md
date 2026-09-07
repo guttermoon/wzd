@@ -274,7 +274,7 @@ that already has a colour of its own:
 | `qr-go-sticker.svg` | black | white | anything — it brings its own white square |
 | `qr-go-sticker-transparent.svg` | black | none | a light colour |
 | `qr-go-sticker-white.svg` | white | none | a dark colour |
-| `qr-go-sticker-red.svg` | `#b03c2e` | none | a light colour |
+| `qr-go-sticker-red.svg` | `#b03a2e` — the site's own red | none | a light colour |
 
 The three transparent ones hand you one job with them: **keep the clear
 space around the code clear.** The margin is still in the file, but it is
