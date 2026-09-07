@@ -9,7 +9,8 @@ London**, migrated off WordPress. None of the blog template remains.
 - Next.js 14 (app router) + Tailwind, deployed on Vercel. Ten static
   routes plus three API routes, no database, no blog.
 - `/` `/register` `/survival` `/faq` `/donate` `/become-a-sponsor`
-  `/press` `/photo-policy` `/submit-photos` `/privacy`. Primary nav is
+  `/press` `/press-release` `/photo-policy` `/submit-photos` `/privacy`.
+  Primary nav is
   `NAV` in `lib/event.ts`; the rest sit in the footer (`FOOTER_NAV`) and
   `LEGAL_NAV`. `/rules` and `/sponsors` are **not** routes — they are
   redirects to `/survival` and `/become-a-sponsor`, which are the live
@@ -67,7 +68,18 @@ Two layers, and the first one is complete on its own:
 Keys are dotted and lowercase (`home.hero.title`, `faq.q3`,
 `sponsors.onsite.amount`), namespaced per page: `site.` `home.` `register.`
 `rules.` `faq.` `sponsors.` `photo.` `press.` `privacy.`
-`footer.`.
+`footer.`. `release.` is `/press-release` — not `press.`, which is the
+press kit; the two pages are separate and so are their rows.
+
+`/press-release` is the release itself, as a page rather than a PDF in an
+inbox: it has a URL to link to, it is indexed, and every line is a Notion
+row, so a date that moves is an edit rather than a reissue. The release
+button on `/press` now points at it, and `press.release.url` still
+overrides that with an outside address if the owner ever wants one — which
+is why the disabled-button branch there is gone, and with it
+`press.release.pending`. The page carries a `NewsArticle` graph through
+`jsonLd()`, with the same reasoning as `/faq`'s `FAQPage`: the headline
+and standfirst are Notion cells.
 
 `components/notion-text.tsx` exports `makeT` (renders a key, newlines →
 `<br/>`) and `makeS` (plain string, for attributes).

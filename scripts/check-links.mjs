@@ -31,6 +31,7 @@ const ROUTES = [
   "/become-a-sponsor",
   "/donate",
   "/press",
+  "/press-release",
   "/photo-policy",
   "/submit-photos",
   "/privacy", "/confirmed",

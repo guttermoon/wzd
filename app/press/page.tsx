@@ -292,38 +292,21 @@ export default async function PressPage() {
         )}
       </Section>
 
-      {/* Same pattern as the photographs: the owner points it at this
-          year's release from Notion, and the button appears. */}
+      {/* Not the photographs' pattern any more: the release is a page on
+          this site, so this button always has somewhere to go and is
+          never the disabled one it used to be. `press.release.url` still
+          overrides it — this year's release as a hosted PDF, or a
+          newsroom somewhere else — and with the cell empty it lands on
+          /press-release, which is the same words a Notion edit away. */}
       <Section title={<T k="press.release.title" />}>
         <p className="prose-wzd font-body">
           <T k="press.release.body" />
         </p>
-        {/* The button is here either way. Until `press.release.url` has a
-            value in Notion it is a real disabled <button>, not a link
-            dressed as one: a button that goes nowhere is worse than one
-            that says it cannot yet, and `disabled` is what a screen reader
-            announces as unavailable. The line underneath says why and how
-            to get the release in the meantime. */}
-        {pressRelease ? (
-          <Cta k="press.release.cta" href={pressRelease} className="btn btn-primary mt-6" />
-        ) : (
-          <>
-            <button
-              type="button"
-              disabled
-              aria-describedby="press-release-pending"
-              className="btn btn-secondary mt-6 opacity-60"
-            >
-              <T k="press.release.cta" />
-            </button>
-            <p
-              id="press-release-pending"
-              className="prose-wzd mt-4 font-body text-muted"
-            >
-              <T k="press.release.pending" />
-            </p>
-          </>
-        )}
+        <Cta
+          k="press.release.cta"
+          href={pressRelease || "/press-release"}
+          className="btn btn-primary mt-6"
+        />
       </Section>
 
       <Section title={<T k="press.coverage.title" />}>
