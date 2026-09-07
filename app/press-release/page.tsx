@@ -216,10 +216,14 @@ export default async function PressReleasePage() {
                     />
                   </p>
                 ) : null}
-                {k === "assets" && has("release.contact.kit.cta") ? (
+                {/* Assets goes to the folder itself, not to /press: this
+                    note is about high-resolution images, and the page is
+                    the readable kit rather than the downloadable one. The
+                    contact block below still links to /press. */}
+                {k === "assets" && has("release.notes.assets.cta") ? (
                   <Cta
-                    k="release.contact.kit.cta"
-                    href="/press"
+                    k="release.notes.assets.cta"
+                    href={EVENT.pressKitUrl}
                     className="btn btn-secondary mt-4"
                   />
                 ) : null}

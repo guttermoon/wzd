@@ -65,6 +65,14 @@ export const EVENT = {
    */
   linksUrl: "https://paa.ge/worldzombieday",
   /**
+   * The whole press kit in one folder — everything /press shows and the
+   * documents it does not. The page is the readable version and this is
+   * the download-it-all one; a journalist on a deadline wants the second.
+   * Repointable from the `press.kit.cta` row's URL cell, like any button.
+   */
+  pressKitUrl:
+    "https://drive.google.com/drive/folders/1818Zch0uslTXRHpyrt9kZkxk3oeWdvGk?usp=drive_link",
+  /**
    * The two typefaces, for the press kit. Crackhouse is the style guide's
    * display face and is not shipped — the lock-up carries its letterforms
    * as paths — so these are the two a journalist can actually get.

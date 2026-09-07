@@ -102,6 +102,22 @@ export default async function PressPage() {
         </div>
       </Section>
 
+      {/* The whole kit as one folder, above everything the page unpacks
+          on its own. A journalist filing today wants the download, not the
+          reading; the sections below are for whoever has more time. */}
+      {any("press.kit.title", "press.kit.body", "press.kit.cta") ? (
+        <Section title={<T k="press.kit.title" />}>
+          <P k="press.kit.body" className="prose-wzd font-body" />
+          {has("press.kit.cta") ? (
+            <Cta
+              k="press.kit.cta"
+              href={EVENT.pressKitUrl}
+              className="btn btn-primary mt-6"
+            />
+          ) : null}
+        </Section>
+      ) : null}
+
       <Section title={<T k="press.facts.title" />} className="mt-10">
         <dl className="grid gap-6 sm:grid-cols-2">
           {FACTS.filter((f) => any(`press.facts.${f}.label`, `press.facts.${f}.value`)).map((fact) => (
