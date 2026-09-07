@@ -57,6 +57,22 @@ export const EVENT = {
   },
   hashtags: ["#WZD2026", "#WorldZombieDay"],
   /**
+   * The links page, which is where the walk points people when it has one
+   * address to give rather than four. Named in the press release, hence
+   * here: it is a URL, and URLs live in this file so a page never types
+   * one out. It is the walk's own page — paa.ge also hosts the club's,
+   * which is a different slug and a different thing.
+   */
+  linksUrl: "https://paa.ge/worldzombieday",
+  /**
+   * The whole press kit in one folder — everything /press shows and the
+   * documents it does not. The page is the readable version and this is
+   * the download-it-all one; a journalist on a deadline wants the second.
+   * Repointable from the `press.kit.cta` row's URL cell, like any button.
+   */
+  pressKitUrl:
+    "https://drive.google.com/drive/folders/1818Zch0uslTXRHpyrt9kZkxk3oeWdvGk?usp=drive_link",
+  /**
    * The two typefaces, for the press kit. Crackhouse is the style guide's
    * display face and is not shipped — the lock-up carries its letterforms
    * as paths — so these are the two a journalist can actually get.
@@ -114,6 +130,7 @@ export const NAV = [
 export const FOOTER_NAV = [
   { name: "Become a sponsor", href: "/become-a-sponsor" },
   { name: "Press kit", href: "/press" },
+  { name: "Press release", href: "/press-release" },
   { name: "Photo policy", href: "/photo-policy" },
   { name: "Submit photos", href: "/submit-photos" },
 ] as const

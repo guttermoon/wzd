@@ -27,6 +27,26 @@
  * come back exactly. Rendering and reading are different libraries on
  * purpose: a bug shared by both is the only way this passes wrongly.
  *
+ * ── Four versions of each, and what each one is for ─────────────────
+ *
+ * A sticker or a flag is not a sheet of A4: it has a colour of its own,
+ * and a white square dropped on it looks like a mistake. So each code is
+ * drawn four ways — on white, and then black, white and brand red on a
+ * transparent ground, for placing straight onto artwork.
+ *
+ * The three transparent ones move the quiet zone's job onto whoever
+ * places them. The margin is still in the file, but it is now the colour
+ * of the artwork underneath, so **the four modules of clear space around
+ * the code have to stay clear of type, edges and anything else**. A code
+ * butted up against a border does not scan, and on a transparent version
+ * nothing in the file stops that happening.
+ *
+ * Each variant is decoded flattened onto the ground it is meant for —
+ * the white one against black, the other two against white — so what is
+ * proved is the thing that matters: that this ink scans on that surface.
+ * jsQR reads in greyscale, which is what makes it a real test of the red
+ * rather than a look at it.
+ *
  * ── Why plain black, and no logo in the middle ───────────────────────
  *
  * The style guide's colours are for things people read. A QR code is read
@@ -81,12 +101,29 @@ function codes() {
 /** What the code has to read back as, character for character. */
 const urlFor = (code) => `${SITE}/go/${code}`
 
-const options = {
+const common = {
   errorCorrectionLevel: "Q",
   margin: 4, // The quiet zone. Four modules is the spec's minimum, and a
              // code butted against artwork is a code that does not scan.
-  color: { dark: "#000000ff", light: "#ffffffff" },
 }
+
+/**
+ * `dark` is the ink, `light` the ground — `#00000000` for none — and `on`
+ * is the surface the variant exists to be placed on, which is what it is
+ * flattened against before being decoded.
+ *
+ * The red is #b03a2e — the site's own `--accent-strong`, which is also
+ * `--accent-text` in the light theme, and the Deep Red in the press kit.
+ * One value, so a sticker printed from this and a button on the page are
+ * the same colour. If it is ever changed it should be changed in
+ * app/globals.css first and copied here, not the other way round.
+ */
+const VARIANTS = [
+  { suffix: "", dark: "#000000ff", light: "#ffffffff", on: "#ffffff" },
+  { suffix: "-transparent", dark: "#000000ff", light: "#00000000", on: "#ffffff" },
+  { suffix: "-white", dark: "#ffffffff", light: "#00000000", on: "#000000" },
+  { suffix: "-red", dark: "#b03a2eff", light: "#00000000", on: "#ffffff" },
+]
 
 /**
  * Renders, reads back, and returns the PNG — or throws with the mismatch.
@@ -95,28 +132,40 @@ const options = {
  * the actual pixels that will be printed rather than the matrix that
  * produced them.
  */
-async function proof(url) {
+async function proof(url, variant) {
+  const options = { ...common, color: { dark: variant.dark, light: variant.light } }
   const png = await QRCode.toBuffer(url, { ...options, type: "png", width: PNG_PX })
+
+  // Flattened onto the surface this variant is for, because that is the
+  // thing being claimed. A transparent code decoded against its own
+  // absent background proves nothing about whether it reads on a sticker.
   const { data, info } = await sharp(png)
+    .flatten({ background: variant.on })
     .ensureAlpha()
     .raw()
     .toBuffer({ resolveWithObject: true })
+
   const read = jsQR(new Uint8ClampedArray(data), info.width, info.height)
-  if (!read) throw new Error(`the code for ${url} did not decode at all`)
+  const name = `${url}${variant.suffix || " (on white)"}`
+  if (!read) throw new Error(`${name} did not decode at all on ${variant.on}`)
   if (read.data !== url) {
-    throw new Error(`the code for ${url} decoded as ${JSON.stringify(read.data)}`)
+    throw new Error(`${name} decoded as ${JSON.stringify(read.data)}`)
   }
-  return png
+  return { png, options }
 }
 
 mkdirSync(OUT, { recursive: true })
 
 for (const code of codes()) {
   const url = urlFor(code)
-  const png = await proof(url)
-  const svg = await QRCode.toString(url, { ...options, type: "svg" })
+  for (const variant of VARIANTS) {
+    const { png, options } = await proof(url, variant)
+    const svg = await QRCode.toString(url, { ...options, type: "svg" })
+    const name = `qr-go-${code}${variant.suffix}`
 
-  writeFileSync(join(OUT, `qr-go-${code}.png`), png)
-  writeFileSync(join(OUT, `qr-go-${code}.svg`), svg)
-  console.log(`✓ qr-go-${code}  →  ${url}  (decoded back exactly)`)
+    writeFileSync(join(OUT, `${name}.png`), png)
+    writeFileSync(join(OUT, `${name}.svg`), svg)
+    console.log(`✓ ${name.padEnd(28)} decoded back exactly on ${variant.on}`)
+  }
+  console.log(`  …all four point at ${url}\n`)
 }
