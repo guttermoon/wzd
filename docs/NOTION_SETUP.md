@@ -231,7 +231,7 @@ which never change:
 | --- | --- | --- |
 | `https://worldzombieday.co.uk/go/poster` | `qr.poster` | the home page |
 | `https://worldzombieday.co.uk/go/register` | `qr.register` | `/register` |
-| `https://worldzombieday.co.uk/go/donate` | `qr.donate` | the Zeffy fundraising page |
+| `https://worldzombieday.co.uk/go/sticker` | `qr.sticker` | the Zeffy fundraising page |
 | `https://worldzombieday.co.uk/go/flag` | `qr.flag` | the home page |
 
 **To change where a printed code lands, put the new address in that row's
@@ -262,7 +262,7 @@ Three things worth knowing:
 committed, and downloadable from the site:
 
 - `worldzombieday.co.uk/brand/qr-go-flag.svg` — and `-poster`, `-register`,
-  `-donate`. **Send the SVG to a printer**: it is vector, so it is sharp at
+  `-sticker`. **Send the SVG to a printer**: it is vector, so it is sharp at
   any size, from a wristband to a flag.
 - `…/qr-go-flag.png` — 2048px, for Canva, a slide or a social post.
 

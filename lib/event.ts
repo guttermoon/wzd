@@ -168,8 +168,8 @@ export const QR_CODES = [
     href: "/register",
   },
   {
-    code: "donate",
-    label: "Collection-bucket code — the fundraising page",
+    code: "sticker",
+    label: "Sticker — the fundraising page",
     href: EVENT.cause.donateUrl,
   },
   {
