@@ -557,13 +557,43 @@ owner's instruction:
 The theme choice is kept whatever the answer, on the same footing: the
 visitor asked for it by clicking the switch.
 
-PostHog and GA4 also need their keys (`NEXT_PUBLIC_POSTHOG_KEY`,
-`NEXT_PUBLIC_GA_ID`), so nothing is collected locally or on an
-unconfigured preview. Session recording off, autocapture off, DNT
-respected, IP anonymised. **`/privacy` describes exactly this** — change
-one and change the other. The test that matters is a network one: load a
-page fresh and confirm no third-party host is contacted before the answer
-is given.
+PostHog still needs its key (`NEXT_PUBLIC_POSTHOG_KEY`). **GA4's does not
+live in an environment variable**: a measurement ID is in the page source
+of every site that uses one, so `G-X2YY32RNLP` is built into
+`components/analytics.tsx` — and applied *only* on `worldzombieday.co.uk`
+and its subdomains (`GA_HOSTS`). That hostname rule is what the env var
+was really buying: a preview deployment and a laptop are not the audience,
+and their hits in the same property are a real number that is wrong, mixed
+in with real numbers that are right, and nothing downstream can separate
+them again. `NEXT_PUBLIC_GA_ID` still wins where it is set, for pointing a
+preview at a test property on purpose. The ID is resolved in an effect,
+not at module scope, because the answer depends on the hostname the page
+is served from and one build serves all of them.
+
+Session recording off, autocapture off, DNT respected, IP anonymised, and
+**Google Signals and ad personalisation explicitly off** — gtag turns both
+on unless told otherwise, and they are what would make `/privacy`'s "we do
+not track you across other websites" untrue. **`/privacy` describes
+exactly this** — change one and change the other.
+
+Two things about the pageviews. A route change in the app router does not
+reload the page, so each one is reported explicitly. But GA4's *first*
+pageview is left to the `config` snippet rather than sent from the effect:
+the effect runs on the commit that inserts the `<Script>` tags, before
+either has executed, so `window.gtag` is undefined and the call would go
+nowhere — losing the landing page, which is the most useful pageview there
+is, with nothing in the DOM looking wrong. `lastGaPath` records the path
+GA loaded on and skips it. PostHog has no such problem: `posthog.init` is
+synchronous and has already run.
+
+`npm run check:analytics` is the test that matters, and it is a network
+one: it watches the requests and fails if any third-party host is
+contacted before the dialog is answered, on decline, or on a hostname the
+ID does not apply to. It also pins the two `allow_` flags and the pageview
+accounting. Every Google request is intercepted and answered locally, so
+running it never puts test traffic in the real property. It needs
+`worldzombieday.co.uk` pointed at localhost in `/etc/hosts` — it says so
+and exits rather than skipping quietly.
 
 - Target is WCAG 2.2 AA and it currently passes clean:
   `npx next start & npm run check:a11y` → 0 violations, 10 routes × 2
