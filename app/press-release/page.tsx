@@ -93,6 +93,12 @@ export default async function PressReleasePage() {
     <PageShell
       title={<T k="release.title" />}
       titleText={S("release.title")}
+      /* The h1 is the headline, which is the news and says nothing about
+         what kind of document it is on. An editor scanning the page needs
+         to know it is a release before they read a word of it — the
+         supplied copy opens with exactly this line, above the headline,
+         and it belongs there. */
+      eyebrow={has("release.label") ? <T k="release.label" /> : undefined}
       path="/press-release"
       standfirst={<T k="release.standfirst" />}
     >
@@ -106,7 +112,7 @@ export default async function PressReleasePage() {
           rather than folded into the first paragraph, where it would be
           read as prose. */}
       {has("release.dateline") ? (
-        <p className="display mt-4 text-sm tracking-wide text-accent-text">
+        <p className="display mt-4 text-sm tracking-wide text-muted">
           <T k="release.dateline" />
         </p>
       ) : null}
