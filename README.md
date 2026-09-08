@@ -164,7 +164,7 @@ reasoning; this is the short version.
 | `BREVO_DOI_REDIRECT` | where the confirmation link lands — set it to `https://worldzombieday.co.uk/confirmed`. `BREVO_DOI_REDIRECT_URL` also works | defaults to the site root, so a confirmed subscriber lands on the homepage with no acknowledgement |
 | `REVALIDATION_SECRET` | forcing a re-fetch before the 60s window | `/api/revalidate` refuses every request with 503 |
 | `NEXT_PUBLIC_POSTHOG_KEY` | PostHog | analytics never load |
-| `NEXT_PUBLIC_GA_ID` | Google Analytics 4 | analytics never load |
+| `NEXT_PUBLIC_GA_ID` | pointing GA4 somewhere other than the walk's own property | GA4 runs on its built-in ID, and only on worldzombieday.co.uk — a preview or a laptop measures nothing |
 
 `NOTION_TOKEN` should be a **read-only** integration. The site only ever
 reads, and a token that can also write can rewrite every word on the site

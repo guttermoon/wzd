@@ -17,7 +17,8 @@
     "check:links": "node scripts/check-links.mjs",
     "check:headings": "node scripts/check-headings.mjs",
     "route:pdf": "node scripts/make-route-pdf.mjs",
-    "qr": "node scripts/make-qr.mjs"
+    "qr": "node scripts/make-qr.mjs",
+    "check:analytics": "node scripts/check-analytics.mjs"
   },
   "dependencies": {
     "@notionhq/client": "^4.0.1",
