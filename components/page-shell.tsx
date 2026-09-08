@@ -10,6 +10,7 @@ import { jsonLd } from "@/lib/json-ld"
  */
 export function PageShell({
   title,
+  eyebrow,
   titleText,
   standfirst,
   banner,
@@ -17,6 +18,16 @@ export function PageShell({
   children,
 }: {
   title: React.ReactNode
+  /**
+   * A short label above the heading, saying what kind of page this is
+   * rather than what it says — "Press release" over a headline that is
+   * the news itself.
+   *
+   * A paragraph, deliberately, not a heading: it sits above the h1 and
+   * anything heading-shaped there either steals the h1 or puts an h2
+   * before one, and `npm run check:headings` would be right to fail it.
+   */
+  eyebrow?: React.ReactNode
   /**
    * The same heading as a plain string, from `makeS`. When it is given the
    * heading arrives a word at a time instead of in one block; `title` still
@@ -69,6 +80,13 @@ export function PageShell({
             {/* on-blood: the panel each word comes out from has to be the
                 slab it sits on, not the page behind it. */}
             <div className="on-blood mx-auto w-full max-w-page px-4 sm:px-6">
+              {eyebrow ? (
+                <Reveal variant="slide-right" className="mb-2 inline-block">
+                  <p className="display bg-blood px-5 py-1 text-sm tracking-wide text-blood-text">
+                    {eyebrow}
+                  </p>
+                </Reveal>
+              ) : null}
               <Reveal variant="slide-right" className="inline-block">
                 {titleText ? (
                   <Swipe
@@ -91,6 +109,11 @@ export function PageShell({
       <header>
         {banner ? null : (
           <>
+            {eyebrow ? (
+              <Reveal variant="slide-right" as="p" className="display mb-3 text-sm tracking-wide text-accent-text">
+                {eyebrow}
+              </Reveal>
+            ) : null}
             <Reveal variant="wipe">
               <h1 className="display text-[clamp(2.25rem,7vw,4.5rem)]">{title}</h1>
             </Reveal>
