@@ -162,6 +162,10 @@ export default async function RegisterPage() {
               &middot; {EVENT.afterParty.address}
             </p>
             <P k="party.thanks" className="prose-wzd mt-4 font-body text-muted" />
+            {/* The party has its own page now, with the tickets on it —
+                and you do not have to do the walk to come, which is the
+                one thing this section cannot say from inside /register. */}
+            <Cta k="party.page.cta" href="/after-party" className="btn btn-primary mt-6" />
           </div>
 
           {/* The after-party artwork, plain: the mat and the cut so it sits

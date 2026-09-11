@@ -8,9 +8,9 @@ London**, migrated off WordPress. None of the blog template remains.
 
 - Next.js 14 (app router) + Tailwind, deployed on Vercel. Ten static
   routes plus three API routes, no database, no blog.
-- `/` `/register` `/survival` `/faq` `/donate` `/become-a-sponsor`
-  `/press` `/press-release` `/photo-policy` `/submit-photos` `/privacy`.
-  Primary nav is
+- `/` `/register` `/after-party` `/survival` `/faq` `/donate`
+  `/become-a-sponsor` `/press` `/press-release` `/photo-policy`
+  `/submit-photos` `/privacy`. Primary nav is
   `NAV` in `lib/event.ts`; the rest sit in the footer (`FOOTER_NAV`) and
   `LEGAL_NAV`. `/rules` and `/sponsors` are **not** routes — they are
   redirects to `/survival` and `/become-a-sponsor`, which are the live
@@ -521,6 +521,25 @@ owner's instruction:
   are not told. If that list ever changes, or the embed is gated after
   all, that copy has to change with it. The honest fix is upstream: ask
   Zeffy to turn the marketing trackers off for the account.
+
+- The **after-party ticket widget** on `/after-party` is a third one, and
+  it is a *second ticketing company*: the party is the venue's event and
+  BLOODSport sells its tickets through DesignMyNight. `components/dmn-embed.tsx`
+  loads it on sight on the same reasoning as Zeffy's, and `/privacy` names
+  it. **What it loads has not been verified** — the development
+  environment's egress policy refuses designmynight.com, so the widget has
+  never been exercised here. The privacy copy says as much rather than
+  listing companies nobody checked; fill it in once someone has watched
+  the requests on the live page, and change `privacy.cookies.body` with it.
+  The component is built for that uncertainty: their script anchors to its
+  own tag, so it is injected into the component's container from an effect
+  (a loaded script does not re-run on a client-side navigation, which is
+  the Zeffy bug again), the paint is watched rather than assumed, and both
+  the fallback and the `<noscript>` path are a plain link to the booking
+  page rather than a guessed iframe URL. That link goes through
+  `ExternalLink` even inside `<noscript>`: a hand-written `<a>` there had
+  none of the three things an outbound link owes a reader, and
+  `check:links` reads inside `<noscript>` and caught it.
 
 - `lib/consent.ts` holds the answer in localStorage and broadcasts changes
   on a window event. Storing the answer itself needs no consent: it is the
