@@ -110,7 +110,7 @@ export function DmnEmbed({
   }, [fallback])
 
   return (
-    <div className="zeffy-embed w-full">
+    <div className="dmn-embed w-full">
       {/* React renders this with only the script in it and their widget
           fills it, which is two owners for one node — survivable only
           because the script is injected from an effect, after hydration.

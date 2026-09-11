@@ -38,7 +38,7 @@ const REQUIRED = [
   // Layout devices.
   "edge-left", "edge-right", "breakout", "panel-ground",
   "credit-tag", "credit-tag-right", "credit-tag-band", "on-blood", "vhs", "vhs-light", "zeffy-embed",
-  "dgc-mark", "dgc-mark-tint",
+  "dgc-mark", "dgc-mark-tint", "dmn-embed",
   // The one-page sheet, /the-route/sheet. These are unlayered, so Tailwind
   // has no reason to drop them today — but they are the whole layout of
   // the printed PDF and nothing on screen would show their loss, so the

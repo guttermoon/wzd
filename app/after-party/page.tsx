@@ -94,7 +94,21 @@ export default async function AfterPartyPage() {
           photo={photo("pinball-zombie")}
           priority
           bleed="full"
-          ratio="80/27"
+          /* Deeper than the 80/27 band the other pages use, and
+             deliberately. This photograph is one person draped across a
+             pinball table in the lower half of the frame; 80/27 from a 4:3
+             original shows about a third of its height, and whichever
+             third that is, she is cut in half by it. 2/1 shows two thirds
+             and she is the subject. A banner ratio is a crop, and a crop
+             should follow the picture rather than the other pages.
+
+             Only the vertical is doing anything: the container is wider
+             than 4:3, so `object-cover` fills the width and crops the
+             height, and object-position's first number has no effect at
+             all. 64% puts the band on her head and her arm, and leaves the
+             title slab sitting over her shoulder rather than her face. */
+          ratio="2/1"
+          focus="50% 64%"
           sizes="100vw"
         />
       }
@@ -105,21 +119,9 @@ export default async function AfterPartyPage() {
       />
 
       <Section className="mt-10">
-        <div className="grid gap-10 lg:grid-cols-12">
-          <div className="lg:col-span-7">
-            <P k="party.intro" className="prose-wzd font-body text-lg" />
-            <P k="party.open" className="prose-wzd mt-4 font-body" />
-            <P k="party.entry" className="prose-wzd mt-4 font-body" />
-          </div>
-
-          {/* A portrait rather than a band across the top: the picture is
-              one person, and a face at this size is the invitation. */}
-          <Photo
-            photo={photo("doorway-portrait")}
-            sizes="(min-width: 64rem) 24rem, 100vw"
-            className="lg:col-span-5 lg:sticky lg:top-24 lg:self-start"
-          />
-        </div>
+        <P k="party.intro" className="prose-wzd font-body text-lg" />
+        <P k="party.open" className="prose-wzd mt-4 font-body" />
+        <P k="party.entry" className="prose-wzd mt-4 font-body" />
       </Section>
 
       {/* The four things somebody decides on before they read anything —
@@ -144,11 +146,26 @@ export default async function AfterPartyPage() {
 
       <Section title={<T k="party.tickets.title" />}>
         <P k="party.tickets.body" className="prose-wzd font-body" />
-        <div className="mt-6">
-          <DmnEmbed
-            trouble={S("party.tickets.trouble")}
-            troubleCta={S("party.tickets.cta")}
-            missing={S("party.tickets.missing")}
+        {/* The portrait sits beside the widget rather than beside the
+            intro. Two reasons and both are about the widget: it is the
+            tallest thing on the page and it left a column of nothing next
+            to three paragraphs, and their box carries a good deal of its
+            own empty space that a picture alongside absorbs. Eight
+            columns, not seven, so their form is not squeezed narrower
+            than it was — a form this page exists for does not get made
+            worse to balance a layout. */}
+        <div className="mt-6 grid gap-8 lg:grid-cols-12">
+          <div className="lg:col-span-8">
+            <DmnEmbed
+              trouble={S("party.tickets.trouble")}
+              troubleCta={S("party.tickets.cta")}
+              missing={S("party.tickets.missing")}
+            />
+          </div>
+          <Photo
+            photo={photo("doorway-portrait")}
+            sizes="(min-width: 64rem) 20rem, 100vw"
+            className="lg:col-span-4 lg:sticky lg:top-24 lg:self-start"
           />
         </div>
       </Section>
