@@ -95,6 +95,11 @@ export default async function AfterPartyPage() {
           priority
           bleed="full"
           ratio="80/27"
+          /* The default full-bleed focus is 50% 28%, which on a band this
+             shallow is the top of the pinball machine and nobody in it.
+             She is low and left of centre in the frame, so the crop is
+             moved onto her. */
+          focus="38% 60%"
           sizes="100vw"
         />
       }
@@ -105,21 +110,9 @@ export default async function AfterPartyPage() {
       />
 
       <Section className="mt-10">
-        <div className="grid gap-10 lg:grid-cols-12">
-          <div className="lg:col-span-7">
-            <P k="party.intro" className="prose-wzd font-body text-lg" />
-            <P k="party.open" className="prose-wzd mt-4 font-body" />
-            <P k="party.entry" className="prose-wzd mt-4 font-body" />
-          </div>
-
-          {/* A portrait rather than a band across the top: the picture is
-              one person, and a face at this size is the invitation. */}
-          <Photo
-            photo={photo("doorway-portrait")}
-            sizes="(min-width: 64rem) 24rem, 100vw"
-            className="lg:col-span-5 lg:sticky lg:top-24 lg:self-start"
-          />
-        </div>
+        <P k="party.intro" className="prose-wzd font-body text-lg" />
+        <P k="party.open" className="prose-wzd mt-4 font-body" />
+        <P k="party.entry" className="prose-wzd mt-4 font-body" />
       </Section>
 
       {/* The four things somebody decides on before they read anything —
@@ -144,11 +137,26 @@ export default async function AfterPartyPage() {
 
       <Section title={<T k="party.tickets.title" />}>
         <P k="party.tickets.body" className="prose-wzd font-body" />
-        <div className="mt-6">
-          <DmnEmbed
-            trouble={S("party.tickets.trouble")}
-            troubleCta={S("party.tickets.cta")}
-            missing={S("party.tickets.missing")}
+        {/* The portrait sits beside the widget rather than beside the
+            intro. Two reasons and both are about the widget: it is the
+            tallest thing on the page and it left a column of nothing next
+            to three paragraphs, and their box carries a good deal of its
+            own empty space that a picture alongside absorbs. Eight
+            columns, not seven, so their form is not squeezed narrower
+            than it was — a form this page exists for does not get made
+            worse to balance a layout. */}
+        <div className="mt-6 grid gap-8 lg:grid-cols-12">
+          <div className="lg:col-span-8">
+            <DmnEmbed
+              trouble={S("party.tickets.trouble")}
+              troubleCta={S("party.tickets.cta")}
+              missing={S("party.tickets.missing")}
+            />
+          </div>
+          <Photo
+            photo={photo("doorway-portrait")}
+            sizes="(min-width: 64rem) 20rem, 100vw"
+            className="lg:col-span-4 lg:sticky lg:top-24 lg:self-start"
           />
         </div>
       </Section>
