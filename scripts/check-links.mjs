@@ -26,6 +26,7 @@ const base = process.env.BASE_URL ?? "http://localhost:3000"
 const ROUTES = [
   "/",
   "/register",
+  "/after-party",
   "/survival",
   "/faq",
   "/become-a-sponsor",

@@ -51,9 +51,27 @@ export const EVENT = {
     venue: "BLOODSport by MEATliquor",
     url: "https://bloodsports.co/",
     address: "27-29 Endell St, London WC2H 9BA",
-    /** Machine-readable, for the structured data on /register. */
+    /** Machine-readable, for the structured data on /after-party. */
     startsAt: "2026-10-10T19:30:00+01:00",
     supporters: ["BLOODSport by MEATliquor", "Harbour Brewing Co"],
+    /**
+     * Tickets are DesignMyNight's, not Zeffy's — the venue sells them, so
+     * this one is booked on the venue's own ticketing platform.
+     *
+     * `ticketsUrl` is the page the widget is an embed of. It is the route
+     * through for anyone whose browser will not run the widget, so it has
+     * to be the real public page rather than an embed URL.
+     *
+     * `widgetItemId` is the event in their system, and the two colours are
+     * the theme the widget is asked to wear: near-black, and the site's
+     * own deep red (--accent-strong) so the buttons inside their box are
+     * not a stranger's blue on our page.
+     */
+    ticketsUrl:
+      "https://www.designmynight.com/london/bars/covent-garden/bloodsports/world-zombie-day-london-2026-official-after-party?t=tickets",
+    widgetItemId: "6aa2a0b32704ba09ba7920f9",
+    widgetPrimary: "070707",
+    widgetPrimaryLight: "B03A2E",
   },
   hashtags: ["#WZD2026", "#WorldZombieDay"],
   /**
@@ -122,6 +140,7 @@ export const EVENT = {
 export const NAV = [
   { name: "Home", href: "/" },
   { name: "Register", href: "/register" },
+  { name: "After party", href: "/after-party" },
   { name: "Survival", href: "/survival" },
   { name: "FAQ", href: "/faq" },
   { name: "Donate", href: "/donate" },

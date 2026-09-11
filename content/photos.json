@@ -132,5 +132,36 @@
     "alt": "A group of zombies advances towards the camera past a cluster of red balloons, one man caught mid-groan.",
     "slot": "gallery",
     "busy": true
+  },
+  {
+    "slug": "doorway-portrait",
+    "source": "Graham Snelgar14.jpg",
+    "credit": "Graham Snelgar",
+    "alt": "A zombie leans into a painted shopfront doorway, grey-streaked hair backcombed high, a raw prosthetic wound open across her cheek and neck, blood running from one eye, a checkerboard scarf at her throat and a torn printed jacket slipping off one shoulder.",
+    "slot": "after party"
+  },
+  {
+    "slug": "bloodsport-booths",
+    "source": "bloodsports-4-optimised.jpeg",
+    "credit": "BLOODSport by MEATliquor",
+    "creditNote": "Venue interior supplied by BLOODSport; the photographer is not named in the file and the credit follows the source. Confirm the photographer before this is used in print.",
+    "alt": "The booth room at BLOODSport: wood-panelled walls hung with horror film posters and screens, striped banquettes in orange, blue and green, copper-topped tables, and a PSYCHOBOOTH sign glowing red beside a shadow of clawing hands.",
+    "slot": "after party"
+  },
+  {
+    "slug": "bloodsport-bar",
+    "source": "bloodsports-6-optimised.jpeg",
+    "credit": "BLOODSport by MEATliquor",
+    "creditNote": "Venue interior supplied by BLOODSport; the photographer is not named in the file and the credit follows the source. Confirm the photographer before this is used in print.",
+    "alt": "The bar at BLOODSport under deep red light, a row of leather stools along a leopard-print bar front, bottles and glassware racked behind, screens and framed horror posters above.",
+    "slot": "after party"
+  },
+  {
+    "slug": "pinball-zombie",
+    "source": "11_chunghauphoto.JPG",
+    "credit": "Chung Hau",
+    "creditNote": "Filename reads “11_chunghauphoto”; the credit shown is the name read from that. Confirm with the photographer.",
+    "alt": "A zombie in a blood-spattered orange World Zombie Day tabard and a Runner 5 armband sprawls over a Walking Dead pinball machine in a dark bar, hair across their face, a hand-lettered BELIEVE sign taped to the wall behind.",
+    "slot": "after party"
   }
 ]
