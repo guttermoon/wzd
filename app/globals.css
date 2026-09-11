@@ -392,6 +392,49 @@
     margin-inline: 0 auto !important;
   }
 
+  /* ── The after-party ticket widget ────────────────────────────────
+     DesignMyNight's, on /after-party. Unlike Zeffy's it renders **into
+     our document** rather than an iframe, which is the only reason any of
+     this is possible — and the only reason it is needed.
+
+     Their widget is a flex column with a height, and the content inside
+     it is `flex: 1 1` with `overflow-y: auto`. With one ticket type on
+     sale that leaves roughly 450px of nothing between the ticket and the
+     Book tickets button, which reads as a broken page on the one page
+     that takes money for the party.
+
+     So the height is released and the content is allowed to be as tall as
+     it is. Nothing here clips: no max-height, no `overflow: hidden`. The
+     worst this rule can do is nothing at all — which is what happens the
+     day they rename a component, because these are CSS-module class names
+     and the hash after the underscore changes on their every deploy. The
+     stable half is the prefix, which comes from their own file names, so
+     that is what is matched.
+
+     `!important` and `:where()` for the same reason as Zeffy's above:
+     these are elements we do not own, and the selector should not win any
+     argument it is not having. Scoped under .dmn-embed so it can never
+     reach anything of ours.
+
+     **Untested against the live widget.** designmynight.com is not
+     reachable from the development environment, so this was written from
+     the element tree rather than run against it. That is why it only ever
+     loosens a constraint. */
+  .dmn-embed {
+    max-width: 46rem;
+    margin-inline: 0 auto;
+  }
+
+  .dmn-embed :where([class*="page_embeddedWidget"]),
+  .dmn-embed :where([class*="page_main"]),
+  .dmn-embed :where([class*="page_content"]) {
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    overflow-y: visible !important;
+    flex: 0 1 auto !important;
+  }
+
   /* ── The Dead Good Club's lock-up, as a link ───────────────────────
      The hover state is their own artwork, supplied as a third file: the
      lettering goes red and the ghost and the gravestone are left exactly

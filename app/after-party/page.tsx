@@ -94,12 +94,21 @@ export default async function AfterPartyPage() {
           photo={photo("pinball-zombie")}
           priority
           bleed="full"
-          ratio="80/27"
-          /* The default full-bleed focus is 50% 28%, which on a band this
-             shallow is the top of the pinball machine and nobody in it.
-             She is low and left of centre in the frame, so the crop is
-             moved onto her. */
-          focus="38% 60%"
+          /* Deeper than the 80/27 band the other pages use, and
+             deliberately. This photograph is one person draped across a
+             pinball table in the lower half of the frame; 80/27 from a 4:3
+             original shows about a third of its height, and whichever
+             third that is, she is cut in half by it. 2/1 shows two thirds
+             and she is the subject. A banner ratio is a crop, and a crop
+             should follow the picture rather than the other pages.
+
+             Only the vertical is doing anything: the container is wider
+             than 4:3, so `object-cover` fills the width and crops the
+             height, and object-position's first number has no effect at
+             all. 64% puts the band on her head and her arm, and leaves the
+             title slab sitting over her shoulder rather than her face. */
+          ratio="2/1"
+          focus="50% 64%"
           sizes="100vw"
         />
       }
